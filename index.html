@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>릴리브 러그 가을 무드 전환 캠페인 - 촬영가이드 포맷</title>
+<style>
+  :root{
+    --surface-0:#faf9f6; --surface-1:#f1efe8; --surface-2:#ffffff;
+    --text-primary:#2c2c2a; --text-secondary:#5f5e5a; --text-muted:#888780;
+    --border:#e4e2da; --border-strong:#cfcdc3;
+    --bg-accent:#e6f1fb; --text-accent:#0c447c; --border-accent:#378add;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:24px 16px 60px; background:var(--surface-0);
+    color:var(--text-primary);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  }
+  .wrap{max-width:680px; margin:0 auto;}
+  h1{font-size:19px; font-weight:600; margin:0 0 4px;}
+  .subtitle{font-size:13px; color:var(--text-secondary); margin:0 0 20px;}
+  .fmt-tab{
+    cursor:pointer; border-radius:10px; background:transparent;
+    border:0.5px solid var(--border); font-family:inherit;
+  }
+  .fmt-tab.active{border:2px solid var(--border-accent); background:var(--bg-accent);}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>릴리브 러그 · 가을 무드 전환 캠페인</h1>
+<p class="subtitle">저장·댓글·공유 유도 촬영가이드 포맷 3종 — 탭을 눌러 확인하세요</p>
+
+<div style="display:flex; gap:8px; margin-bottom:1.25rem; flex-wrap:wrap;" role="tablist">
+  <button class="fmt-tab" data-fmt="a" style="flex:1; min-width:150px; text-align:left; padding:12px 14px;">
+    <div style="font-size:14px; font-weight:500; margin-bottom:2px;">A. 체크리스트형</div>
+    <div style="font-size:12px; color:var(--text-secondary);">저장 · 공유 강점</div>
+  </button>
+  <button class="fmt-tab" data-fmt="b" style="flex:1; min-width:150px; text-align:left; padding:12px 14px;">
+    <div style="font-size:14px; font-weight:500; margin-bottom:2px;">B. 공감스토리형</div>
+    <div style="font-size:12px; color:var(--text-secondary);">댓글 · 좋아요 강점</div>
+  </button>
+  <button class="fmt-tab" data-fmt="c" style="flex:1; min-width:150px; text-align:left; padding:12px 14px;">
+    <div style="font-size:14px; font-weight:500; margin-bottom:2px;">C. 비교반전형</div>
+    <div style="font-size:12px; color:var(--text-secondary);">공유 · 저장 강점</div>
+  </button>
+</div>
+
+<div id="fmt-body"></div>
+</div>
+
+<script>
+const DATA = {
+  a: {
+    why: "정보 밀도가 높아 저장률이 높고, “나도 해당됨” 태그로 공유되기 좋은 체크리스트 형식.",
+    core: [
+      ["배경","환절기 거실 정리 시즌, 뭐부터 바꿔야 할지 막막함"],
+      ["타겟 인사이트","계절템 하면 옷·침구만 떠올리고 러그는 후순위"],
+      ["핵심 메시지","가을 거실 준비는 러그 하나로 시작된다"],
+      ["소구 포인트","계절 컬러감 · 미끄럼방지 · 청소기 호환 · 세탁·생활방수"]
+    ],
+    flow: "문제 제기 → 체크리스트 나열 → 러그가 핵심인 이유 → 교체 장면 → 체크 완료 마무리",
+    scenes: [
+      ["1 (후킹)","거실 소파 옆 강아지, 손에 체크리스트 든 인플루언서","환절기 거실템 안 바꾸면 나만 손해?\n가을 되면 무조건 바꾸는 거실템 3가지\n옷장만 바꾸고 계셨다면 이거 보세요"],
+      ["2","체크리스트 1·2 항목 텍스트 오버레이 + 거실 훑기","1. 침구 계절템 ✔ 2. 커튼 두께 ✔"],
+      ["3","러그 항목 등장, 러그로 줌인, 강아지 앉은 모습","근데 러그는요?"],
+      ["4","기존 러그 걷고 릴리브 러그로 교체 컷 전환","계절 따라 러그도 바꾸는 시대"],
+      ["5","강아지가 새 러그서 뒹구는 모습, 미끄럼방지 클로즈업","미끄럼방지라 맘 편히 뒹굴뒹굴"],
+      ["6","청소기로 러그 미는 장면","털 청소도 청소기로 한번에"],
+      ["7 (마무리)","체크리스트 전체 완료 + 완성된 가을 거실","이제 우리 집도 완전 가을 준비 끝"]
+    ]
+  },
+  b: {
+    why: "“저희 집도 그래요” 공감 댓글을 유도하는 감정선 중심 구조.",
+    core: [
+      ["배경","환절기에 반려동물도 사람도 은근히 처지는 시기"],
+      ["타겟 인사이트","강아지가 처져 보이는 원인을 모르고 막연히 걱정"],
+      ["핵심 메시지","집 분위기를 바꾸면 반려동물과 나 모두 기분이 달라진다"],
+      ["소구 포인트","따뜻한 컬러감 · 포근한 촉감 · 반려동물 친화 소재"]
+    ],
+    flow: "공감 유발 문제 제기 → 원인을 집 분위기로 연결 → 몰랐던 사실 전달 → 교체 후 변화 → 감정적 마무리",
+    scenes: [
+      ["1 (후킹)","교체 전 러그 위 축 늘어진 강아지, 걱정스레 보는 인플루언서","요즘 우리 강아지 왜 이렇게 축 처져있지 했는데\n환절기 되니까 강아지도 기분을 탄다고?\n몰랐는데 이거 때문이었어요"],
+      ["2","생각하는 컷 + “환절기 반려동물 컨디션” 텍스트","환절기엔 집안 분위기도 영향을 준대요"],
+      ["3","기존 여름 러그 걷어내는 장면","여름 내내 쓰던 러그, 그대로였구나"],
+      ["4","릴리브 러그 교체, 웜톤 조명 텍스처 클로즈업","가을 컬러로 바꿔봤어요"],
+      ["5","강아지가 새 러그 냄새 맡고 자리잡는 모습","냄새 맡더니 바로 자리잡음"],
+      ["6","강아지 편안히 눕고, 인플루언서도 옆에 앉은 투샷","표정이 다르네..."],
+      ["7 (마무리)","함께 러그 위에서 편안한 시간","집 분위기 하나로 이렇게 달라질 줄이야"]
+    ]
+  },
+  c: {
+    why: "Before/After 시각 대비가 뚜렷해 “이거 봐봐” 공유·인테리어 참고 저장에 강함.",
+    core: [
+      ["배경","계절은 바뀌었는데 거실은 그대로인 상태"],
+      ["타겟 인사이트","러그 하나가 분위기를 이렇게 바꿀 줄 몰랐다는 반전"],
+      ["핵심 메시지","가구를 안 바꿔도 러그만으로 계절감 인테리어 완성"],
+      ["소구 포인트","계절 컬러 대비 · 미끄럼방지 · 청소기 호환 · 세탁·생활방수"]
+    ],
+    flow: "Before 제시 → 문제의식 → 교체 과정 → After 제시 → 반려동물과 함께 비교 강조 마무리",
+    scenes: [
+      ["1 (후킹)","여름 러그 위 강아지, 화면 절반 차분한 톤 처리","이 거실 뭔가 어색한 거 눈치채셨어요?\n러그 하나 바꿨을 뿐인데 완전 딴 집\nBefore / After 보여드릴게요"],
+      ["2","Before 거실 전체 와이드샷","Before: 여름 그대로인 거실"],
+      ["3","러그 걷고 새 러그 펼치는 타임랩스","체인지"],
+      ["4","After 거실 전체, 동일 구도 대비","After: 완전히 달라진 무드"],
+      ["5","강아지가 미끄러지지 않고 뛰노는 모습","미끄럼방지라 뛰어놀아도 안심"],
+      ["6","흘린 물·간식 자국 닦는 클로즈업","물 흘려도 쓱 닦으면 끝"],
+      ["7 (마무리)","Before/After 스플릿 + 강아지와 완성된 거실","러그 하나로 계절이 바뀐다는 거, 이제 믿으실 듯"]
+    ]
+  }
+};
+
+function render(key){
+  const d = DATA[key];
+  const body = document.getElementById('fmt-body');
+  let html = '';
+  html += '<div style="background:var(--surface-1); border-radius:8px; padding:1rem; margin-bottom:1.25rem; font-size:14px; color:var(--text-secondary); line-height:1.6;">' + d.why + '</div>';
+
+  html += '<div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:1.5rem;">';
+  d.core.forEach(([label,val])=>{
+    html += '<div style="background:var(--surface-2); border:0.5px solid var(--border); border-radius:8px; padding:10px 12px;">'
+      + '<div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">'+label+'</div>'
+      + '<div style="font-size:13px; line-height:1.5;">'+val+'</div></div>';
+  });
+  html += '</div>';
+
+  html += '<div style="font-size:13px; color:var(--text-secondary); margin-bottom:1.5rem; line-height:1.7;"><span style="color:var(--text-primary); font-weight:500;">흐름</span> — '+d.flow+'</div>';
+
+  html += '<div style="display:flex; flex-direction:column; gap:10px;">';
+  d.scenes.forEach(([no,shot,cap])=>{
+    const isHook = no.includes('후킹');
+    html += '<div style="border:0.5px solid var(--border); border-radius:12px; padding:12px 14px;">'
+      + '<div style="display:flex; gap:10px; align-items:baseline; margin-bottom:6px; flex-wrap:wrap;">'
+      + '<span style="font-size:12px; font-weight:500; color:var(--text-accent); min-width:56px;">씬 '+no+'</span>'
+      + '<span style="font-size:13px; color:var(--text-secondary); line-height:1.5;">'+shot+'</span></div>'
+      + '<div style="font-size:13px; white-space:pre-line; line-height:1.6;'+(isHook?' color:var(--text-primary);':' color:var(--text-muted);')+'">'+cap+'</div>'
+      + '</div>';
+  });
+  html += '</div>';
+
+  body.innerHTML = html;
+}
+
+document.querySelectorAll('.fmt-tab').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.fmt-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    render(btn.dataset.fmt);
+  });
+});
+
+document.querySelector('.fmt-tab[data-fmt="a"]').click();
+</script>
+</body>
+</html>
