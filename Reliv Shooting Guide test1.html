@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>릴리브 촬영가이드</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-400-normal.woff2') format('woff2');}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-700-normal.woff2') format('woff2');}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url('https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2') format('woff2');}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('https://fonts.gstatic.com/s/spacemono/v14/i7dPIFZifjKcF5UAWdDRYE98RXi4EwSqfg.woff2') format('woff2');}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:700;font-display:swap;src:url('https://fonts.gstatic.com/s/spacemono/v14/i7dMIFZifjKcF5UAWdDRYE98RQOc0Xw8FqRV.woff2') format('woff2');}
+:root{
+--brand-brown:#885e45;--charcoal:#2b2420;--canvas:#faf7f1;--paper:#ffffff;--surface-card-warm:#f1e9dd;
+--amber:#d99a45;--brick:#b6543a;--sage:#8c9a76;
+--wash-amber:#fbf1e1;--wash-brick:#fbeeea;--wash-sage:#eef1e8;
+--ink:#2a241f;--muted:#8c8074;--slate:#6b6259;--hairline:#e6ddd0;--border-light:#efe8dc;
+--font-display:'Space Grotesk','Inter',ui-sans-serif,system-ui,sans-serif;
+--font-body:'Inter',Arial,ui-sans-serif,system-ui,sans-serif;
+--font-mono:'Space Mono',Arial,ui-sans-serif,system-ui,monospace;
+--radius-md:14px;--radius-lg:20px;--radius-pill:999px;
+--shadow-card:0 2px 10px rgba(43,36,32,0.07);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas)}
+[data-nav-row]{scrollbar-width:none}
+[data-nav-row]::-webkit-scrollbar{display:none}
+@keyframes sectionIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useRef } = React;
+
+function Badge({ variant = 'pill', tone = 'neutral', children }) {
+  const toneBg = { neutral: 'var(--surface-card-warm)', amber: 'var(--wash-amber)', brick: 'var(--wash-brick)', sage: 'var(--wash-sage)' }[tone];
+  const toneText = { neutral: 'var(--ink)', amber: 'var(--amber)', brick: 'var(--brick)', sage: 'var(--sage)' }[tone];
+  if (variant === 'chip') return <span style={{fontFamily:'var(--font-mono)',fontSize:12,letterSpacing:'.28px',color:'var(--paper)',background:'var(--charcoal)',padding:'4px 10px',borderRadius:6,display:'inline-block'}}>{children}</span>;
+  if (variant === 'mono-label') return <span style={{fontFamily:'var(--font-mono)',fontSize:12,letterSpacing:'.28px',color:'var(--muted)'}}>{children}</span>;
+  return <span style={{fontFamily:'var(--font-body)',fontSize:12,fontWeight:600,padding:'6px 12px',borderRadius:'var(--radius-pill)',background:toneBg,color:toneText,display:'inline-block'}}>{children}</span>;
+}
+function CalloutBox({ tone = 'warning', mark = '·', children }) {
+  const map = { warning:{bg:'var(--wash-brick)',mk:'var(--brick)'}, success:{bg:'var(--wash-sage)',mk:'var(--sage)'}, neutral:{bg:'transparent',mk:'var(--muted)'} }[tone];
+  return <div style={{display:'flex',gap:10,alignItems:'flex-start',padding:tone==='neutral'?0:'14px 16px',borderRadius:8,background:map.bg}}>
+    <span style={{flex:'none',color:map.mk,fontWeight:700,fontSize:14}}>{mark}</span>
+    <p style={{margin:0,fontSize:13.5,lineHeight:1.55,color:'var(--ink)'}}>{children}</p>
+  </div>;
+}
+function InfoRow({ label, value, valueColor = 'var(--ink)', divider = true }) {
+  return <div style={{display:'flex',justifyContent:'space-between',gap:12,padding:'13px 16px',borderBottom:divider?'1px solid var(--hairline)':'none'}}>
+    <span style={{fontSize:13,color:'var(--slate)'}}>{label}</span>
+    <span style={{fontSize:13.5,color:valueColor,fontWeight:600,textAlign:'right'}}>{value}</span>
+  </div>;
+}
+function FeatureCard({ title, desc, required }) {
+  return <div style={{padding:16,background:'var(--paper)',borderRadius:'var(--radius-md)',boxShadow:'var(--shadow-card)',position:'relative',border:required?'1.5px solid var(--brick)':'none'}}>
+    {required ? <span style={{position:'absolute',top:-1,right:12,fontSize:10,fontWeight:700,color:'var(--paper)',background:'var(--brick)',padding:'3px 8px',borderRadius:'0 0 5px 5px',letterSpacing:'.2px',whiteSpace:'nowrap'}}>필수</span> : null}
+    <h3 style={{fontSize:15,margin:'0 0 6px',color:'var(--ink)',fontWeight:700,fontFamily:'var(--font-body)',paddingRight:required?36:0}}>{title}</h3>
+    <p style={{fontSize:13,lineHeight:1.55,color:'var(--slate)',margin:0}}>{desc}</p>
+  </div>;
+}
+function HookTypeButton({ label, tapLabel, accent = 'amber', active = false, onClick }) {
+  const accentColor = { amber:'var(--amber)', brick:'var(--brick)', sage:'var(--sage)' }[accent];
+  return <button onClick={onClick} style={{position:'relative',fontFamily:'var(--font-body)',fontSize:13.5,fontWeight:700,lineHeight:1.3,padding:'16px 8px 22px',minHeight:64,borderRadius:14,border:`2px solid ${accentColor}`,background:active?accentColor:'var(--paper)',color:active?'var(--paper)':'var(--ink)',cursor:'pointer'}}>
+    {label}
+    <span style={{position:'absolute',bottom:6,left:'50%',transform:'translateX(-50%)',fontSize:9.5,fontWeight:700,letterSpacing:'.4px',opacity:.7}}>{tapLabel}</span>
+  </button>;
+}
+function Tab({ label, active = false, emphasis = false, onClick }) {
+  return <button onClick={onClick} style={{flex:'none',fontFamily:'var(--font-body)',fontSize:13,fontWeight:600,color:active?'var(--paper)':(emphasis?'var(--brand-brown)':'var(--ink)'),background:active?'var(--brand-brown)':'var(--surface-card-warm)',border:emphasis&&!active?'1.5px solid var(--brand-brown)':'none',borderRadius:'var(--radius-pill)',padding:emphasis&&!active?'5.5px 11.5px':'7px 13px',cursor:'pointer',whiteSpace:'nowrap'}}>{label}</button>;
+}
+function SceneCard({ n, title, beat, accent = 'amber', screen, purpose, captions = [] }) {
+  const accentColor = { amber:'var(--amber)', brick:'var(--brick)', sage:'var(--sage)' }[accent];
+  return <div style={{background:'var(--paper)',borderRadius:'var(--radius-lg)',padding:16,display:'flex',flexDirection:'column',gap:12,boxShadow:'var(--shadow-card)'}}>
+    <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+      <span style={{fontFamily:'var(--font-mono)',fontSize:11.5,letterSpacing:'.28px',color:'var(--paper)',background:accentColor,padding:'3px 9px',borderRadius:5}}>{'SCENE ' + n}</span>
+      <span style={{fontSize:14.5,fontWeight:700,color:'var(--ink)'}}>{title}</span>
+      <span style={{marginLeft:'auto',fontSize:11,color:'var(--muted)'}}>{beat}</span>
+    </div>
+    <div style={{display:'flex',gap:14,flexWrap:'wrap',alignItems:'flex-start'}}>
+      <div style={{flex:'1 1 220px',minWidth:220,aspectRatio:'1/1',borderRadius:12,background:'var(--surface-card-warm)',border:'1px dashed var(--hairline)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,color:'var(--muted)',fontFamily:'var(--font-mono)'}}>사진</div>
+      <div style={{display:'flex',flexDirection:'column',gap:9,flex:'2 1 260px',minWidth:220}}>
+        <div style={{paddingBottom:9,borderBottom:'1px solid var(--border-light)'}}>
+          <span style={{display:'block',fontSize:10.5,fontWeight:700,letterSpacing:'.4px',color:'var(--muted)',marginBottom:2}}>화면</span>
+          <span style={{fontSize:13,lineHeight:1.4,color:'var(--ink)'}}>{screen}</span>
+        </div>
+        <div style={{paddingBottom:9,borderBottom:'1px solid var(--border-light)'}}>
+          <span style={{display:'block',fontSize:10.5,fontWeight:700,letterSpacing:'.4px',color:'var(--muted)',marginBottom:2}}>목적</span>
+          <span style={{fontSize:13,lineHeight:1.4,color:'var(--ink)'}}>{purpose}</span>
+        </div>
+        <div>
+          <span style={{display:'block',fontSize:10.5,fontWeight:700,letterSpacing:'.4px',color:accentColor,marginBottom:2}}>자막예시</span>
+          {captions.map((c,i) => <p key={i} style={{margin:0,fontSize:13,lineHeight:1.5,color:'var(--ink)',fontStyle:'italic'}}>{'"' + c + '"'}</p>)}
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+const SECTIONS = [
+  { key:'checklist', label:'필독사항' }, { key:'product', label:'제품정보' }, { key:'caption', label:'자막가이드' },
+  { key:'reference', label:'참고소재' }, { key:'scene', label:'씬가이드' }, { key:'caution', label:'유의사항' }, { key:'submit', label:'제출정보' }
+];
+const REFERENCE_LINKS = [
+  { n:1, label:'참고 링크 1', url:'https://tinyurl.com/3smd7b85' },
+  { n:2, label:'참고 링크 2', url:'https://tinyurl.com/4y2j87eb' },
+  { n:3, label:'참고 링크 3', url:'https://tinyurl.com/y579tkn6' }
+];
+const PRODUCT_FEATURES = [
+  { title:'관절 보호 3중 장치', desc:'표면 패턴 + 논슬립 + 쿠션폼으로 관절 보호' },
+  { title:'고밀도 원단 & 내구성', desc:'높은 원단 밀도로 발수 성능 우수' },
+  { title:'완벽한 워셔블', desc:'물세탁 및 세탁기 사용 가능' },
+  { title:'쉬운 청소기 사용', desc:'먼지·이물질 제거 간편' },
+  { title:'안전 인증 완료', desc:'사람과 동물 모두 안전하게 사용' },
+  { title:'인테리어 조화', desc:'어떤 공간에도 잘 어울리는 모던한 디자인' }
+];
+const CONTENT_CARDS = [
+  { title:'안정적으로 뛰는 강아지', desc:'논슬립 기능으로 관절 걱정을 덜어주는 모습', required:true },
+  { title:'비포/애프터', desc:'러그 깔기 전·후 같은 구도 비교', required:true },
+  { title:'밀림방지', desc:'하단 밀림방지 원단으로 러그가 밀리지 않는 모습' },
+  { title:'생활방수', desc:'물이나 간식이 떨어져도 걱정 없는 모습' },
+  { title:'인테리어 완성', desc:'어떤 공간에도 잘 어울리는 인테리어로서의 완성도' },
+  { title:'청소기 사용', desc:'청소기를 돌려도 러그가 빨려 들어가지 않는 모습' },
+  { title:'워셔블', desc:'물세탁 및 세탁기 사용 가능' },
+  { title:'쿠션감', desc:'도톰하고 푹신한 촉감' }
+];
+const EMPTY_SCENES = Array.from({length:9}, (_,i) => ({ n:i+1, title:'', beat:'', screen:'', purpose:'', captions:[] }));
+const HOOK_TYPES = {
+  season: { label:'후킹 A', accent:'amber', scenes:EMPTY_SCENES },
+  empathy: { label:'후킹 B', accent:'brick', scenes:EMPTY_SCENES },
+  impact: { label:'후킹 C', accent:'sage', scenes:EMPTY_SCENES }
+};
+
+function App() {
+  const [activeSection, setActiveSection] = useState('checklist');
+  const [activeHook, setActiveHook] = useState('season');
+  const [showIdeas, setShowIdeas] = useState(false);
+  const dragStartX = useRef(null);
+  const rootRef = useRef(null);
+
+  function centerTab(key) {
+    const container = rootRef.current && rootRef.current.querySelector('[data-nav-row]');
+    const btn = container && container.querySelector('[data-section-key="' + key + '"]');
+    if (btn && container) {
+      const btnRect = btn.getBoundingClientRect();
+      const contRect = container.getBoundingClientRect();
+      const btnCenter = (btnRect.left - contRect.left) + container.scrollLeft + btnRect.width / 2;
+      container.scrollTo({ left: Math.max(0, btnCenter - container.clientWidth / 2), behavior: 'smooth' });
+    }
+  }
+  function selectSection(key) { setActiveSection(key); setTimeout(() => centerTab(key), 30); }
+  function goToSection(delta) {
+    const idx = SECTIONS.findIndex(s => s.key === activeSection);
+    const next = SECTIONS[Math.min(SECTIONS.length - 1, Math.max(0, idx + delta))];
+    if (next) selectSection(next.key);
+  }
+  function onPointerDown(e) { dragStartX.current = e.clientX; }
+  function onPointerUp(e) {
+    if (dragStartX.current == null) return;
+    const dx = e.clientX - dragStartX.current;
+    if (Math.abs(dx) > 60) goToSection(dx < 0 ? 1 : -1);
+    dragStartX.current = null;
+  }
+
+  const scenes = HOOK_TYPES[activeHook].scenes;
+  const accent = HOOK_TYPES[activeHook].accent;
+
+  return <div ref={rootRef} onPointerDown={onPointerDown} onPointerUp={onPointerUp} style={{maxWidth:430,margin:'0 auto',background:'var(--paper)',color:'var(--ink)',paddingBottom:40,fontFamily:'var(--font-body)'}}>
+
+    <div style={{padding:'60px 24px 36px',textAlign:'center',background:'var(--brand-brown)',position:'relative',overflow:'hidden'}}>
+      <img src="assets/photography/hero-dog.jpg" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'70% 30%',opacity:.9}} />
+      <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(43,36,32,0) 30%,var(--brand-brown) 100%)'}}></div>
+      <img src="assets/logo-reliv.jpg" style={{position:'relative',width:44,height:44,borderRadius:10,marginBottom:16}} />
+      <h1 style={{position:'relative',fontFamily:'var(--font-display)',fontWeight:700,fontSize:32,lineHeight:1.2,letterSpacing:'-0.4px',margin:'0 0 10px',color:'var(--paper)'}}>릴리브 펫러그<br/>콘텐츠 촬영 가이드</h1>
+      <div style={{position:'relative',marginBottom:16}}><span style={{fontFamily:'var(--font-mono)',fontSize:12,letterSpacing:'0.28px',color:'rgba(255,255,255,0.75)',background:'rgba(0,0,0,0.18)',padding:'4px 10px',borderRadius:6}}>RELIV PHOTO GUIDE · DOG</span></div>
+      <div style={{position:'relative',display:'flex',gap:8,justifyContent:'center',flexWrap:'wrap'}}>
+        <span style={{fontFamily:'var(--font-body)',fontSize:12,fontWeight:600,padding:'6px 12px',borderRadius:999,background:'rgba(255,255,255,0.14)',color:'var(--paper)'}}>MP4 (4K/FHD 권장)</span>
+        <span style={{fontFamily:'var(--font-body)',fontSize:12,fontWeight:600,padding:'6px 12px',borderRadius:999,background:'rgba(255,255,255,0.14)',color:'var(--paper)'}}>9:16 세로 (1080×1920)</span>
+      </div>
+    </div>
+
+    <div style={{position:'sticky',top:0,background:'var(--paper)',zIndex:5,borderBottom:'1px solid var(--hairline)'}}>
+      <div data-nav-row="true" style={{display:'flex',gap:8,overflowX:'auto',padding:'12px 16px 10px'}}>
+        {SECTIONS.map(s => <span key={s.key} data-section-key={s.key}>
+          <Tab label={s.label} active={s.key===activeSection} emphasis={s.key==='scene'} onClick={() => selectSection(s.key)} />
+        </span>)}
+      </div>
+    </div>
+
+    {activeSection === 'checklist' && <div style={{padding:'40px 24px',borderBottom:'1px solid var(--hairline)',animation:'sectionIn .32s ease',position:'relative',overflow:'hidden'}}>
+      <span style={{position:'absolute',top:12,right:20,fontFamily:'var(--font-display)',fontWeight:700,fontSize:88,lineHeight:1,color:'var(--amber)',opacity:.14,pointerEvents:'none'}}>01</span>
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16,position:'relative'}}><Badge variant="mono-label">CHECKLIST</Badge></div>
+      <h2 style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:24,margin:'0 0 8px',letterSpacing:'-0.3px',position:'relative'}}>촬영 전 필독사항</h2>
+      <p style={{fontSize:14,color:'var(--slate)',margin:'0 0 22px',lineHeight:1.5}}>가이드의 촬영 구성 순서(씬)는 꼭 준수해주세요.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:14,marginBottom:22}}>
+        {['자막 및 장면 연출은 가이드 내용 내에서 자유롭게 표현해주세요.','촬영 원본 파일을 전달해 주세요. GIF 변환 금지, B컷 포함 전체 전달.','목소리·얼굴 노출 등 원본 전달이 불가한 상황이 없도록 주의해 주세요.','촬영 전 러그의 주름을 최대한 펴주세요!'].map((t,i) =>
+          <div key={i} style={{display:'flex',gap:12}}><span style={{flex:'none',fontFamily:'var(--font-mono)',fontSize:13,width:24,height:24,borderRadius:'50%',background:'var(--surface-card-warm)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--ink)'}}>{i+1}</span><p style={{margin:'2px 0 0',fontSize:15,lineHeight:1.5}}>{t}</p></div>
+        )}
+      </div>
+      <CalloutBox tone="warning" mark="!">가이드 미준수 시 수정 피드백이 많아질 수 있습니다.</CalloutBox>
+      <div style={{border:'1px solid var(--hairline)',borderRadius:8,overflow:'hidden',margin:'20px 0'}}>
+        <InfoRow label="편집본 전달(초안)" value="24일까지" />
+        <InfoRow label="최종 업로드" value="28일까지" />
+        <InfoRow label="파트너스 애드코드" value="업로드 후 함께 전달 필수" divider={false} />
+      </div>
+      <p style={{fontSize:13.5,lineHeight:1.6,color:'var(--slate)',margin:0}}>시청자에게 자연스럽게 다가가 브랜드 전달력을 높일 수 있도록, 평소 채널 고유의 릴스 피드 무드와 편집 스타일을 최대한 적용하여 촬영·편집 부탁드립니다.</p>
+    </div>}
+
+    {activeSection === 'product' && <div style={{padding:'40px 24px',borderBottom:'1px solid var(--hairline)',animation:'sectionIn .32s ease',background:'var(--canvas)',position:'relative',overflow:'hidden'}}>
+      <span style={{position:'absolute',top:12,right:20,fontFamily:'var(--font-display)',fontWeight:700,fontSize:88,lineHeight:1,color:'var(--sage)',opacity:.16,pointerEvents:'none'}}>02</span>
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16,position:'relative'}}><Badge variant="mono-label">REFERENCE ONLY</Badge></div>
+      <h2 style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:24,margin:'0 0 8px',letterSpacing:'-0.3px',position:'relative'}}>제품 소개 및 기본 정보</h2>
+      <p style={{fontSize:14,color:'var(--slate)',margin:'0 0 20px',lineHeight:1.5}}>제품 이해를 돕기 위한 페이지입니다. 릴리브 펫러그 주요 제품 속성.</p>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+        {PRODUCT_FEATURES.map((f,i) => <FeatureCard key={i} title={f.title} desc={f.desc} />)}
+      </div>
+    </div>}
+
+    {activeSection === 'caption' && <div style={{padding:'40px 24px',borderBottom:'1px solid var(--hairline)',animation:'sectionIn .32s ease',position:'relative',overflow:'hidden'}}>
+      <span style={{position:'absolute',top:12,right:20,fontFamily:'var(--font-display)',fontWeight:700,fontSize:88,lineHeight:1,color:'var(--brick)',opacity:.14,pointerEvents:'none'}}>03</span>
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16,position:'relative'}}><Badge variant="mono-label">COPYWRITING</Badge></div>
+      <h2 style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:24,margin:'0 0 20px',letterSpacing:'-0.3px',position:'relative'}}>영상 자막 구성</h2>
+      <div style={{display:'flex',flexDirection:'column',gap:14,marginBottom:22}}>
+        {[['목적','첫 1~2초 안에 시청자를 멈춰 세우는 것이 핵심입니다.'],['원칙','제품명/기능 대신 시청자의 고민, 궁금증, 경각심을 건드리는 문장으로 시작하세요.'],['연출','화면에 크고 잘 보이는 폰트로, 1.5~2초 이내에 읽히도록 짧게 배치해 주세요.']].map(([k,v],i) =>
+          <div key={i} style={{display:'flex',gap:12}}><span style={{flex:'none',fontSize:16,fontWeight:700,fontFamily:'var(--font-mono)',color:'var(--brick)',width:56}}>{k}</span><p style={{margin:0,fontSize:14.5,lineHeight:1.55}}>{v}</p></div>
+        )}
+      </div>
+      <p style={{fontSize:15,fontWeight:700,margin:'0 0 14px'}}>자막 작성 시 참고사항</p>
+      <div style={{display:'flex',flexDirection:'column',gap:10}}>
+        {[['경험 중심의 문장 구성','"예쁘다", "잘 어울린다" 같은 표현보다 사용 경험에 대한 표현을 담아주세요.'],['간결한 가독성 확보','한 화면에 노출되는 메인 자막은 가급적 간결하게 구성해야 몰입도가 높습니다.'],['단순 스펙 나열 금지','기능을 나열하기보다 "이래서 사용하기 좋았다"처럼 경험형으로 표현해주세요.']].map(([t,d],i) =>
+          <div key={i} style={{padding:'14px 16px',border:'1px solid var(--hairline)',borderRadius:8}}>
+            <p style={{margin:'0 0 4px',fontSize:14.5,fontWeight:600}}>{t}</p>
+            <p style={{margin:0,fontSize:13.5,lineHeight:1.55,color:'var(--slate)'}}>{d}</p>
+          </div>
+        )}
+      </div>
+    </div>}
+
+    {activeSection === 'reference' && <div style={{padding:'40px 24px',borderBottom:'1px solid var(--hairline)',animation:'sectionIn .32s ease',background:'var(--canvas)',position:'relative',overflow:'hidden'}}>
+      <span style={{position:'absolute',top:12,right:20,fontFamily:'var(--font-display)',fontWeight:700,fontSize:88,lineHeight:1,color:'var(--amber)',opacity:.16,pointerEvents:'none'}}>04</span>
+      <h2 style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:24,margin:'0 0 8px',letterSpacing:'-0.3px',position:'relative'}}>참고소재</h2>
+      <p style={{fontSize:14,color:'var(--slate)',margin:'0 0 20px',lineHeight:1.5}}>촬영 전에 참고하면 좋은 레퍼런스 링크입니다.</p>
+      <div style={{border:'1px solid var(--hairline)',borderRadius:8,overflow:'hidden'}}>
+        {REFERENCE_LINKS.map(ref => <a key={ref.n} href={ref.url} target="_blank" rel="noopener" style={{display:'flex',alignItems:'center',gap:12,padding:'14px 16px',borderBottom:'1px solid var(--hairline)',textDecoration:'none',color:'var(--ink)',background:'var(--paper)'}}>
+          <span style={{flex:'none',width:26,height:26,borderRadius:'50%',background:'var(--wash-amber)',color:'var(--amber)',fontFamily:'var(--font-mono)',fontSize:12,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center'}}>{ref.n}</span>
+          <span style={{fontSize:14,fontWeight:600,flex:1}}>{ref.label}</span>
+          <span style={{fontSize:13,color:'var(--brand-brown)',flex:'none'}}>열기 →</span>
+        </a>)}
+      </div>
+    </div>}
+
+    {activeSection === 'scene' && <div style={{padding:'40px 0 44px',borderBottom:'1px solid var(--hairline)',background:'var(--charcoal)',animation:'sectionIn .32s ease'}}>
+      <div style={{padding:'0 24px'}}>
+        <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}><span style={{fontFamily:'var(--font-mono)',fontSize:12,letterSpacing:'0.28px',color:'rgba(255,255,255,0.55)'}}>SCENE GUIDE</span></div>
+        <h2 style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:24,margin:'0 0 8px',letterSpacing:'-0.3px',color:'var(--paper)'}}>후킹(인트로) 3종 예시</h2>
+        <p style={{fontSize:14,color:'rgba(255,255,255,0.65)',margin:'0 0 22px',lineHeight:1.5}}>인트로를 하나를 골라 촬영해주세요. <br/>아래는 후킹이후 영상에 담길 장면 예시입니다 <br/>다 넣지 말고 어울리는 장면만 골라 구성해주세요.</p>
+        <p style={{padding:0,margin:'0 0 10px',fontSize:12.5,fontWeight:600,letterSpacing:'0.3px',color:'rgba(255,255,255,0.75)'}}>아래 유형을 탭해서 골라보세요</p>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10,marginBottom:8}}>
+          {Object.keys(HOOK_TYPES).map(key => <HookTypeButton key={key} label={HOOK_TYPES[key].label} tapLabel="TAP" accent={HOOK_TYPES[key].accent} active={key===activeHook} onClick={() => setActiveHook(key)} />)}
+        </div>
+        <button onClick={() => setShowIdeas(v => !v)} style={{width:'100%',marginTop:2,padding:'12px 16px',borderRadius:999,border:'none',background:'var(--amber)',color:'var(--charcoal)',fontFamily:'var(--font-body)',fontSize:13.5,fontWeight:700,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:6}}>{showIdeas ? '후킹 이후 장면 예시 숨기기 ▴' : '후킹 이후 장면 예시 보기 ▾'}</button>
+      </div>
+      {showIdeas && <div style={{padding:'16px 24px 0',display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+        {CONTENT_CARDS.map((c,i) => <FeatureCard key={i} title={c.title} desc={c.desc} required={c.required} />)}
+      </div>}
+      <div style={{padding:'20px 24px 0',display:'flex',flexDirection:'column',gap:14}}>
+        {scenes.map(s => <SceneCard key={s.n} n={s.n} title={s.title} beat={s.beat} accent={accent} screen={s.screen} purpose={s.purpose} captions={s.captions} />)}
+      </div>
+      <p style={{padding:'16px 24px 0',fontSize:12,color:'rgba(255,255,255,0.5)',margin:0}}>자막 및 세부연출은 자유롭게 표현해주세요. 씬은 필요에 맞게 추가·삭제하세요.</p>
+    </div>}
+
+    {activeSection === 'caution' && <div style={{padding:'40px 24px',borderBottom:'1px solid var(--hairline)',animation:'sectionIn .32s ease',position:'relative',overflow:'hidden'}}>
+      <span style={{position:'absolute',top:12,right:20,fontFamily:'var(--font-display)',fontWeight:700,fontSize:88,lineHeight:1,color:'var(--brick)',opacity:.14,pointerEvents:'none'}}>05</span>
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16,position:'relative'}}><Badge variant="mono-label">CAUTION</Badge></div>
+      <h2 style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:24,margin:'0 0 22px',letterSpacing:'-0.3px',lineHeight:1.3,position:'relative'}}>유의사항 &amp; 마무리 체크</h2>
+      <p style={{fontSize:16,fontWeight:700,margin:'0 0 12px'}}>반드시 포함해주세요</p>
+      <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:28}}>
+        <CalloutBox tone="success" mark="✓">비포/애프터: 러그 깔기 전·후 같은 구도로 촬영 필수</CalloutBox>
+        <CalloutBox tone="success" mark="✓">반려동물과 러그가 함께 담기는 거실 구도</CalloutBox>
+        <CalloutBox tone="success" mark="✓">러그 위에서 반려동물이 안정적으로 움직이는 장면</CalloutBox>
+        <CalloutBox tone="success" mark="✓"><strong style={{color:'var(--brick)',fontSize:15}}>생활방수 장면 연출 시</strong> 아래 문구 자막에 작게 표기: "생활방수는 오염물의 흡수를 지연시킬 뿐, 완벽히 방수되는 것은 아니니 유의해주세요!"</CalloutBox>
+      </div>
+      <p style={{fontSize:16,fontWeight:700,margin:'0 0 12px'}}>편집 &amp; 자막 팁</p>
+      <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:28}}>
+        {['영상 길이: 35~40초 내외 권장','가독성: 폰트 그림자, 자막바 등 효과 활용','공간감 좋은 넓은 구도 혹은 러그와 반려동물이 잘 보이게','캡션에 생활방수 / 통세탁 가능 내용 포함'].map((t,i) =>
+          <div key={i} style={{display:'flex',gap:8}}><span style={{color:'var(--muted)',fontSize:14}}>·</span><p style={{margin:0,fontSize:14.5,lineHeight:1.6}}>{t}</p></div>
+        )}
+      </div>
+      <p style={{fontSize:16,fontWeight:700,margin:'0 0 12px'}}>절대 피해주세요</p>
+      <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:24}}>
+        <CalloutBox tone="warning" mark="×">"슬개골 탈구 예방" 같은 의학적·스펙 나열형 표현</CalloutBox>
+        <CalloutBox tone="warning" mark="×">"미끄러짐 방지" 표현 → "러그 밀림 방지"로 대체</CalloutBox>
+        <CalloutBox tone="warning" mark="×">클로즈업만 찍어 러그·전경이 안 보이는 구도</CalloutBox>
+        <CalloutBox tone="warning" mark="×">과도한 광고 톤("무조건 사세요!" 강매형)</CalloutBox>
+      </div>
+      <div style={{padding:16,border:'1px solid var(--hairline)',borderRadius:8}}>
+        <p style={{margin:0,fontSize:14.5,lineHeight:1.6}}><strong>제출 리마인더</strong> - 메일 제목 양식을 꼭 지켜주세요.</p>
+      </div>
+    </div>}
+
+    {activeSection === 'submit' && <div style={{padding:'40px 24px',animation:'sectionIn .32s ease',background:'var(--canvas)',position:'relative',overflow:'hidden'}}>
+      <span style={{position:'absolute',top:12,right:20,fontFamily:'var(--font-display)',fontWeight:700,fontSize:88,lineHeight:1,color:'var(--sage)',opacity:.16,pointerEvents:'none'}}>06</span>
+      <h2 style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:24,margin:'0 0 20px',letterSpacing:'-0.3px',position:'relative'}}>제출 정보</h2>
+      <div style={{border:'1px solid var(--hairline)',borderRadius:8,overflow:'hidden',marginBottom:16}}>
+        <InfoRow label="이메일" value="hello@reliv.co.kr" valueColor="var(--brand-brown)" />
+        <InfoRow label="제목" value="[릴리브] 콘텐츠 촬영본 전달_OOO" />
+        <InfoRow label="첨부" value="원본 + 편집본 + 클린본 + 실사용 이미지 5컷" divider={false} />
+      </div>
+      <p style={{fontSize:13.5,lineHeight:1.65,color:'var(--slate)',margin:0}}>전달해주시는 영상 및 사진 소스는 2차 가공 후 제품 상세페이지, 광고영상 제작 등에 활용될 수 있습니다.</p>
+    </div>}
+
+    <div style={{padding:'44px 24px',textAlign:'center'}}>
+      <h3 style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:20,margin:'0 0 10px'}}>좋은 장면, 함께 만들어요.</h3>
+      <p style={{fontSize:13.5,color:'var(--slate)',margin:0}}>촬영 중 궁금한 점은 언제든 담당자에게 문의해주세요.</p>
+    </div>
+  </div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
