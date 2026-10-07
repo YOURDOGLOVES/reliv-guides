@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>릴리브 신제품 촬영 가이드 · 넓은 복도형 러그</title>
+<meta name="description" content="릴리브 넓은 복도형 러그 협찬 촬영 가이드">
+<meta property="og:title" content="릴리브 신제품 촬영 가이드">
+<meta property="og:description" content="[넓은 복도형 러그] 장면별 촬영 가이드와 제출 안내">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --brown:#885e45; --brown-dark:#6b4a36; --ink:#2a241f; --slate:#5f564e; --muted:#8c8074;
+  --canvas:#faf7f1; --paper:#ffffff; --warm:#f1e9dd; --line:#e6ddd0;
+  --good:#5f7a4a; --good-bg:#eef1e8; --bad:#b6543a; --bad-bg:#fbeeea; --amber-bg:#fbf1e1;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:16px;line-height:1.65;word-break:keep-all;overflow-wrap:break-word;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+a{color:var(--brown)}
+
+/* hero */
+.hero{background:var(--brown);color:#fff;padding:40px 0 32px}
+.brand{font-size:13px;letter-spacing:.18em;opacity:.8;font-weight:600}
+.hero h1{font-size:30px;line-height:1.25;margin:10px 0 6px;font-weight:800;letter-spacing:-.02em}
+.hero .product{display:inline-block;background:rgba(255,255,255,.16);border-radius:999px;padding:5px 14px;font-size:15px;font-weight:600}
+.msg{margin-top:24px;background:#fff;color:var(--ink);border-radius:18px;padding:20px 18px}
+.msg .label{font-size:12px;font-weight:700;color:var(--brown);letter-spacing:.06em}
+.msg strong{display:block;font-size:20px;line-height:1.4;margin:6px 0 10px;letter-spacing:-.01em}
+.msg p{margin:0;color:var(--slate);font-size:15px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:10;background:rgba(250,247,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;color:var(--slate);font-size:14px;font-weight:600;padding:7px 13px;border-radius:999px;background:var(--paper);border:1px solid var(--line)}
+
+section{padding:36px 0 8px;scroll-margin-top:56px}
+h2{font-size:22px;margin:0 0 6px;letter-spacing:-.02em}
+h2 .num{color:var(--brown);margin-right:6px}
+.lead{color:var(--slate);font-size:15px;margin:0 0 18px}
+h3{font-size:17px;margin:28px 0 12px}
+
+/* spec list */
+.spec{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.spec div{display:flex;gap:14px;padding:14px 16px;border-top:1px solid var(--line)}
+.spec div:first-child{border-top:0}
+.spec dt{flex:0 0 76px;font-weight:700;font-size:14px;color:var(--brown)}
+.spec dd{margin:0;font-size:15px}
+
+/* scene cards */
+.scene{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 16px;margin-bottom:14px}
+.scene-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.scene-no{flex:none;width:32px;height:32px;border-radius:50%;background:var(--brown);color:#fff;font-weight:800;display:grid;place-items:center;font-size:15px}
+.scene-title{font-size:18px;font-weight:800}
+.tag-must{margin-left:auto;font-size:12px;font-weight:700;color:var(--bad);background:var(--bad-bg);padding:3px 9px;border-radius:999px}
+.how{margin:0 0 12px;font-size:15px}
+.caps-label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.04em}
+.cap{background:var(--warm);border-radius:12px;padding:10px 12px;font-size:15px;font-weight:600;margin-top:6px;position:relative}
+.cap small{display:block;font-size:12px;color:var(--brown);font-weight:700;margin-bottom:2px}
+.notice{background:var(--amber-bg);border-radius:14px;padding:14px 16px;font-size:14px;margin-top:12px}
+.notice b{display:block;margin-bottom:4px;color:var(--brown-dark)}
+
+/* hooks & tips */
+.hook{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:10px}
+.hook b{font-size:16px}
+.hook p{margin:4px 0 0;font-size:15px;color:var(--slate)}
+.hook .cap{margin-top:10px}
+.tips{list-style:none;padding:0;margin:0;counter-reset:t}
+.tips li{counter-increment:t;position:relative;padding:14px 16px 14px 52px;background:var(--paper);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;font-size:15px}
+.tips li::before{content:counter(t);position:absolute;left:16px;top:14px;width:24px;height:24px;border-radius:50%;background:var(--warm);color:var(--brown);font-weight:800;font-size:13px;display:grid;place-items:center}
+.tips b{display:block;font-size:16px}
+
+/* do / don't */
+.dd{display:grid;gap:10px}
+.dd-row{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--paper)}
+.dd-row div{padding:12px 16px;font-size:15px;display:flex;gap:10px}
+.dd-row .ok{background:var(--good-bg)}
+.dd-row .no{color:var(--slate)}
+.dd-row span{flex:none;font-weight:800}
+.dd-row .ok span{color:var(--good)} .dd-row .no span{color:var(--bad)}
+
+.must{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:6px 16px}
+.must div{padding:12px 0;border-top:1px solid var(--line);font-size:15px}
+.must div:first-child{border-top:0}
+.must b{display:block;font-size:13px;color:var(--brown);margin-bottom:2px}
+.copy-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.copy-row code{font-family:inherit;font-weight:600;font-size:15px}
+.btn-copy{border:1px solid var(--brown);color:var(--brown);background:#fff;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+.ph{background:#fff3c4;padding:0 4px;border-radius:4px}
+
+/* checklist */
+.check{list-style:none;padding:0;margin:0}
+.check label{display:flex;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:8px;font-size:15px;cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--brown);flex:none}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+
+.submit{display:grid;gap:10px}
+.submit a,.submit .dm{display:block;text-decoration:none;border-radius:16px;padding:16px;background:var(--paper);border:1px solid var(--line);color:var(--ink)}
+.submit a{border-color:var(--brown)}
+.submit small{display:block;color:var(--muted);font-size:13px;font-weight:600}
+.submit strong{font-size:17px}
+.submit a strong::after{content:" →";color:var(--brown)}
+
+.thanks{text-align:center;padding:40px 0 20px;color:var(--slate);font-size:15px}
+.thanks b{display:block;font-size:18px;color:var(--brown);margin-bottom:4px}
+
+/* bottom bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.bar .inner{max-width:560px;margin:0 auto;display:flex;gap:8px}
+.bar a{flex:1;text-align:center;text-decoration:none;font-weight:700;font-size:15px;border-radius:14px;padding:13px 8px}
+.bar .primary{background:var(--brown);color:#fff}
+.bar .ghost{background:var(--warm);color:var(--brown-dark)}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">RELIV</div>
+    <h1>릴리브 신제품<br>촬영 가이드</h1>
+    <span class="product">[넓은 복도형 러그]</span>
+    <div class="msg">
+      <div class="label">이번 영상의 한 줄 메시지</div>
+      <strong>"복도 폭이 넓어져서, 이제 발 디디는 곳이 전부 러그예요."</strong>
+      <p>기존 복도형 러그를 써보신 분들께만 드리는 재협찬이에요. "원래 쓰던 집에서 더 넓은 걸로 바꿨다"는 흐름이 가장 자연스럽고 설득력 있어요.</p>
+    </div>
+  </div>
+</header>
+
+<nav class="nav"><div class="wrap">
+  <a href="#basic">기본 조건</a><a href="#scenes">장면 가이드</a><a href="#hooks">훅·팁</a><a href="#rules">표현·표기</a><a href="#submit">일정·제출</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="basic">
+  <h2><span class="num">01</span>기본 촬영 조건</h2>
+  <dl class="spec">
+    <div><dt>화면 비율</dt><dd>세로 9:16 (릴스)</dd></div>
+    <div><dt>길이</dt><dd>30~40초 (첫 3초 안에 훅)</dd></div>
+    <div><dt>화질</dt><dd>1080p 이상, 30fps 이상</dd></div>
+    <div><dt>조명</dt><dd>낮 자연광 또는 복도 조명 모두 켜기 (어두운 복도는 러그 색이 탁해 보여요)</dd></div>
+    <div><dt>촬영 전</dt><dd>복도 바닥의 물건, 신발, 전선 치우기 · 러그 주름 펴기</dd></div>
+    <div><dt>음성/음악</dt><dd>저작권 없는 음원으로 자유.<br>단, 광고 활용용 클린본은 음악·자막 없이 따로 저장</dd></div>
+  </dl>
+</section>
+
+<section id="scenes">
+  <h2><span class="num">02</span>장면별 촬영 가이드</h2>
+  <p class="lead">총 6장면이에요. 순서는 지켜주시되 표현은 자유롭게! 자막은 예시 중 하나를 쓰거나 본인 말투로 바꿔도 좋아요.</p>
+
+  <article class="scene">
+    <div class="scene-head"><div class="scene-no">1</div><div class="scene-title">훅</div></div>
+    <p class="how">아이가 맨바닥 복도를 달리다 미끄러지거나 조심조심 걷는 모습. 아이 눈높이(바닥 가까이)에서 정면으로.</p>
+    <div class="caps-label">자막 예시</div>
+    <div class="cap">복도만 지나가면 스케이트 타는 우리 애</div>
+    <div class="cap">발톱 타닥타닥 소리 들릴 때마다 심장 철렁하는 집사 손</div>
+  </article>
+
+  <article class="scene">
+    <div class="scene-head"><div class="scene-no">2</div><div class="scene-title">Before</div></div>
+    <p class="how">예전 영상 써도 OK. 기존 러그 양옆 맨바닥에 발이 닿거나 미끄러지는 순간이 보이면 가장 좋아요.</p>
+    <div class="caps-label">자막 예시</div>
+    <div class="cap">양 옆에 틈이 살짝 아쉬운데..?</div>
+    <div class="cap">복도형 깔았는데 양옆 틈으로 먼지 들어가네 ㅠ</div>
+  </article>
+
+  <article class="scene">
+    <div class="scene-head"><div class="scene-no">3</div><div class="scene-title">교체</div></div>
+    <p class="how">넓은 복도형을 굴려서 펼치는 장면. 복도 끝에서 위에서 내려다보는 앵글로, 벽에 거의 닿는 폭이 보이게.</p>
+    <div class="caps-label">자막 예시</div>
+    <div class="cap">그래서 벽 끝까지 덮는 걸로 갈아탔어요</div>
+    <div class="cap">폭 보이시나요? 이번엔 벽까지 꽉 참</div>
+  </article>
+
+  <article class="scene">
+    <div class="scene-head"><div class="scene-no">4</div><div class="scene-title">After</div></div>
+    <p class="how">1번과 <b>같은 위치·같은 앵글</b>에서 신나게 뛰는 모습. 마지막에 복도 전체 풀샷.</p>
+    <div class="caps-label">자막 예시</div>
+    <div class="cap">이제 어디로 뛰어도 러그 위 ㅋㅋ 우다다해도 마음 편함</div>
+    <div class="cap">우다다 타임마다 조마조마하던 거 저만 그랬나요</div>
+  </article>
+
+  <article class="scene">
+    <div class="scene-head"><div class="scene-no">5</div><div class="scene-title">관리</div><span class="tag-must">생활방수 필수</span></div>
+    <p class="how"><b>생활방수 장면은 필수</b>: 물이나 음료를 흘리고 쓱 닦아내는 모습. 세탁기에 넣는 장면까지 이어서 넣어주시면 더 좋아요 (권장).</p>
+    <div class="caps-label">자막 예시</div>
+    <div class="cap"><small>생활방수</small>물그릇 엎어도 일단 닦고 봄</div>
+    <div class="cap"><small>생활방수</small>토해도 이제 당황 안 함, 쓱 닦고 끝</div>
+    <div class="cap"><small>세탁</small>더러워지면 통째로 세탁기행, 이게 제일 편함</div>
+    <div class="notice"><b>생활방수 장면 하단에 꼭 넣어주세요</b>생활방수는 오염물의 흡수를 지연시킬 뿐, 완벽히 방수되는 것은 아니니 유의해주세요.</div>
+  </article>
+
+  <article class="scene">
+    <div class="scene-head"><div class="scene-no">6</div><div class="scene-title">마무리</div></div>
+    <p class="how">러그 위에 편하게 엎드린 아이 + 넓어진 폭·길이에 대한 솔직한 한 줄 후기.</p>
+    <div class="caps-label">자막 예시</div>
+    <div class="cap">진작 넓은 걸로 살 걸 그랬어요</div>
+    <div class="cap">복도형 쓰던 집사들, 이건 갈아탈 만해요</div>
+  </article>
+</section>
+
+<section id="hooks">
+  <h2><span class="num">03</span>훅 옵션과 촬영 팁</h2>
+  <p class="lead">미끄러지는 장면이 없다면 아래 훅 중 하나로 시작해도 좋아요. 첫 3초가 조회수와 광고 성과를 거의 결정해요.</p>
+  <div class="hook"><b>비교형</b><p>기존 러그와 넓은 러그를 나란히 펼쳐 폭 차이를 바로 보여주기</p><div class="cap">같은 복도형인데 폭 차이 실화?</div></div>
+  <div class="hook"><b>소리형</b><p>맨바닥에서 발톱 '타닥타닥' 소리 → 러그 위에서 조용해지는 대비</p></div>
+  <div class="hook"><b>질문형</b><p>아이가 러그 끝 맨바닥 앞에서 멈칫하는 모습</p><div class="cap">러그 끝나는 데서 꼭 멈칫하는 거 우리 애만 그래요?</div></div>
+
+  <h3>퀄리티를 올리는 촬영 팁</h3>
+  <ol class="tips">
+    <li><b>앵글은 낮게</b>휴대폰을 바닥에 가깝게 두면 복도가 길고 넓어 보이고 아이 움직임도 역동적으로 담겨요.</li>
+    <li><b>Before와 After는 같은 자리에서</b>바닥에 마스킹테이프로 휴대폰 위치를 표시해 두면 비교가 확실해져요.</li>
+    <li><b>달리기는 유도해서</b>복도 끝에서 간식이나 장난감으로 불러주세요. 여러 번 찍고 가장 좋은 컷만 쓰면 돼요.</li>
+    <li><b>폭이 보이는 컷 1개는 필수</b>위에서 내려다보거나 복도 끝에서 정면으로, 러그가 벽 가까이까지 덮는 모습이 한눈에 보이게.</li>
+    <li><b>손 클로즈업 1컷</b>러그 두께감이나 촉감을 손으로 눌러 보여주면 광고 소재로 활용도가 높아요.</li>
+    <li><b>흔들림 줄이기</b>삼각대나 벽에 기대 찍고, 따라가며 찍을 땐 0.5배 광각을 써주세요.</li>
+  </ol>
+</section>
+
+<section id="rules">
+  <h2><span class="num">04</span>표현 주의사항과 필수 표기</h2>
+  <p class="lead">광고로 집행될 수 있는 영상이라 아래 표현은 꼭 지켜주세요.</p>
+  <div class="dd">
+    <div class="dd-row"><div class="ok"><span>O</span>미끄러짐이 줄었어요</div><div class="no"><span>X</span>미끄럼 100% 방지, 절대 안 미끄러져요</div></div>
+    <div class="dd-row"><div class="ok"><span>O</span>관절 부담이 덜할 것 같아요 (느낌)</div><div class="no"><span>X</span>슬개골·관절 질환 예방, 치료 효과</div></div>
+    <div class="dd-row"><div class="ok"><span>O</span>생활방수라 흘려도 금방 닦여요</div><div class="no"><span>X</span>완벽 방수, 물이 절대 안 스며요</div></div>
+    <div class="dd-row"><div class="ok"><span>O</span>기존보다 넓어서 좋아요</div><div class="no"><span>X</span>기존 제품 단점을 깎아내리는 표현</div></div>
+  </div>
+
+  <h3>필수 표기</h3>
+  <div class="must">
+    <div><b>유료광고 표시</b>인스타그램 '유료 파트너십' 라벨 + 본문 첫 줄 #광고 또는 #협찬</div>
+    <div><b>브랜드 계정 태그</b><span class="ph">@[릴리브 계정]</span></div>
+    <div><b>필수 해시태그</b><div class="copy-row"><code id="tags">#광고 #릴리브펫러그 #복도러그 #강아지매트 #펫러그</code><button class="btn-copy" data-copy="tags">복사</button></div></div>
+    <div><b>생활방수 고지</b>생활방수 장면 시 화면 하단 고지 문구 (5번 장면 참고)</div>
+  </div>
+</section>
+
+<section id="submit">
+  <h2><span class="num">05</span>업로드 일정과 제출물</h2>
+  <dl class="spec">
+    <div><dt>초안 공유</dt><dd>업로드 예정일 5일 전까지 DM 전달 (업로드 전 1회 확인)</dd></div>
+    <div><dt>업로드 기간</dt><dd>제품 수령 후 2주</dd></div>
+    <div><dt>채널</dt><dd>인스타그램 릴스</dd></div>
+    <div><dt>광고 활용</dt><dd>업로드 영상을 <span class="ph">[기간]</span> 동안 브랜드 광고로 활용할 수 있어요 (파트너십 광고 권한 승인 요청 예정)</dd></div>
+    <div><dt>문의</dt><dd>인스타그램 DM</dd></div>
+  </dl>
+
+  <h3>제출 체크리스트</h3>
+  <ul class="check">
+    <li><label><input type="checkbox"><span>업로드 게시물 링크</span></label></li>
+    <li><label><input type="checkbox"><span>최종 편집본 원본 파일 (자막·음악 포함)</span></label></li>
+    <li><label><input type="checkbox"><span>클린본 원본 파일 (자막·음악 없는 버전)</span></label></li>
+    <li><label><input type="checkbox"><span>제품 이용 사진 5장 이상</span></label></li>
+    <li><label><input type="checkbox"><span>파트너십 애드코드 DM 전달</span></label></li>
+  </ul>
+
+  <h3>제출 방법</h3>
+  <div class="submit">
+    <a href="https://xzfbvm.s.gy/Jk1jy6" target="_blank" rel="noopener"><small>원본 · 클린본 · 제품 사진 5컷</small><strong>제출 폼</strong></a>
+    <a href="https://forms.gle/Ja8ay48MLCw4ApEv9" target="_blank" rel="noopener"><small>제품 사용 설문</small><strong>설문 구글폼</strong></a>
+    <div class="dm"><small>파트너십 광고 코드</small><strong>업로드 후 인스타그램 DM</strong></div>
+  </div>
+
+  <div class="thanks"><b>감사합니다!</b>촬영부터 업로드까지 함께해주셔서 고마워요.</div>
+</section>
+</main>
+
+<div class="bar"><div class="inner">
+  <a class="ghost" href="https://forms.gle/Ja8ay48MLCw4ApEv9" target="_blank" rel="noopener">설문하기</a>
+  <a class="primary" href="https://xzfbvm.s.gy/Jk1jy6" target="_blank" rel="noopener">파일 제출하기</a>
+</div></div>
+<div class="toast" id="toast">해시태그를 복사했어요</div>
+
+<script>
+document.querySelectorAll('.btn-copy').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=document.getElementById(b.dataset.copy).textContent;
+    var done=function(){var el=document.getElementById('toast');el.classList.add('show');setTimeout(function(){el.classList.remove('show')},1500)};
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,function(){})}
+    else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done()}catch(e){}ta.remove()}
+  });
+});
+</script>
+</body>
+</html>
