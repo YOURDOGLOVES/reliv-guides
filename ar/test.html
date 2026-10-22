@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>AR 진단</title>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
+<style>body{font-family:system-ui,sans-serif;margin:16px;background:#F3EFE8;color:#241F17}model-viewer{width:100%;height:220px;background:#EAE4DA;border-radius:12px}section{margin-bottom:28px}button{width:100%;height:48px;border:0;border-radius:999px;background:#241F17;color:#fff;font-size:16px;font-weight:700;margin-top:8px}h2{font-size:16px;margin:0 0 6px}p{font-size:13px;color:#6B6155;margin:4px 0 8px}#log{font-size:12px;white-space:pre-wrap;background:#fff;padding:10px;border-radius:8px}</style></head>
+<body>
+<h1 style="font-size:20px">AR 진단 페이지</h1>
+<p>각 버튼으로 AR을 열어 러그가 바닥에 나타나는지 알려 주세요. (A→B→C 순서)</p>
+<div id="log">기기: …</div>
+
+<section><h2>A. 예전 모델 (v2) 그대로</h2><p>이게 되면 → 새 모델(v3) 문제</p>
+<model-viewer id="a" src="models/_v2_green_XL.glb" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed" camera-controls></model-viewer>
+<button onclick="go('a')">A 열기</button></section>
+
+<section><h2>B. 새 모델 (v3) 파일 직접</h2><p>A는 되고 B가 안 되면 → 모델 형태 문제</p>
+<model-viewer id="b" src="models/green_XL.glb?v=3" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed" camera-controls></model-viewer>
+<button onclick="go('b')">B 열기</button></section>
+
+<section><h2>C. 새 모델 (v3) 회전 심은 blob</h2><p>B는 되고 C가 안 되면 → 페이지의 회전 처리 문제</p>
+<model-viewer id="c" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed" camera-controls></model-viewer>
+<button onclick="go('c')">C 열기</button></section>
+
+<section><h2>D. 새 모델, 텍스처 1024 제한</h2><p>B는 안 되고 D가 되면 → 텍스처 크기 문제</p>
+<model-viewer id="d" src="models/green_XL.glb?v=3" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed" ar-usdz-max-texture-size="1024" camera-controls></model-viewer>
+<button onclick="go('d')">D 열기</button></section>
+
+<script>
+const log=document.getElementById('log');
+log.textContent=`기기: ${navigator.userAgent}\nWebXR: ${!!navigator.xr}`;
+if(navigator.xr&&navigator.xr.isSessionSupported) navigator.xr.isSessionSupported('immersive-ar').then(v=>log.textContent+=`\nimmersive-ar: ${v}`).catch(()=>{});
+function rotateGlb(buf,deg){const dv=new DataView(buf),u8=new Uint8Array(buf);const jl=dv.getUint32(12,true);const j=JSON.parse(new TextDecoder().decode(u8.subarray(20,20+jl)));const rest=u8.subarray(20+jl);const a=deg*Math.PI/180;j.nodes[0].rotation=[0,Math.sin(a/2),0,Math.cos(a/2)];let js=new TextEncoder().encode(JSON.stringify(j));const pad=(4-js.length%4)%4;const out=new Uint8Array(20+js.length+pad+rest.length),o=new DataView(out.buffer);out.set(u8.subarray(0,12));o.setUint32(8,out.length,true);o.setUint32(12,js.length+pad,true);o.setUint32(16,0x4E4F534A,true);out.set(js,20);for(let i=0;i<pad;i++)out[20+js.length+i]=0x20;out.set(rest,20+js.length+pad);return out.buffer;}
+fetch('models/green_XL.glb?v=3').then(r=>r.arrayBuffer()).then(b=>{document.getElementById('c').src=URL.createObjectURL(new Blob([rotateGlb(b,30)],{type:'model/gltf-binary'}));});
+for(const id of ['a','b','c','d']){const mv=document.getElementById(id);mv.addEventListener('ar-status',e=>log.textContent+=`\n${id.toUpperCase()}: ${e.detail.status}`);mv.addEventListener('error',e=>log.textContent+=`\n${id.toUpperCase()} error: ${JSON.stringify(e.detail)}`);}
+async function go(id){const mv=document.getElementById(id);await customElements.whenDefined('model-viewer');log.textContent+=`\n${id.toUpperCase()}: canActivateAR=${mv.canActivateAR}`;try{await mv.activateAR();}catch(e){log.textContent+=`\n${id.toUpperCase()} 실패: ${e}`;}}
+</script></body></html>
