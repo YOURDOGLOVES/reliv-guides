@@ -125,6 +125,15 @@ model-viewer::part(default-ar-button){display:none}
 .cta[aria-busy="true"] .spin{display:block}
 .cta[aria-busy="true"] .i{display:none}
 
+.sheet{position:fixed;inset:0;z-index:300;display:none;align-items:flex-end;justify-content:center;background:rgba(36,31,23,.45);padding:0 var(--s-4) max(var(--s-4),env(safe-area-inset-bottom))}
+.sheet.on{display:flex}
+.sheet>div{width:100%;max-width:528px;background:var(--surface);border-radius:var(--r-surface);padding:var(--s-5);display:grid;gap:var(--s-4);transform:translateY(0);animation:up var(--t-ui) var(--ease-out)}
+@keyframes up{from{transform:translateY(16px);opacity:0}}
+.sheet h2{margin:0;font-size:var(--t-body);font-weight:700}
+.sheet ul{margin:0;padding-left:18px;display:grid;gap:var(--s-2);font-size:var(--t-small);color:var(--ink-2)}
+.sheet ul strong{color:var(--ink)}
+.sheet .ghost{display:grid;grid-template-columns:auto 1fr;gap:var(--s-3);align-items:center;background:var(--stage);border-radius:var(--r-chip);padding:var(--s-3);font-size:var(--t-small)}
+.sheet .ghost i{display:block;width:44px;height:30px;border-radius:3px;border:2px dashed var(--ink-3);opacity:.7;transform:perspective(60px) rotateX(35deg)}
 body.embed header,body.embed .tips,body.embed .fine,body.embed .row{display:none}
 @media (prefers-reduced-motion:reduce){
   *{transition-duration:0ms!important}
@@ -212,6 +221,18 @@ body.embed header,body.embed .tips,body.embed .fine,body.embed .row{display:none
   <p class="fine">러그 색은 방의 밝기와 조명 색을 따라가고 바닥에 그림자가 생겨요. 창으로 들어온 햇빛 무늬는 러그 위에 비치지 않아서, 그늘진 쪽에서 볼 때 실제 색에 가장 가까워요.</p>
 </div>
 
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h">
+  <div>
+    <h2 id="sheet-h">카메라가 바닥을 찾을 때까지 잠깐</h2>
+    <div class="ghost"><i aria-hidden="true"></i><span>이런 <strong>연한 러그 모양</strong>이 뜨면 바닥을 찾은 거예요. 그때 화면을 탭하면 놓여요.</span></div>
+    <ul>
+      <li><strong>가구 다리나 바닥 경계</strong>가 보이게 비추며 폰을 천천히 좌우로 움직여요. 무늬 없는 맨바닥만 비추면 못 찾아요.</li>
+      <li>너무 어둡거나 창을 정면으로 보면 안 잡혀요.</li>
+      <li>30초 넘게 안 뜨면 닫고 다시 열어요.</li>
+    </ul>
+    <button type="button" class="cta" id="sheetGo"><svg class="i" aria-hidden="true"><use href="#ic-camera"/></svg>알겠어요, 열기</button>
+  </div>
+</div>
 <div class="bar"><button class="cta" id="cta" type="button" aria-busy="false"><span class="spin" aria-hidden="true"></span><svg class="i" aria-hidden="true"><use id="ctaIcon" href="#ic-camera"/></svg><span id="ctaText">우리집 바닥에 깔아보기</span></button></div>
 
 <script>
@@ -323,7 +344,9 @@ document.getElementById('share').onclick=async()=>{
   try{ await navigator.clipboard.writeText(location.href); t.textContent='링크를 복사했어요'; setTimeout(()=>t.textContent='이 조합 링크 복사',1800);}catch(e){ prompt('링크를 복사하세요',location.href); }
 };
 const cta=document.getElementById('cta'), ctaText=document.getElementById('ctaText'), arFail=document.getElementById('arFail');
-cta.onclick=async()=>{
+let seenHint=false; try{ seenHint=localStorage.getItem('reliv-ar-hint')==='1'; }catch(e){}
+const sheet=document.getElementById('sheet');
+async function launchAR(){
   await customElements.whenDefined('model-viewer');
   if(mv.canActivateAR){
     cta.disabled=true; cta.setAttribute('aria-busy','true'); ctaText.textContent='AR 여는 중';
@@ -332,7 +355,14 @@ cta.onclick=async()=>{
   }
   else if(!isMobile){ const b=document.getElementById('qrBox'); b.classList.add('on'); drawQR(); b.scrollIntoView({behavior:'smooth',block:'center'}); }
   else { arFail.classList.add('on'); }
+}
+cta.onclick=async()=>{
+  await customElements.whenDefined('model-viewer');
+  if(mv.canActivateAR&&!seenHint){ sheet.classList.add('on'); document.getElementById('sheetGo').focus(); return; }
+  launchAR();
 };
+document.getElementById('sheetGo').onclick=()=>{ sheet.classList.remove('on'); seenHint=true; try{ localStorage.setItem('reliv-ar-hint','1'); }catch(e){} launchAR(); };
+sheet.addEventListener('click',e=>{ if(e.target===sheet) sheet.classList.remove('on'); });
 mv.addEventListener('ar-status',e=>{ if(e.detail.status==='failed') arFail.classList.add('on'); });
 if(!isMobile){ ctaText.textContent='휴대폰으로 열어서 깔아보기'; document.getElementById('ctaIcon').setAttribute('href','#ic-phone'); window.addEventListener('load',()=>{document.getElementById('qrBox').classList.add('on');drawQR();}); }
 render();
