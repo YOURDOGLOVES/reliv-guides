@@ -74,7 +74,7 @@ section h2{margin:0 0 10px;font-size:13px;font-weight:700;color:var(--ink-2);let
   <div class="stage">
     <model-viewer id="mv"
       src="models/green_XL.glb"
-      poster="thumb.jpg"
+      poster="thumb_green.jpg"
       alt="릴리브 펫슬리브 러그 3D 미리보기"
       ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed"
       camera-controls touch-action="pan-y" disable-zoom
@@ -126,7 +126,7 @@ const SIZES=[
   {k:'S',n:'거실S',w:100,h:150},{k:'M',n:'거실M',w:150,h:200},{k:'L',n:'거실L',w:200,h:250},{k:'XL',n:'거실XL',w:200,h:300},
   {k:'hall',n:'기본 복도형',w:100,h:250},{k:'widehall',n:'넓은 복도형',w:120,h:200},{k:'module',n:'모듈형',w:100,h:200},{k:'kitchen',n:'주방형',w:45,h:115}
 ];
-const COLORS=[{k:'green',n:'그린',c:'#2F6E5E',ready:true},{k:'ivory',n:'아이보리',c:'#EEE8DA'},{k:'beige',n:'베이지',c:'#CDB89A'},{k:'gray',n:'그레이',c:'#A3A19C'}];
+const COLORS=[{k:'green',n:'그린',c:'#2F6E5E',ready:true},{k:'ivory',n:'아이보리',c:'#EEE8DA'},{k:'beige',n:'베이지',c:'#C6B8AA',ready:true},{k:'gray',n:'그레이',c:'#ACA8A5',ready:true}];
 const mv=document.getElementById('mv');
 const q=new URLSearchParams(location.search);
 let size=SIZES.find(s=>s.k===q.get('size'))||SIZES[3];
@@ -137,7 +137,7 @@ function render(){
   document.getElementById('sizes').innerHTML=SIZES.map(s=>`<button type="button" class="chip" data-k="${s.k}" aria-pressed="${s===size}"><b>${s.n.replace('거실','')}</b><small>${s.w}×${s.h}</small></button>`).join('');
   document.getElementById('colors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-k="${c.k}" aria-pressed="${c===color}" ${c.ready?'':'disabled'}><i style="background:${c.c}"></i>${c.n}${c.ready?'':' <em>준비 중</em>'}</button>`).join('');
   document.getElementById('dim').innerHTML=`${size.w} × ${size.h} cm <span>${size.n}</span>`;
-  if(!mv.src.endsWith(src())) mv.src=src();
+  if(!mv.src.endsWith(src())){ mv.poster=`thumb_${color.k}.jpg`; mv.src=src(); }
   const u=new URL(location.href); u.searchParams.set('size',size.k); u.searchParams.set('color',color.k); history.replaceState(null,'',u);
   drawQR();
 }
