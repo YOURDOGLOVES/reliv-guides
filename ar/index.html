@@ -8,7 +8,7 @@
 <title>릴리브 우리집에 깔아보기</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.2.0/dist/model-viewer.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js" defer></script>
 <style>
 /* 휴대폰 한 열: 3D 미리보기 → 사이즈·색 → 사용법, 맨 아래 AR 버튼 고정 */
@@ -159,8 +159,12 @@ const ua=navigator.userAgent;
 const isIOS=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 const isAndroid=/Android/i.test(ua);
 const isMobile=isIOS||isAndroid;
-// 안드로이드 Scene Viewer(WebXR 없는 기기)는 파일 주소만 받으므로 회전을 심은 blob 을 쓸 수 없음 → 서버 파일 + 90도 판만 사용
-const canBlob=!(isAndroid&&!navigator.xr);
+// 안드로이드 Scene Viewer 는 파일 주소만 받으므로 회전을 심은 blob 을 쓸 수 없음.
+// 안드로이드는 WebXR immersive-ar 이 실제로 되는 기기에서만 blob, 아니면 서버 파일 + 90도 판 사용. (확인 전엔 서버 파일)
+let canBlob=!isAndroid;
+if(isAndroid&&navigator.xr&&navigator.xr.isSessionSupported){
+  navigator.xr.isSessionSupported('immersive-ar').then(ok=>{ if(ok){ canBlob=true; if(yaw%90) loadModel(); } }).catch(()=>{});
+}
 
 function fileUrl(r90){return `models/${color.k}_${size.k}${r90?'_r90':''}.glb?${V}`;}
 const cache=new Map();
