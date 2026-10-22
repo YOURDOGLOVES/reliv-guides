@@ -1,102 +1,214 @@
-"""v2 rug models: calibrated albedo + fabric normal map + bound edge.
-Albedo targets come from the rug as seen in real room footage / studio shots,
-lifted slightly so AR lighting (which multiplies base color) lands near reality."""
-import io, json, struct
+"""v3 rug models — 릴리브 펫슬리브 러그 AR용 GLB 생성.
+
+v2 대비 달라진 점
+- 원단 결: 사진에서 결 방향을 자동으로 찾아 러그 긴 변에 맞춰 돌린 뒤, 결 방향으로 길쭉한 조각을 겹쳐 붙여
+  헤더(두 가닥 혼방) 줄무늬가 끊기지 않게 함. 결의 진하기는 사진에서 실측한 대비를 그대로 씀(고정값 X).
+- 가장자리: 실제 제품처럼 둥근 모서리(r=3cm) + 둥글게 말린 파이핑 테두리(약 1.2cm) + 박음질 홈.
+  테두리는 지오메트리(옆면을 1/4 원으로 둥글림)와 노멀맵 둘 다로 표현.
+- 노멀맵: 미세 보풀 노이즈를 빼고 파이핑·홈·완만한 굴곡만 넣어 압축 잡티(자글자글)가 안 생기게 함.
+- 아이보리: 2025-06 고객 촬영 탑뷰(ivory_top_250625.jpg)의 결을 씀.
+
+사용법: python3 build_models.py [green gray beige ivory]   (색을 안 적으면 전부)
+"""
+import io, json, os, struct, sys
 import numpy as np
-from PIL import Image, ImageFilter
-from scipy.ndimage import gaussian_filter
+from PIL import Image, ImageOps
+from scipy.ndimage import gaussian_filter, rotate as ndrotate
 
 rng = np.random.default_rng(11)
-import os
 HERE = os.path.dirname(os.path.abspath(__file__))
-D = os.path.join(HERE, 'src') + '/'
-# key: (structure source, crop, real cm across crop, target base sRGB, detail amp)
+SRC_DIR = os.path.join(HERE, 'src')
+
+# color: (structure photo, crop box, real cm across the crop width, target base sRGB)
 SRC = {
-    'green': (D + 'green_3141_6s.jpg', (60, 80, 1020, 1040), 35.0, (95, 137, 135), 0.10),
-    'gray':  (D + 'gray_close.jpg', (1600, 850, 3100, 2350), 45.0, (178, 174, 171), 0.07),
-    'beige': (D + 'beige_d3070.jpg', (1300, 250, 3050, 2000), 45.0, (204, 194, 184), 0.07),
-    'ivory': (D + 'beige_d3070.jpg', (1300, 250, 3050, 2000), 45.0, (224, 218, 207), 0.06),
+    'green': ('green_3141_6s.jpg', (60, 80, 1020, 1040), 35.0, (95, 137, 135)),
+    'gray':  ('gray_close.jpg', (1600, 1000, 3300, 2350), 45.0, (178, 174, 171)),
+    'beige': ('beige_d3070.jpg', (1700, 150, 3000, 1250), 38.0, (204, 194, 184)),
+    'ivory': ('ivory_top_250625.jpg', (0, 0, 1500, 1450), 69.0, (224, 218, 207)),
 }
 SIZES = [('S', 100, 150), ('M', 150, 200), ('L', 200, 250), ('XL', 200, 300),
          ('hall', 100, 250), ('widehall', 120, 200), ('module', 100, 200), ('kitchen', 45, 115)]
-TH = 0.009  # 9 mm
+TH = 0.009        # 두께 9 mm
+CORNER_CM = 3.0   # 모서리 반지름
+PIPE_CM = 1.2     # 파이핑 폭
+MAX_PX = 1536     # 긴 변 최대 픽셀
+PPC_MAX = 5.0     # px / cm 상한
 
 
-def detail_src(key):
-    f, box, cm, _, _ = SRC[key]
-    im = Image.open(f).convert('L').crop(box).resize((960, 960), Image.LANCZOS)
+# ---------- 1. 원단 결 추출 ----------
+def load_detail(key):
+    """사진 -> 조명 제거한 상대 고역(결만), 결 방향을 세로로 정렬. 반환: (detail[H,W] 상대값, cm/px)"""
+    f, box, cm, _ = SRC[key]
+    im = ImageOps.exif_transpose(Image.open(os.path.join(SRC_DIR, f))).convert('L').crop(box)
     a = np.asarray(im).astype(np.float32)
-    low = np.asarray(im.filter(ImageFilter.GaussianBlur(25))).astype(np.float32)
-    hp = (a - low) / (low + 1)          # relative high-pass: fabric pile only, lighting removed
-    hp = (hp - hp.mean()) / (hp.std() + 1e-6)
-    return hp, cm
+    cm_per_px = cm / a.shape[1]
+    low = gaussian_filter(a, 2.0 / cm_per_px)            # 2 cm 보다 큰 명암(조명·주름) 제거
+    hp = (a - low) / (low + 1)
+    hp = gaussian_filter(hp, 0.12 / cm_per_px)            # 0.1 mm 급 센서 노이즈 억제
+    # 결 방향: 구조 텐서로 지배적 방향 찾기, 결이 세로가 되도록 회전(부호는 결과를 보고 고름)
+    def streak_angle(a):
+        gy, gx = np.gradient(a)
+        jxx, jyy, jxy = (gx * gx).mean(), (gy * gy).mean(), (gx * gy).mean()
+        return np.degrees(0.5 * np.arctan2(2 * jxy, jxx - jyy)) + 90, (jxx - jyy) / (jxx + jyy + 1e-9)
+    streak_deg, _ = streak_angle(hp)
+    best = None
+    for sgn in (1, -1):
+        r = ndrotate(hp, sgn * (streak_deg - 90), reshape=False, order=1, mode='reflect')
+        H, W = r.shape; m = int(min(H, W) * 0.18)
+        r = r[m:H - m, m:W - m]
+        _, aniso = streak_angle(r)                         # 세로 결이면 x 방향 변화가 커서 +
+        if best is None or aniso > best[0]: best = (aniso, r)
+    rot = best[1]
+    rms = float(rot.std())
+    if rms < 0.02: rot *= 0.02 / rms; rms = 0.02           # 흐린 사진은 최소 가시 대비로 올림
+    print(f'  {key}: streak {streak_deg:.1f}deg, aniso {best[0]:.2f}, contrast rms {rms:.3f}', flush=True)
+    return rot, cm_per_px
 
 
-def splat(hp, cm, W, H, ppc):
-    """random overlapping feathered patches -> seamless, non-repeating detail field"""
-    scale = cm * ppc / hp.shape[0]
-    s = np.asarray(Image.fromarray(hp.astype(np.float32), 'F').resize(
-        (max(8, int(hp.shape[1] * scale)), max(8, int(hp.shape[0] * scale))), Image.BILINEAR))
-    P = int(min(s.shape) * 0.7)
-    yy, xx = np.mgrid[0:P, 0:P]
-    mask = np.clip(1 - np.hypot(yy - P / 2, xx - P / 2) / (P / 2), 0, 1) ** 1.5
+def splat(det, cm_per_px, W, H, ppc, along_v=True):
+    """결 방향으로 길쭉한 깃털 조각을 랜덤 위치·뒤집기로 겹쳐 붙여 이음새·반복 없는 결 필드 생성"""
+    s = det if along_v else det.T
+    scale = cm_per_px * ppc                                # 원본 px -> 출력 px
+    sh, sw = max(8, int(s.shape[0] * scale)), max(8, int(s.shape[1] * scale))
+    rms0 = s.std()
+    s = np.asarray(Image.fromarray(s.astype(np.float32), 'F').resize((sw, sh), Image.LANCZOS))
+    s = s * min(2.5, 0.8 * rms0 / (s.std() + 1e-6))         # 축소로 깎인 대비를 80%까지 되살림
+    PH, PW = int(sh * 0.8), int(sw * 0.45)                 # 조각: 결 방향으로 길게
+    yy, xx = np.mgrid[0:PH, 0:PW]
+    mask = np.clip(1 - np.hypot((yy - PH / 2) / (PH / 2), (xx - PW / 2) / (PW / 2)), 0, 1) ** 1.3
     acc = np.zeros((H, W), np.float32); ws = np.zeros((H, W), np.float32)
-    step = max(4, int(P * 0.45))
-    for y in range(-P // 2, H, step):
-        for x in range(-P // 2, W, step):
-            jx = x + rng.integers(-step // 3, step // 3 + 1); jy = y + rng.integers(-step // 3, step // 3 + 1)
-            sy = rng.integers(0, s.shape[0] - P + 1); sx = rng.integers(0, s.shape[1] - P + 1)
-            y0, x0, y1, x1 = max(jy, 0), max(jx, 0), min(jy + P, H), min(jx + P, W)
+    sy_, sx_ = max(4, int(PH * 0.42)), max(4, int(PW * 0.42))
+    for y in range(-PH // 2, H, sy_):
+        for x in range(-PW // 2, W, sx_):
+            jy = y + rng.integers(-sy_ // 3, sy_ // 3 + 1); jx = x + rng.integers(-sx_ // 3, sx_ // 3 + 1)
+            oy = rng.integers(0, sh - PH + 1); ox = rng.integers(0, sw - PW + 1)
+            p = s[oy:oy + PH, ox:ox + PW]
+            if rng.random() < .5: p = p[::-1]
+            if rng.random() < .5: p = p[:, ::-1]
+            y0, x0, y1, x1 = max(jy, 0), max(jx, 0), min(jy + PH, H), min(jx + PW, W)
             if y1 <= y0 or x1 <= x0: continue
             m = mask[y0 - jy:y1 - jy, x0 - jx:x1 - jx]
-            acc[y0:y1, x0:x1] += s[sy + y0 - jy:sy + y1 - jy, sx + x0 - jx:sx + x1 - jx] * m
+            acc[y0:y1, x0:x1] += p[y0 - jy:y1 - jy, x0 - jx:x1 - jx] * m
             ws[y0:y1, x0:x1] += m
-    d = acc / np.maximum(ws, 1e-3)
-    return (d - d.mean()) / (d.std() + 1e-6)
+    return acc / np.maximum(ws, 1e-3)
 
 
-def maps(key, wcm, hcm, ppc):
-    hp, cm = detail_src(key)
-    W, H = int(wcm * ppc), int(hcm * ppc)
-    det = splat(hp, cm, W, H, ppc)
-    target = np.array(SRC[key][3], np.float32); amp = SRC[key][4]
-    # distance from edge (cm)
-    ey = np.minimum(np.arange(H), np.arange(H)[::-1])[:, None]
-    ex = np.minimum(np.arange(W), np.arange(W)[::-1])[None, :]
-    e = np.minimum(ey, ex) / ppc
-    band = e < 2.5
-    # large-scale gentle mottling (pile direction / wear) so the field isn't flat
-    lo = splat(hp, cm * 6, W, H, ppc)
-    lo = gaussian_filter(lo, ppc * 6)
+# ---------- 2. 가장자리 SDF ----------
+def edge_distance(W, H, ppc):
+    """둥근 사각형 안쪽에서 테두리까지의 거리(cm). 모서리는 원호를 따라감."""
+    r = CORNER_CM * ppc
+    y = np.arange(H)[:, None] + 0.5; x = np.arange(W)[None, :] + 0.5
+    cx, cy = W / 2, H / 2
+    qx = np.abs(x - cx) - (W / 2 - r); qy = np.abs(y - cy) - (H / 2 - r)
+    sdf = np.hypot(np.maximum(qx, 0), np.maximum(qy, 0)) + np.minimum(np.maximum(qx, qy), 0) - r
+    return -sdf / ppc
+
+
+# ---------- 3. 텍스처 ----------
+def textures(key, wcm, hcm, ppc, det, cm_per_px):
+    W, H = int(round(wcm * ppc)), int(round(hcm * ppc))
+    target = np.array(SRC[key][3], np.float32)
+    along_v = hcm >= wcm                                   # 결은 긴 변 방향
+    d = splat(det, cm_per_px, W, H, ppc, along_v)          # 상대 명암 (실측 대비 유지)
+    d = np.clip(d, -0.35, 0.35)
+    # 아주 완만한 색 얼룩(보풀 눕는 방향·착용감) — 결 필드를 크게 흐려 재사용
+    lo = gaussian_filter(splat(det, cm_per_px * 5, W, H, ppc, along_v), ppc * 8)
     lo = lo / (np.abs(lo).max() + 1e-6)
-    lum = 1 + amp * np.clip(det, -2.5, 2.5) / 2.5 + 0.02 * lo
-    detb = gaussian_filter(det, ppc * 0.3)
-    lum = np.where(band, 0.965 + amp * 0.4 * np.clip(detb, -2.5, 2.5) / 2.5, lum)
-    seam = np.exp(-((e - 2.5) / 0.12) ** 2); lum *= 1 - 0.10 * seam
+    e = edge_distance(W, H, ppc)
+    pipe = np.clip(e / PIPE_CM, 0, 1)                      # 0=바깥 테두리, 1=파이핑 안쪽
+    lum = 1 + 1.0 * d + 0.03 * lo
+    # 파이핑: 결이 짧게 끊기고(천을 감쌌으니) 둥근 면이라 바깥쪽이 살짝 밝고 안쪽 경계가 어둡다
+    pipe_lum = 1 + 0.45 * gaussian_filter(d, 0.6 * ppc) + 0.05 * np.sin(np.pi * pipe)
+    seam = np.exp(-((e - PIPE_CM) / 0.10) ** 2)            # 박음질 홈
+    lum = np.where(e < PIPE_CM, pipe_lum, lum) * (1 - 0.14 * seam)
+    stitch = (np.sin(2 * np.pi * (np.arange(W)[None, :] + np.arange(H)[:, None]) / (0.35 * ppc)) > 0.6) * seam
+    lum *= 1 + 0.05 * stitch                               # 땀 자국
     alb = np.clip(target[None, None, :] * lum[..., None], 0, 255).astype(np.uint8)
-    # height field -> normal map (pile + binding roll + seam groove)
-    h = np.where(band, 0.25 * detb, det) * 0.6
-    h += -1.2 * np.clip(1 - e / 0.9, 0, 1) ** 2 - 0.8 * seam
+    # 높이: 파이핑 둥근 단면 + 홈 + 완만한 굴곡 + 약한 결 요철(보풀) — 노이즈는 넣지 않음
+    h = 0.35 * np.sin(np.pi * pipe) * (e < PIPE_CM)        # 파이핑 볼록
+    h -= 0.25 * seam                                       # 홈
+    h += 0.10 * lo                                         # 굴곡
+    h += 0.06 * gaussian_filter(d, 0.5 * ppc) * (e >= PIPE_CM)
     gy, gx = np.gradient(h)
-    k = 1.4
+    k = 5.0 * ppc / 5.0
     n = np.dstack([-gx * k, -gy * k, np.ones_like(h)])
     n /= np.linalg.norm(n, axis=2, keepdims=True)
     nm = ((n * 0.5 + 0.5) * 255).astype(np.uint8)
-    return Image.fromarray(alb), Image.fromarray(nm)
+    return Image.fromarray(alb), Image.fromarray(nm), W, H
 
 
-def glb(wcm, hcm, alb_jpg, nrm_png, side):
-    w, d = wcm / 100, hcm / 100; x, z = w / 2, d / 2
-    tp = [(-x, TH, -z), (x, TH, -z), (x, TH, z), (-x, TH, z)]
-    tn = [(0, 1, 0)] * 4; tuv = [(0, 0), (1, 0), (1, 1), (0, 1)]; tt = [(1, 0, 0, 1)] * 4; ti = [0, 2, 1, 0, 3, 2]
-    P, N, I = [], [], []
-    def quad(a, b, c, dd, n):
-        k0 = len(P); P.extend([a, b, c, dd]); N.extend([n] * 4); I.extend([k0, k0 + 1, k0 + 2, k0, k0 + 2, k0 + 3])
-    quad((-x, 0, z), (x, 0, z), (x, TH, z), (-x, TH, z), (0, 0, 1))
-    quad((x, 0, -z), (-x, 0, -z), (-x, TH, -z), (x, TH, -z), (0, 0, -1))
-    quad((x, 0, z), (x, 0, -z), (x, TH, -z), (x, TH, z), (1, 0, 0))
-    quad((-x, 0, -z), (-x, 0, z), (-x, TH, z), (-x, TH, -z), (-1, 0, 0))
-    quad((-x, 0, -z), (x, 0, -z), (x, 0, z), (-x, 0, z), (0, -1, 0))
+# ---------- 4. 지오메트리 ----------
+def outline(wcm, hcm, seg=8):
+    """둥근 사각형 외곽선 (x,z) 반시계, 단위 m"""
+    w, d, r = wcm / 100, hcm / 100, CORNER_CM / 100
+    pts = []
+    for (cx, cz, a0) in [(w / 2 - r, d / 2 - r, 0), (-w / 2 + r, d / 2 - r, 90), (-w / 2 + r, -d / 2 + r, 180), (w / 2 - r, -d / 2 + r, 270)]:
+        for i in range(seg + 1):
+            a = np.radians(a0 + 90 * i / seg)
+            pts.append((cx + r * np.cos(a), cz + r * np.sin(a)))
+    return pts
+
+
+def mesh(wcm, hcm):
+    """상판(둥근 사각형, 선풍기 삼각분할) + 옆면(1/4 원 프로파일) + 바닥. UV는 상판 평면 투영."""
+    w, d = wcm / 100, hcm / 100
+    ring = outline(wcm, hcm)
+    n = len(ring)
+    uv = lambda x, z: ((x + w / 2) / w, (z + d / 2) / d)
+    P, N, UV, I = [], [], [], []
+    # top
+    top0 = len(P)
+    P.append((0, TH, 0)); N.append((0, 1, 0)); UV.append(uv(0, 0))
+    for (x, z) in ring:
+        P.append((x, TH, z)); N.append((0, 1, 0)); UV.append(uv(x, z))
+    for i in range(n):
+        j = (i + 1) % n
+        I += [top0, top0 + 1 + j, top0 + 1 + i]           # 위에서 봤을 때 CCW (y-up, 반시계 x->z)
+    # side: quarter-round profile from top edge down to the floor edge
+    prof = [(np.radians(90 * t / 4)) for t in range(5)]   # 0..90deg
+    rows = []
+    for a in prof:
+        row = []
+        inset = TH * (1 - np.sin(a)); y = TH * np.cos(a)  # a=0: top (inset TH), a=90: outer bottom
+        for k, (x, z) in enumerate(ring):
+            # outward normal in plane from polygon neighbours
+            xp, zp = ring[k - 1]; xn, zn = ring[(k + 1) % n]
+            tx, tz = xn - xp, zn - zp; L = np.hypot(tx, tz) or 1
+            ox, oz = tz / L, -tx / L
+            # ring winds CCW viewed from +y (x->z); outward = (tz,-tx) check sign against centre
+            if ox * x + oz * z < 0: ox, oz = -ox, -oz
+            px, pz = x - ox * inset, z - oz * inset
+            nx, ny, nz = ox * np.sin(a), np.cos(a), oz * np.sin(a)
+            row.append(len(P)); P.append((px, y, pz)); N.append((nx, ny, nz)); UV.append(uv(px, pz))
+        rows.append(row)
+    for r in range(len(rows) - 1):
+        for k in range(n):
+            a, b = rows[r][k], rows[r][(k + 1) % n]
+            c, dd = rows[r + 1][k], rows[r + 1][(k + 1) % n]
+            I += [a, c, b, b, c, dd]
+    # bottom (separate flat-colour material)
+    B_P, B_N, B_I = [], [], []
+    B_P.append((0, 0, 0)); B_N.append((0, -1, 0))
+    for (x, z) in ring: B_P.append((x, 0, z)); B_N.append((0, -1, 0))
+    for i in range(n):
+        j = (i + 1) % n
+        B_I += [0, 1 + i, 1 + j]
+    # check winding of top: cross((ring[1]-ring[0]) , ...) ; fix by test
+    return P, N, UV, I, B_P, B_N, B_I
+
+
+def fix_winding(P, I, want_up):
+    a, b, c = (np.array(P[I[k]]) for k in range(3))
+    nrm = np.cross(b - a, c - a)
+    if (nrm[1] > 0) != want_up:
+        I = [I[k + off] for k in range(0, len(I), 3) for off in (0, 2, 1)]
+    return I
+
+
+# ---------- 5. GLB ----------
+def glb(wcm, hcm, alb_jpg, nrm_jpg, side_rgba, name, rot90=False):
+    P, N, UV, I, BP, BN, BI = mesh(wcm, hcm)
+    I = fix_winding(P, I, True); BI = fix_winding(BP, BI, False)
     bufs, views, acc = [], [], []
     def add(data, target=None):
         off = sum(len(b) for b in bufs); bufs.append(data + b'\0' * ((-len(data)) % 4))
@@ -108,21 +220,24 @@ def glb(wcm, hcm, alb_jpg, nrm_png, side):
         if mm: o['min'] = a.min(0).tolist(); o['max'] = a.max(0).tolist()
         acc.append(o); return len(acc) - 1
     def acci(arr):
-        acc.append({'bufferView': add(np.array(arr, np.uint16).tobytes(), 34963), 'componentType': 5123, 'count': len(arr), 'type': 'SCALAR'}); return len(acc) - 1
-    a0, a1, a2, a4, a3 = accf(tp, 'VEC3', True), accf(tn, 'VEC3'), accf(tuv, 'VEC2'), accf(tt, 'VEC4'), acci(ti)
-    b0, b1, b3 = accf(P, 'VEC3', True), accf(N, 'VEC3'), acci(I)
-    iv0 = add(alb_jpg); iv1 = add(nrm_png)
-    g = {'asset': {'version': '2.0', 'generator': 'reliv-ar v2'}, 'scene': 0, 'scenes': [{'nodes': [0]}], 'nodes': [{'mesh': 0, 'name': 'rug'}],
-         'meshes': [{'primitives': [
-             {'attributes': {'POSITION': a0, 'NORMAL': a1, 'TEXCOORD_0': a2, 'TANGENT': a4}, 'indices': a3, 'material': 0},
-             {'attributes': {'POSITION': b0, 'NORMAL': b1}, 'indices': b3, 'material': 1}]}],
+        a = np.array(arr, np.uint32); acc.append({'bufferView': add(a.tobytes(), 34963), 'componentType': 5125, 'count': len(arr), 'type': 'SCALAR'}); return len(acc) - 1
+    tangents = [(1, 0, 0, 1)] * len(P)
+    a_p, a_n, a_uv, a_t, a_i = accf(P, 'VEC3', True), accf(N, 'VEC3'), accf(UV, 'VEC2'), accf(tangents, 'VEC4'), acci(I)
+    b_p, b_n, b_i = accf(BP, 'VEC3', True), accf(BN, 'VEC3'), acci(BI)
+    iv0, iv1 = add(alb_jpg), add(nrm_jpg)
+    g = {'asset': {'version': '2.0', 'generator': 'reliv-ar v3'},
+         'scene': 0, 'scenes': [{'nodes': [0]}],
+         'nodes': [dict({'mesh': 0, 'name': name}, **({'rotation': [0, 0.70710678, 0, 0.70710678]} if rot90 else {}))],
+         'meshes': [{'name': name, 'primitives': [
+             {'attributes': {'POSITION': a_p, 'NORMAL': a_n, 'TEXCOORD_0': a_uv, 'TANGENT': a_t}, 'indices': a_i, 'material': 0},
+             {'attributes': {'POSITION': b_p, 'NORMAL': b_n}, 'indices': b_i, 'material': 1}]}],
          'materials': [
-             {'name': 'pile', 'pbrMetallicRoughness': {'baseColorTexture': {'index': 0}, 'metallicFactor': 0, 'roughnessFactor': 0.95},
-              'normalTexture': {'index': 1, 'scale': 1.0}},
-             {'name': 'side', 'pbrMetallicRoughness': {'baseColorFactor': side, 'metallicFactor': 0, 'roughnessFactor': 1}}],
+             {'name': 'pile', 'pbrMetallicRoughness': {'baseColorTexture': {'index': 0}, 'metallicFactor': 0, 'roughnessFactor': 0.92},
+              'normalTexture': {'index': 1, 'scale': 1.0}, 'doubleSided': False},
+             {'name': 'backing', 'pbrMetallicRoughness': {'baseColorFactor': side_rgba, 'metallicFactor': 0, 'roughnessFactor': 1}}],
          'textures': [{'source': 0, 'sampler': 0}, {'source': 1, 'sampler': 0}],
          'samplers': [{'magFilter': 9729, 'minFilter': 9987, 'wrapS': 33071, 'wrapT': 33071}],
-         'images': [{'bufferView': iv0, 'mimeType': 'image/jpeg'}, {'bufferView': iv1, 'mimeType': 'image/jpeg'}],
+         'images': [{'bufferView': iv0, 'mimeType': 'image/jpeg', 'name': 'albedo'}, {'bufferView': iv1, 'mimeType': 'image/jpeg', 'name': 'normal'}],
          'accessors': acc, 'bufferViews': views}
     binb = b''.join(bufs); g['buffers'] = [{'byteLength': len(binb)}]
     js = json.dumps(g, separators=(',', ':')).encode(); js += b' ' * ((-len(js)) % 4)
@@ -130,21 +245,29 @@ def glb(wcm, hcm, alb_jpg, nrm_png, side):
             + struct.pack('<II', len(binb), 0x004E4942) + binb)
 
 
-def srgb2lin(c): c = np.array(c) / 255; return np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+def srgb2lin(c):
+    c = np.array(c, np.float64) / 255
+    return np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+
 
 if __name__ == '__main__':
-    import os, sys
     OUT = os.path.join(HERE, '..'); os.makedirs(os.path.join(OUT, 'models'), exist_ok=True)
     cols = sys.argv[1:] or list(SRC)
     for col in cols:
-        side = list(srgb2lin(np.array(SRC[col][3]) * 0.8)) + [1]
+        det, cmpp = load_detail(col)
+        backing = list(srgb2lin((120, 112, 104))) + [1]   # 바닥 논슬립 면: 짙은 회갈색
         for key, w, h in SIZES:
-            ppc = min(5.0, 1536 / max(w, h))
-            alb, nrm = maps(col, w, h, ppc)
-            b1 = io.BytesIO(); alb.save(b1, 'JPEG', quality=88)
-            nrm_s = nrm.resize((max(4, nrm.width // 2 * 2), max(4, nrm.height // 2 * 2)))
-            b2 = io.BytesIO(); nrm_s.save(b2, 'JPEG', quality=90)
-            open(os.path.join(OUT, 'models', f'{col}_{key}.glb'), 'wb').write(glb(w, h, b1.getvalue(), b2.getvalue(), side))
+            ppc = min(PPC_MAX, MAX_PX / max(w, h))
+            alb, nrm, W, H = textures(col, w, h, ppc, det, cmpp)
+            pot = lambda n: int(min(2048, max(128, 2 ** round(np.log2(n)))))   # 밉맵용 2의 거듭제곱
+            alb = alb.resize((pot(W), pot(H)), Image.LANCZOS)
+            b1 = io.BytesIO(); alb.save(b1, 'JPEG', quality=90, subsampling=0)
+            nrm_s = nrm.resize((pot(W) // 2, pot(H) // 2), Image.LANCZOS)
+            b2 = io.BytesIO(); nrm_s.save(b2, 'JPEG', quality=92, subsampling=0)
+            path = os.path.join(OUT, 'models', f'{col}_{key}.glb')
+            open(path, 'wb').write(glb(w, h, b1.getvalue(), b2.getvalue(), backing, f'reliv_{col}_{key}'))
+            # 90도 돌린 판: 안드로이드 Scene Viewer 는 파일 주소만 받으므로 페이지에서 회전을 못 심음
+            open(path.replace('.glb', '_r90.glb'), 'wb').write(glb(w, h, b1.getvalue(), b2.getvalue(), backing, f'reliv_{col}_{key}_r90', rot90=True))
             if key == 'XL':
-                alb.resize((alb.width // 2, alb.height // 2)).save(os.path.join(OUT, f'thumb_{col}.jpg'), quality=85)
-            print(col, key, alb.size, os.path.getsize(os.path.join(OUT, 'models', f'{col}_{key}.glb')) // 1024, 'KB', flush=True)
+                alb.resize((alb.width // 2, alb.height // 2), Image.LANCZOS).save(os.path.join(OUT, f'thumb_{col}.jpg'), quality=85)
+            print(f'{col} {key} {W}x{H} {os.path.getsize(path) // 1024} KB', flush=True)
