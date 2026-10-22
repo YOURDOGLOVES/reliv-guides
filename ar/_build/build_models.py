@@ -22,7 +22,7 @@ SRC_DIR = os.path.join(HERE, 'src')
 # color: (structure photo, crop box, real cm across the crop width, target base sRGB)
 SRC = {
     # 2025-10-22 실사(러그색감_AR용) 기준. 색은 흰 가구·종이를 기준으로 화이트밸런스 보정한 중앙값에 AR 조명 감쇠분을 올린 값
-    'green': ('green_tex_251022.jpg', (0, 0, 910, 1365), 60.0, (120, 157, 136)),
+    'green': ('green_tex_251022.jpg', (0, 0, 910, 1365), 60.0, (128, 154, 128)),
     'gray':  ('gray_top_251022.jpg', (0, 0, 520, 2048), 20.0, (172, 172, 169)),
     'beige': ('beige_tex_251022.jpg', (515, 0, 966, 483), 25.0, (203, 194, 180)),
     'ivory': ('ivory_tex_251022.jpg', (0, 0, 1365, 1138), 45.0, (234, 231, 224)),
@@ -110,7 +110,7 @@ def edge_distance(W, H, ppc):
 def textures(key, wcm, hcm, ppc, det, cm_per_px):
     W, H = int(round(wcm * ppc)), int(round(hcm * ppc))
     target = np.array(SRC[key][3], np.float32)
-    along_v = hcm >= wcm                                   # 결은 긴 변 방향
+    along_v = hcm < wcm                                    # 결은 짧은 변 방향(실사 기준: 소파 앞에 놓으면 가로 결)
     d = splat(det, cm_per_px, W, H, ppc, along_v)          # 상대 명암 (실측 대비 유지)
     d = np.clip(d, -0.35, 0.35)
     # 아주 완만한 색 얼룩(보풀 눕는 방향·착용감) — 결 필드를 크게 흐려 재사용
