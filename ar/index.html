@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>릴리브 우리집에 깔아보기</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<style>
+/* Layout: one column phone page — 3D stage on top, size/color/rotate controls, one big AR button pinned at the bottom */
+:root{
+  --bg:#F7F4EF; --card:#FFFFFF; --ink:#2B271C; --ink-2:#6B6455; --line:#E6E0D5;
+  --brand:#AB6F4B; --brand-deep:#714A32; --stage:#ECE6DC; --green:#2F6E5E;
+  --font:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-left)) calc(110px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:18px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.logo{font-weight:800;letter-spacing:.18em;font-size:14px;color:var(--brand-deep)}
+h1{margin:4px 0 0;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.sub{margin:4px 0 0;color:var(--ink-2);font-size:14px;line-height:1.5}
+.stage{position:relative;border-radius:18px;overflow:hidden;background:var(--stage)}
+model-viewer{width:100%;height:min(62vh,440px);background:var(--stage);--poster-color:var(--stage);--progress-bar-color:var(--brand)}
+.dim{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.92);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+.dim span{color:var(--ink-2);font-weight:500;margin-left:6px}
+.rot{position:absolute;right:10px;bottom:10px;display:flex;gap:6px}
+.rot button{width:44px;height:44px;border-radius:12px;border:0;background:rgba(255,255,255,.94);color:var(--ink);font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.rot button.wide{width:auto;padding:0 12px;font-size:13px}
+.rot button:active{transform:scale(.96)}
+section h2{margin:0 0 10px;font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:.04em}
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:10px 4px;text-align:center;cursor:pointer;font-family:inherit;color:var(--ink)}
+.chip b{display:block;font-size:14px}
+.chip small{display:block;font-size:11.5px;color:var(--ink-2);margin-top:2px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{border-color:var(--brand);background:#FBF3EC}
+.chip[aria-pressed="true"] b{color:var(--brand-deep)}
+.chip:focus-visible,.cta:focus-visible,.rot button:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.colors{display:flex;gap:10px;flex-wrap:wrap}
+.sw{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px 6px 6px;font-family:inherit;font-size:14px;color:var(--ink);cursor:pointer}
+.sw i{width:24px;height:24px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.08)}
+.sw[aria-pressed="true"]{border-color:var(--brand)}
+.sw:disabled{opacity:.45;cursor:not-allowed}
+.sw:disabled em{font-style:normal;font-size:11px;color:var(--ink-2)}
+.tips{background:var(--card);border-radius:14px;padding:14px 16px;display:grid;gap:8px;font-size:14px;line-height:1.5}
+.tips div{display:flex;gap:10px}
+.tips b{min-width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;display:grid;place-items:center}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px max(16px,env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-right));background:linear-gradient(to top,var(--bg) 70%,rgba(247,244,239,0));z-index:5}
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:528px;margin:0 auto;height:56px;border:0;border-radius:16px;background:var(--ink);color:#fff;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer}
+.cta:active{transform:scale(.98)}
+.qr{display:none;background:var(--card);border-radius:14px;padding:16px;gap:16px;align-items:center}
+.qr.on{display:flex}
+.qr #qr{flex:none;width:120px;height:120px}
+.qr #qr img{width:120px;height:120px;image-rendering:pixelated}
+.qr p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.qr p b{color:var(--ink)}
+.note{font-size:12px;color:var(--ink-2);line-height:1.5;margin:0}
+#arFail{display:none;background:#FFF4E5;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="logo">RELIV</div>
+      <h1>우리집에 깔아보기</h1>
+      <p class="sub">휴대폰 카메라로 거실 바닥을 비추면 고른 러그가 <b>실제 크기</b>로 깔려요.</p>
+    </div>
+  </header>
+
+  <div class="stage">
+    <model-viewer id="mv"
+      src="models/green_XL.glb"
+      poster="thumb.jpg"
+      alt="릴리브 펫슬리브 러그 3D 미리보기"
+      ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed"
+      camera-controls touch-action="pan-y" disable-zoom
+      camera-orbit="25deg 58deg auto" field-of-view="30deg"
+      shadow-intensity="0.9" shadow-softness="0.8" environment-image="neutral" exposure="1.05" tone-mapping="neutral"
+      interaction-prompt="none">
+      <button slot="ar-button" hidden></button>
+    </model-viewer>
+    <div class="dim" id="dim">200 × 300 cm <span>거실XL</span></div>
+    <div class="rot" aria-label="러그 회전">
+      <button type="button" id="rotL" aria-label="왼쪽으로 15도">↺</button>
+      <button type="button" id="rotR" aria-label="오른쪽으로 15도">↻</button>
+      <button type="button" id="rot90" class="wide" aria-label="90도 돌리기">90° 돌리기</button>
+    </div>
+  </div>
+
+  <section>
+    <h2>사이즈</h2>
+    <div class="chips" id="sizes"></div>
+  </section>
+
+  <section>
+    <h2>색상</h2>
+    <div class="colors" id="colors"></div>
+  </section>
+
+  <div id="arFail">이 기기에서는 AR을 열 수 없어요. 최근 아이폰(사파리) 또는 AR을 지원하는 안드로이드(크롬)에서 열어 주세요.</div>
+
+  <div class="qr" id="qrBox">
+    <div id="qr"></div>
+    <p><b>휴대폰으로 스캔하세요</b><br>PC에서는 카메라를 쓸 수 없어요. QR을 찍으면 지금 고른 사이즈로 바로 열려요.</p>
+  </div>
+
+  <section>
+    <h2>이렇게 써보세요</h2>
+    <div class="tips">
+      <div><b>1</b><span>아래 버튼을 누르고 휴대폰으로 바닥을 천천히 좌우로 비춰요.</span></div>
+      <div><b>2</b><span>러그가 나타나면 <b>한 손가락</b>으로 끌어서 원하는 자리로 옮겨요.</span></div>
+      <div><b>3</b><span><b>두 손가락</b>을 돌리면 러그 방향이 돌아가요. 크기는 실제 cm 그대로 고정돼요.</span></div>
+    </div>
+  </section>
+  <p class="note">화면 속 색은 조명과 휴대폰 화면에 따라 실제와 조금 다를 수 있어요. 미리보기 화면에서 돌린 방향은 아이폰 AR에서는 처음 놓을 때 기본 방향으로 열릴 수 있어요.</p>
+</div>
+
+<div class="bar"><button class="cta" id="cta" type="button">📷 우리집 바닥에 깔아보기</button></div>
+
+<script>
+const SIZES=[
+  {k:'S',n:'거실S',w:100,h:150},{k:'M',n:'거실M',w:150,h:200},{k:'L',n:'거실L',w:200,h:250},{k:'XL',n:'거실XL',w:200,h:300},
+  {k:'hall',n:'기본 복도형',w:100,h:250},{k:'widehall',n:'넓은 복도형',w:120,h:200},{k:'module',n:'모듈형',w:100,h:200},{k:'kitchen',n:'주방형',w:45,h:115}
+];
+const COLORS=[{k:'green',n:'그린',c:'#2F6E5E',ready:true},{k:'ivory',n:'아이보리',c:'#EEE8DA'},{k:'beige',n:'베이지',c:'#CDB89A'},{k:'gray',n:'그레이',c:'#A3A19C'}];
+const mv=document.getElementById('mv');
+const q=new URLSearchParams(location.search);
+let size=SIZES.find(s=>s.k===q.get('size'))||SIZES[3];
+let color=COLORS.find(c=>c.k===q.get('color')&&c.ready)||COLORS[0];
+let yaw=0;
+function src(){return `models/${color.k}_${size.k}.glb`;}
+function render(){
+  document.getElementById('sizes').innerHTML=SIZES.map(s=>`<button type="button" class="chip" data-k="${s.k}" aria-pressed="${s===size}"><b>${s.n.replace('거실','')}</b><small>${s.w}×${s.h}</small></button>`).join('');
+  document.getElementById('colors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-k="${c.k}" aria-pressed="${c===color}" ${c.ready?'':'disabled'}><i style="background:${c.c}"></i>${c.n}${c.ready?'':' <em>준비 중</em>'}</button>`).join('');
+  document.getElementById('dim').innerHTML=`${size.w} × ${size.h} cm <span>${size.n}</span>`;
+  if(!mv.src.endsWith(src())) mv.src=src();
+  const u=new URL(location.href); u.searchParams.set('size',size.k); u.searchParams.set('color',color.k); history.replaceState(null,'',u);
+  drawQR();
+}
+function setYaw(d){yaw=((yaw+d)%360+360)%360; mv.orientation=`0deg 0deg ${yaw}deg`;}
+document.getElementById('sizes').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;size=SIZES.find(s=>s.k===b.dataset.k);render();});
+document.getElementById('colors').addEventListener('click',e=>{const b=e.target.closest('.sw');if(!b||b.disabled)return;color=COLORS.find(c=>c.k===b.dataset.k);render();});
+document.getElementById('rotL').onclick=()=>setYaw(-15);
+document.getElementById('rotR').onclick=()=>setYaw(15);
+document.getElementById('rot90').onclick=()=>setYaw(90);
+const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function drawQR(){
+  if(isMobile||typeof qrcode==='undefined')return;
+  const qr=qrcode(0,'M'); qr.addData(location.href); qr.make();
+  document.getElementById('qr').innerHTML=qr.createImgTag(4,0);
+}
+document.getElementById('cta').onclick=async()=>{
+  await customElements.whenDefined('model-viewer');
+  if(mv.canActivateAR){ mv.activateAR(); }
+  else if(!isMobile){ const b=document.getElementById('qrBox'); b.classList.add('on'); drawQR(); b.scrollIntoView({behavior:'smooth',block:'center'}); }
+  else { document.getElementById('arFail').style.display='block'; }
+};
+mv.addEventListener('ar-status',e=>{ if(e.detail.status==='failed') document.getElementById('arFail').style.display='block'; });
+if(!isMobile){ document.getElementById('cta').textContent='📱 휴대폰으로 열어서 깔아보기'; window.addEventListener('load',()=>{document.getElementById('qrBox').classList.add('on');drawQR();}); }
+render();
+</script>
+</body>
+</html>
