@@ -139,11 +139,11 @@ function render(){
   document.getElementById('sizes').innerHTML=SIZES.map(s=>`<button type="button" class="chip" data-k="${s.k}" aria-pressed="${s===size}"><b>${s.n.replace('거실','')}</b><small>${s.w}×${s.h}</small></button>`).join('');
   document.getElementById('colors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-k="${c.k}" aria-pressed="${c===color}" ${c.ready?'':'disabled'}><i style="background:${c.c}"></i>${c.n}${c.ready?'':' <em>준비 중</em>'}</button>`).join('');
   document.getElementById('dim').innerHTML=`${size.w} × ${size.h} cm <span>${size.n}</span>`;
-  if(!mv.src.endsWith(src())){ mv.poster=`thumb_${color.k}.jpg?${V}`; mv.src=src(); }
+  if(mv.getAttribute('src')!==src()){ mv.setAttribute('poster',`thumb_${color.k}.jpg?${V}`); mv.setAttribute('src',src()); }
   const u=new URL(location.href); u.searchParams.set('size',size.k); u.searchParams.set('color',color.k); history.replaceState(null,'',u);
   drawQR();
 }
-function setYaw(d){yaw=((yaw+d)%360+360)%360; mv.orientation=`0deg 0deg ${yaw}deg`;}
+function setYaw(d){yaw=((yaw+d)%360+360)%360; mv.setAttribute('orientation',`0deg 0deg ${yaw}deg`);}
 document.getElementById('sizes').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;size=SIZES.find(s=>s.k===b.dataset.k);render();});
 document.getElementById('colors').addEventListener('click',e=>{const b=e.target.closest('.sw');if(!b||b.disabled)return;color=COLORS.find(c=>c.k===b.dataset.k);render();});
 document.getElementById('rotL').onclick=()=>setYaw(-15);
