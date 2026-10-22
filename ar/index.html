@@ -236,12 +236,12 @@ body.embed header,body.embed .tips,body.embed .fine,body.embed .row{display:none
 <div class="bar"><button class="cta" id="cta" type="button" aria-busy="false"><span class="spin" aria-hidden="true"></span><svg class="i" aria-hidden="true"><use id="ctaIcon" href="#ic-camera"/></svg><span id="ctaText">우리집 바닥에 깔아보기</span></button></div>
 
 <script>
-const V='v=3';
+const V='v=4';
 const SIZES=[
   {k:'S',n:'S',g:'거실',w:100,h:150},{k:'M',n:'M',g:'거실',w:150,h:200},{k:'L',n:'L',g:'거실',w:200,h:250},{k:'XL',n:'XL',g:'거실',w:200,h:300},
   {k:'hall',n:'기본 복도',g:'',w:100,h:250},{k:'widehall',n:'넓은 복도',g:'',w:120,h:200},{k:'module',n:'모듈',g:'',w:100,h:200},{k:'kitchen',n:'주방',g:'',w:45,h:115}
 ];
-const COLORS=[{k:'green',n:'그린',c:'#5F8987'},{k:'ivory',n:'아이보리',c:'#E0DACF'},{k:'beige',n:'베이지',c:'#CCC2B8'},{k:'gray',n:'그레이',c:'#B2AEAB'}];
+const COLORS=[{k:'green',n:'그린',c:'#709895'},{k:'ivory',n:'아이보리',c:'#E0DACF'},{k:'beige',n:'베이지',c:'#CCC2B8'},{k:'gray',n:'그레이',c:'#B2AEAB'}];
 const mv=document.getElementById('mv');
 const q=new URLSearchParams(location.search);
 if(q.get('embed')==='1') document.body.classList.add('embed');

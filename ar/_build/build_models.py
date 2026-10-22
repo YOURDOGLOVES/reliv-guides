@@ -21,7 +21,7 @@ SRC_DIR = os.path.join(HERE, 'src')
 
 # color: (structure photo, crop box, real cm across the crop width, target base sRGB)
 SRC = {
-    'green': ('green_3141_6s.jpg', (60, 80, 1020, 1040), 35.0, (95, 137, 135)),
+    'green': ('green_3141_6s.jpg', (60, 80, 1020, 1040), 35.0, (112, 152, 149)),
     'gray':  ('gray_close.jpg', (1600, 1000, 3300, 2350), 45.0, (178, 174, 171)),
     'beige': ('beige_d3070.jpg', (1700, 150, 3000, 1250), 38.0, (204, 194, 184)),
     'ivory': ('ivory_top_250625.jpg', (0, 0, 1500, 1450), 69.0, (224, 218, 207)),
