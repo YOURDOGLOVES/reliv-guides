@@ -21,16 +21,17 @@ SRC_DIR = os.path.join(HERE, 'src')
 
 # color: (structure photo, crop box, real cm across the crop width, target base sRGB)
 SRC = {
-    'green': ('green_3141_6s.jpg', (60, 80, 1020, 1040), 35.0, (112, 152, 149)),
-    'gray':  ('gray_close.jpg', (1600, 1000, 3300, 2350), 45.0, (178, 174, 171)),
-    'beige': ('beige_d3070.jpg', (1700, 150, 3000, 1250), 38.0, (204, 194, 184)),
-    'ivory': ('ivory_top_250625.jpg', (0, 0, 1500, 1450), 69.0, (238, 234, 226)),
+    # 2025-10-22 실사(러그색감_AR용) 기준. 색은 흰 가구·종이를 기준으로 화이트밸런스 보정한 중앙값에 AR 조명 감쇠분을 올린 값
+    'green': ('green_tex_251022.jpg', (0, 0, 910, 1365), 60.0, (150, 176, 146)),
+    'gray':  ('gray_top_251022.jpg', (0, 0, 520, 2048), 20.0, (150, 150, 147)),
+    'beige': ('beige_tex_251022.jpg', (515, 0, 966, 483), 25.0, (203, 194, 180)),
+    'ivory': ('ivory_tex_251022.jpg', (0, 0, 1365, 1138), 45.0, (234, 231, 224)),
 }
 SIZES = [('S', 100, 150), ('M', 150, 200), ('L', 200, 250), ('XL', 200, 300),
          ('hall', 100, 250), ('widehall', 120, 200), ('module', 100, 200), ('kitchen', 45, 115)]
 TH = 0.009        # 두께 9 mm
-CORNER_CM = 3.0   # 모서리 반지름
-PIPE_CM = 1.2     # 파이핑 폭
+CORNER_CM = 1.5   # 모서리 반지름
+BAND_CM = 2.5     # 바인딩 테이프 폭(납작한 직조 테두리)
 MAX_PX = 1536     # 긴 변 최대 픽셀
 PPC_MAX = 5.0     # px / cm 상한
 
@@ -61,6 +62,7 @@ def load_detail(key):
     rot = best[1]
     rms = float(rot.std())
     if rms < 0.02: rot *= 0.02 / rms; rms = 0.02           # 흐린 사진은 최소 가시 대비로 올림
+    if rms > 0.09: rot *= 0.09 / rms; rms = 0.09           # 그늘 사진은 과한 대비를 눌러줌
     print(f'  {key}: streak {streak_deg:.1f}deg, aniso {best[0]:.2f}, contrast rms {rms:.3f}', flush=True)
     return rot, cm_per_px
 
@@ -115,20 +117,22 @@ def textures(key, wcm, hcm, ppc, det, cm_per_px):
     lo = gaussian_filter(splat(det, cm_per_px * 5, W, H, ppc, along_v), ppc * 8)
     lo = lo / (np.abs(lo).max() + 1e-6)
     e = edge_distance(W, H, ppc)
-    pipe = np.clip(e / PIPE_CM, 0, 1)                      # 0=바깥 테두리, 1=파이핑 안쪽
+    band = e < BAND_CM
     lum = 1 + 1.0 * d + 0.03 * lo
-    # 파이핑: 결이 짧게 끊기고(천을 감쌌으니) 둥근 면이라 바깥쪽이 살짝 밝고 안쪽 경계가 어둡다
-    pipe_lum = 1 + 0.45 * gaussian_filter(d, 0.6 * ppc) + 0.05 * np.sin(np.pi * pipe)
-    seam = np.exp(-((e - PIPE_CM) / 0.10) ** 2)            # 박음질 홈
-    lum = np.where(e < PIPE_CM, pipe_lum, lum) * (1 - 0.14 * seam)
-    stitch = (np.sin(2 * np.pi * (np.arange(W)[None, :] + np.arange(H)[:, None]) / (0.35 * ppc)) > 0.6) * seam
-    lum *= 1 + 0.05 * stitch                               # 땀 자국
+    # 바인딩 테이프: 결이 촘촘한 평직. 본체보다 살짝 어둡고(0.955) 가는 가로결
+    tape = 0.45 * gaussian_filter(d, 0.35 * ppc)
+    weave = 0.025 * np.sin(2 * np.pi * (np.arange(H)[:, None] * (along_v == False) + np.arange(W)[None, :] * (along_v)) / (0.12 * ppc))
+    seam_in = np.exp(-((e - BAND_CM) / 0.10) ** 2)         # 안쪽 박음질 홈
+    seam_out = np.exp(-((e - 0.35) / 0.08) ** 2)           # 바깥쪽 박음질
+    lum = np.where(band, 0.955 + tape + weave, lum) * (1 - 0.12 * seam_in - 0.08 * seam_out)
+    stitch = (np.sin(2 * np.pi * (np.arange(W)[None, :] + np.arange(H)[:, None]) / (0.35 * ppc)) > 0.6) * (seam_in + seam_out)
+    lum *= 1 + 0.05 * stitch
     alb = np.clip(target[None, None, :] * lum[..., None], 0, 255).astype(np.uint8)
-    # 높이: 파이핑 둥근 단면 + 홈 + 완만한 굴곡 + 약한 결 요철(보풀) — 노이즈는 넣지 않음
-    h = 0.35 * np.sin(np.pi * pipe) * (e < PIPE_CM)        # 파이핑 볼록
-    h -= 0.25 * seam                                       # 홈
-    h += 0.10 * lo                                         # 굴곡
-    h += 0.06 * gaussian_filter(d, 0.5 * ppc) * (e >= PIPE_CM)
+    # 높이: 테이프가 본체보다 아주 살짝 올라오고(두 겹), 박음질 홈 두 줄, 완만한 굴곡. 노이즈 없음
+    h = 0.12 * np.clip((BAND_CM - e) / 0.4, 0, 1) * band
+    h -= 0.22 * seam_in + 0.12 * seam_out
+    h += 0.10 * lo
+    h += 0.06 * gaussian_filter(d, 0.5 * ppc) * (~band)
     gy, gx = np.gradient(h)
     k = 5.0 * ppc / 5.0
     n = np.dstack([-gx * k, -gy * k, np.ones_like(h)])
@@ -259,10 +263,8 @@ if __name__ == '__main__':
         for key, w, h in SIZES:
             ppc = min(PPC_MAX, MAX_PX / max(w, h))
             alb, nrm, W, H = textures(col, w, h, ppc, det, cmpp)
-            pot = lambda n: int(min(2048, max(128, 2 ** round(np.log2(n)))))   # 밉맵용 2의 거듭제곱
-            alb = alb.resize((pot(W), pot(H)), Image.LANCZOS)
             b1 = io.BytesIO(); alb.save(b1, 'JPEG', quality=90, subsampling=0)
-            nrm_s = nrm.resize((pot(W) // 2, pot(H) // 2), Image.LANCZOS)
+            nrm_s = nrm.resize((max(4, W // 2), max(4, H // 2)), Image.LANCZOS)
             b2 = io.BytesIO(); nrm_s.save(b2, 'JPEG', quality=92, subsampling=0)
             path = os.path.join(OUT, 'models', f'{col}_{key}.glb')
             open(path, 'wb').write(glb(w, h, b1.getvalue(), b2.getvalue(), backing, f'reliv_{col}_{key}'))
