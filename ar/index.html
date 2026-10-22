@@ -73,13 +73,13 @@ section h2{margin:0 0 10px;font-size:13px;font-weight:700;color:var(--ink-2);let
 
   <div class="stage">
     <model-viewer id="mv"
-      src="models/green_XL.glb"
-      poster="thumb_green.jpg"
+      src="models/green_XL.glb?v=2"
+      poster="thumb_green.jpg?v=2"
       alt="릴리브 펫슬리브 러그 3D 미리보기"
-      ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed"
+      ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed" xr-environment
       camera-controls touch-action="pan-y" disable-zoom
       camera-orbit="25deg 58deg auto" field-of-view="30deg"
-      shadow-intensity="0.9" shadow-softness="0.8" environment-image="neutral" exposure="1.05" tone-mapping="neutral"
+      shadow-intensity="1" shadow-softness="0.6" environment-image="neutral" exposure="1.05" tone-mapping="neutral"
       interaction-prompt="none">
       <button slot="ar-button" hidden></button>
     </model-viewer>
@@ -114,9 +114,10 @@ section h2{margin:0 0 10px;font-size:13px;font-weight:700;color:var(--ink-2);let
       <div><b>1</b><span>아래 버튼을 누르고 휴대폰으로 바닥을 천천히 좌우로 비춰요.</span></div>
       <div><b>2</b><span>러그가 나타나면 <b>한 손가락</b>으로 끌어서 원하는 자리로 옮겨요.</span></div>
       <div><b>3</b><span><b>두 손가락</b>을 돌리면 러그 방향이 돌아가요. 크기는 실제 cm 그대로 고정돼요.</span></div>
+      <div><b>4</b><span>소파·의자 앞쪽 바닥에 놓아 보세요. 최신 아이폰(Pro)은 앞에 있는 가구가 러그를 자연스럽게 가려 줘요.</span></div>
     </div>
   </section>
-  <p class="note">화면 속 색은 조명과 휴대폰 화면에 따라 실제와 조금 다를 수 있어요. 미리보기 화면에서 돌린 방향은 아이폰 AR에서는 처음 놓을 때 기본 방향으로 열릴 수 있어요.</p>
+  <p class="note">러그는 방의 밝기와 빛 색에 맞춰 자동으로 밝아지거나 어두워지고, 바닥에 그림자가 생겨요. 창문 햇빛 무늬처럼 바닥에 비친 빛은 화면 속 러그에 옮겨지지 않아서, 햇빛이 강한 곳보다 그늘진 쪽에서 볼 때 실제 색에 가장 가까워요. 미리보기에서 돌린 방향은 아이폰 AR에서는 처음 놓을 때 기본 방향으로 열릴 수 있어요.</p>
 </div>
 
 <div class="bar"><button class="cta" id="cta" type="button">📷 우리집 바닥에 깔아보기</button></div>
@@ -126,18 +127,19 @@ const SIZES=[
   {k:'S',n:'거실S',w:100,h:150},{k:'M',n:'거실M',w:150,h:200},{k:'L',n:'거실L',w:200,h:250},{k:'XL',n:'거실XL',w:200,h:300},
   {k:'hall',n:'기본 복도형',w:100,h:250},{k:'widehall',n:'넓은 복도형',w:120,h:200},{k:'module',n:'모듈형',w:100,h:200},{k:'kitchen',n:'주방형',w:45,h:115}
 ];
-const COLORS=[{k:'green',n:'그린',c:'#2F6E5E',ready:true},{k:'ivory',n:'아이보리',c:'#EEE8DA'},{k:'beige',n:'베이지',c:'#C6B8AA',ready:true},{k:'gray',n:'그레이',c:'#ACA8A5',ready:true}];
+const COLORS=[{k:'green',n:'그린',c:'#5F8986',ready:true},{k:'ivory',n:'아이보리',c:'#E3DCCF',ready:true},{k:'beige',n:'베이지',c:'#C6B8AA',ready:true},{k:'gray',n:'그레이',c:'#ACA8A5',ready:true}];
 const mv=document.getElementById('mv');
 const q=new URLSearchParams(location.search);
 let size=SIZES.find(s=>s.k===q.get('size'))||SIZES[3];
 let color=COLORS.find(c=>c.k===q.get('color')&&c.ready)||COLORS[0];
 let yaw=0;
-function src(){return `models/${color.k}_${size.k}.glb`;}
+const V='v=2';
+function src(){return `models/${color.k}_${size.k}.glb?${V}`;}
 function render(){
   document.getElementById('sizes').innerHTML=SIZES.map(s=>`<button type="button" class="chip" data-k="${s.k}" aria-pressed="${s===size}"><b>${s.n.replace('거실','')}</b><small>${s.w}×${s.h}</small></button>`).join('');
   document.getElementById('colors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-k="${c.k}" aria-pressed="${c===color}" ${c.ready?'':'disabled'}><i style="background:${c.c}"></i>${c.n}${c.ready?'':' <em>준비 중</em>'}</button>`).join('');
   document.getElementById('dim').innerHTML=`${size.w} × ${size.h} cm <span>${size.n}</span>`;
-  if(!mv.src.endsWith(src())){ mv.poster=`thumb_${color.k}.jpg`; mv.src=src(); }
+  if(!mv.src.endsWith(src())){ mv.poster=`thumb_${color.k}.jpg?${V}`; mv.src=src(); }
   const u=new URL(location.href); u.searchParams.set('size',size.k); u.searchParams.set('color',color.k); history.replaceState(null,'',u);
   drawQR();
 }
