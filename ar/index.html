@@ -2,86 +2,157 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#F7F4EF">
+<meta name="theme-color" content="#F3EFE8">
 <title>릴리브 우리집에 깔아보기</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js" defer></script>
 <style>
-/* 휴대폰 한 열: 3D 미리보기 → 사이즈·색 → 사용법, 맨 아래 AR 버튼 고정 */
+/* ── 토큰 ─────────────────────────────────────────────── */
 :root{
-  --bg:#F7F4EF; --card:#FFFFFF; --ink:#2B271C; --ink-2:#6B6455; --line:#E6E0D5;
-  --brand:#AB6F4B; --brand-deep:#714A32; --stage:#EFEAE2; --stage-2:#DED6C9;
+  /* primitive */
+  --linen-50:#F3EFE8; --linen-100:#EAE4DA; --linen-200:#DED6C9; --linen-300:#CBC1AF;
+  --walnut-800:#241F17; --walnut-500:#6B6155; --walnut-400:#766B5E;
+  --clay-500:#8F5A3C; --clay-600:#74472E;
+  --amber-100:#F6EAD8; --amber-800:#6B4A1E;
+  /* semantic */
+  --bg:var(--linen-50); --surface:#FBF9F5; --surface-2:var(--linen-100); --stage:var(--linen-100); --stage-2:var(--linen-200);
+  --ink:var(--walnut-800); --ink-2:var(--walnut-500); --ink-3:var(--walnut-400);
+  --accent:var(--clay-500); --focus:var(--clay-600);
+  --warn-bg:var(--amber-100); --warn-ink:var(--amber-800);
+  /* component */
+  --cta-bg:var(--ink); --cta-ink:#FBF9F5; --chip-bg:var(--surface); --chip-on:var(--accent);
+  /* type */
   --font:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  --t-display:26px; --t-body:16px; --t-small:14px; --t-caption:13px;
+  /* space (4pt) */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-8:32px;
+  /* radius: 컨트롤은 pill, 면은 16, 칩은 12 */
+  --r-pill:999px; --r-surface:16px; --r-chip:12px;
+  /* motion */
+  --t-press:120ms; --t-ui:220ms; --ease-out:cubic-bezier(.16,1,.3,1);
+  --z-bar:200;
+  --bar-h:84px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
-.wrap{max-width:560px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-left)) calc(112px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:18px}
-header{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-.logo{font-weight:800;letter-spacing:.18em;font-size:13px;color:var(--brand-deep)}
-h1{margin:4px 0 0;font-size:22px;font-weight:800;letter-spacing:-.02em}
-.sub{margin:4px 0 0;color:var(--ink-2);font-size:14px;line-height:1.5}
-.stage{position:relative;border-radius:18px;overflow:hidden;background:radial-gradient(120% 90% at 50% 15%,var(--stage) 0%,var(--stage-2) 100%)}
-model-viewer{width:100%;height:min(60vh,440px);background:transparent;--poster-color:transparent;--progress-bar-color:var(--brand);--progress-bar-height:3px}
-model-viewer::part(default-progress-bar){border-radius:0}
-.dim{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.92);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.dim span{color:var(--ink-2);font-weight:500;margin-left:6px}
-.loading{position:absolute;right:12px;top:12px;background:rgba(255,255,255,.92);border-radius:999px;padding:6px 12px;font-size:12px;color:var(--ink-2);opacity:0;transition:opacity .2s}
+html,body{margin:0;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:var(--t-body);line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--linen-300);color:var(--ink)}
+button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointer;outline:2px solid transparent;outline-offset:2px}
+button:focus-visible{outline-color:var(--focus)}
+button:disabled{opacity:.5;cursor:not-allowed}
+svg{display:block}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ── 레이아웃 ─────────────────────────────────────────── */
+.wrap{max-width:560px;margin:0 auto;padding:var(--s-5) max(var(--s-4),env(safe-area-inset-left)) calc(var(--bar-h) + var(--s-6) + env(safe-area-inset-bottom)) max(var(--s-4),env(safe-area-inset-right));display:flex;flex-direction:column;gap:var(--s-6)}
+header{display:flex;flex-direction:column;gap:var(--s-2)}
+.logo{width:64px;height:auto;color:var(--ink)}
+h1{margin:var(--s-1) 0 0;font-size:var(--t-display);font-weight:800;line-height:1.15;letter-spacing:-.025em;text-wrap:balance;overflow-wrap:anywhere;min-width:0}
+.lead{margin:0;color:var(--ink-2);font-size:var(--t-body);text-wrap:pretty;max-width:34em}
+.lead strong{color:var(--ink);font-weight:700}
+
+/* 3D 무대 */
+.stage{position:relative;border-radius:var(--r-surface);overflow:hidden;background:radial-gradient(120% 90% at 50% 10%,var(--stage) 0%,var(--stage-2) 100%);aspect-ratio:4/5;max-height:62dvh}
+model-viewer{width:100%;height:100%;background:transparent;--poster-color:transparent;--progress-bar-color:var(--accent);--progress-bar-height:3px;transition:opacity var(--t-ui) var(--ease-out)}
+model-viewer.swapping{opacity:.55}
+model-viewer::part(default-ar-button){display:none}
+.dim{position:absolute;left:var(--s-3);top:var(--s-3);background:var(--surface);border-radius:var(--r-pill);padding:6px var(--s-3);font-size:var(--t-small);font-weight:700;font-variant-numeric:tabular-nums;display:flex;gap:var(--s-2);align-items:baseline;white-space:nowrap}
+.dim span{color:var(--ink-2);font-weight:500}
+.loading{position:absolute;right:var(--s-3);top:var(--s-3);background:var(--surface);border-radius:var(--r-pill);padding:6px var(--s-3);font-size:var(--t-caption);color:var(--ink-2);opacity:0;transition:opacity var(--t-ui) var(--ease-out);display:flex;align-items:center;gap:var(--s-2)}
 .loading.on{opacity:1}
-.rot{position:absolute;right:10px;bottom:10px;display:flex;gap:6px}
-.rot button{height:44px;min-width:44px;padding:0 10px;border-radius:12px;border:0;background:rgba(255,255,255,.95);color:var(--ink);font-family:inherit;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.rot button.wide{font-size:13px;padding:0 12px}
-.rot button:active{transform:scale(.96)}
-.zoom{position:absolute;left:10px;bottom:10px;display:flex;gap:6px}
-.zoom button{width:44px;height:44px;border-radius:12px;border:0;background:rgba(255,255,255,.95);color:var(--ink);font-family:inherit;font-size:22px;font-weight:700;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.zoom button:active{transform:scale(.96)}
-.hint{position:absolute;left:12px;top:48px;font-size:12px;color:var(--ink-2);background:rgba(255,255,255,.75);border-radius:999px;padding:4px 10px;pointer-events:none}
-section h2{margin:0 0 10px;font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:.04em;display:flex;justify-content:space-between;align-items:baseline}
-section h2 small{font-weight:500;letter-spacing:0}
-.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.chip{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:10px 4px;text-align:center;cursor:pointer;font-family:inherit;color:var(--ink)}
-.chip b{display:block;font-size:14px}
-.chip small{display:block;font-size:11.5px;color:var(--ink-2);margin-top:2px;font-variant-numeric:tabular-nums}
-.chip[aria-pressed="true"]{border-color:var(--brand);background:#FBF3EC}
-.chip[aria-pressed="true"] b{color:var(--brand-deep)}
-.chip:focus-visible,.cta:focus-visible,.rot button:focus-visible,.sw:focus-visible,.ghost:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
-.colors{display:flex;gap:10px;flex-wrap:wrap}
-.sw{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px 6px 6px;font-family:inherit;font-size:14px;color:var(--ink);cursor:pointer}
-.sw i{width:24px;height:24px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.08)}
-.sw[aria-pressed="true"]{border-color:var(--brand);background:#FBF3EC}
-.tips{background:var(--card);border-radius:14px;padding:14px 16px;display:grid;gap:8px;font-size:14px;line-height:1.5}
-.tips div{display:flex;gap:10px}
-.tips>div>b{flex:none;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;display:grid;place-items:center}
-.bar{position:fixed;left:0;right:0;bottom:0;padding:12px max(16px,env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-right));background:linear-gradient(to top,var(--bg) 70%,rgba(247,244,239,0));z-index:5}
-.cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:528px;margin:0 auto;height:56px;border:0;border-radius:16px;background:var(--ink);color:#fff;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer}
-.cta:active{transform:scale(.98)}
-.cta[disabled]{opacity:.6}
-.qr{display:none;background:var(--card);border-radius:14px;padding:16px;gap:16px;align-items:center}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid var(--linen-300);border-top-color:var(--ink-2);animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ctl{position:absolute;bottom:var(--s-3);display:flex;gap:var(--s-2)}
+.ctl.l{left:var(--s-3)} .ctl.r{right:var(--s-3)}
+.ctl button{height:44px;min-width:44px;padding:0 var(--s-3);border:0;border-radius:var(--r-pill);background:var(--surface);color:var(--ink);display:flex;align-items:center;gap:6px;font-size:var(--t-small);font-weight:700;white-space:nowrap;transition:transform var(--t-press),background var(--t-ui)}
+.ctl button:active{transform:scale(.96)}
+@media (hover:hover) and (pointer:fine){.ctl button:hover{background:#FFFFFF}}
+.stage-note{margin:calc(-1 * var(--s-3)) 0 0;font-size:var(--t-caption);color:var(--ink-3);text-wrap:pretty}
+
+/* 선택 그룹 */
+.group h2{margin:0 0 var(--s-3);font-size:var(--t-body);font-weight:700}
+.sub{display:block;margin:var(--s-4) 0 var(--s-2);font-size:var(--t-small);color:var(--ink-2);font-weight:500}
+.sub:first-of-type{margin-top:0}
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s-2)}
+.chip{display:flex;flex-direction:column;align-items:center;gap:6px;padding:var(--s-3) var(--s-1) var(--s-2);min-height:44px;border:2px solid transparent;border-radius:var(--r-chip);background:var(--chip-bg);white-space:nowrap;transition:transform var(--t-press),border-color var(--t-ui),background var(--t-ui)}
+.chip:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.chip:hover{background:#FFFFFF}}
+.chip[aria-pressed="true"]{border-color:var(--chip-on);background:#FFFFFF}
+.chip .fp{width:32px;height:32px;display:grid;place-items:center}
+.chip .fp i{display:block;background:var(--linen-300);border-radius:2px;transition:background var(--t-ui)}
+.chip[aria-pressed="true"] .fp i{background:var(--accent)}
+.chip b{font-size:var(--t-small);font-weight:700;line-height:1.2}
+.chip small{font-size:var(--t-caption);color:var(--ink-2);font-variant-numeric:tabular-nums;line-height:1.2}
+.chip[aria-pressed="true"] small{color:var(--ink)}
+.colors{display:flex;gap:var(--s-2);flex-wrap:wrap}
+.sw{display:flex;align-items:center;gap:var(--s-2);min-height:44px;padding:0 var(--s-4) 0 var(--s-2);border:2px solid transparent;border-radius:var(--r-pill);background:var(--chip-bg);font-size:var(--t-small);font-weight:600;white-space:nowrap;transition:transform var(--t-press),border-color var(--t-ui),background var(--t-ui)}
+.sw:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.sw:hover{background:#FFFFFF}}
+.sw i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(36,31,23,.12);flex:none}
+.sw i svg{width:14px;height:14px;fill:none;stroke:#FFFFFF;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity var(--t-ui)}
+.sw[aria-pressed="true"]{border-color:var(--chip-on);background:#FFFFFF}
+.sw[aria-pressed="true"] i svg{opacity:1}
+.sw[data-k="ivory"] i svg,.sw[data-k="beige"] i svg,.sw[data-k="gray"] i svg{stroke:var(--ink)}
+
+/* 안내 */
+.tips h2{margin:0 0 var(--s-3);font-size:var(--t-body);font-weight:700}
+.steps{margin:0;padding:var(--s-4) var(--s-5);list-style:none;counter-reset:s;display:grid;gap:var(--s-3);background:var(--surface);border-radius:var(--r-surface)}
+.steps li{counter-increment:s;display:grid;grid-template-columns:24px 1fr;gap:var(--s-3);font-size:var(--t-small);line-height:1.5}
+.steps li::before{content:counter(s);width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--cta-ink);font-size:var(--t-caption);font-weight:700;display:grid;place-items:center;margin-top:1px}
+.steps strong{font-weight:700}
+.fine{margin:0;font-size:var(--t-caption);color:var(--ink-3);text-wrap:pretty}
+.alert{display:none;background:var(--warn-bg);color:var(--warn-ink);border-radius:var(--r-chip);padding:var(--s-3) var(--s-4);font-size:var(--t-small);line-height:1.5}
+.alert.on{display:block}
+.qr{display:none;background:var(--surface);border-radius:var(--r-surface);padding:var(--s-4);gap:var(--s-4);align-items:center}
 .qr.on{display:flex}
-.qr #qr{flex:none;width:120px;height:120px}
-.qr #qr img{width:120px;height:120px;image-rendering:pixelated}
-.qr p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.qr p b{color:var(--ink)}
-.note{font-size:12px;color:var(--ink-2);line-height:1.5;margin:0}
-.ghost{border:1.5px solid var(--line);background:var(--card);color:var(--ink-2);border-radius:999px;padding:6px 12px;font-family:inherit;font-size:12px;cursor:pointer}
-.row{display:flex;gap:8px;align-items:center;justify-content:flex-end}
-#arFail{display:none;background:#FFF4E5;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5}
-body.embed header,body.embed .tips-sec,body.embed .note{display:none}
-body.embed .wrap{padding-top:8px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.qr #qr{flex:none;width:120px;height:120px;background:#FFFFFF;border-radius:var(--s-2);display:grid;place-items:center}
+.qr #qr img{width:112px;height:112px;image-rendering:pixelated}
+.qr p{margin:0;font-size:var(--t-small);color:var(--ink-2)}
+.qr p strong{color:var(--ink);display:block;margin-bottom:var(--s-1)}
+.link{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 var(--s-2);border:0;background:none;font-size:var(--t-small);font-weight:600;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--linen-300);transition:color var(--t-ui)}
+@media (hover:hover) and (pointer:fine){.link:hover{color:var(--ink)}}
+.row{display:flex;justify-content:flex-end;margin-top:calc(-1 * var(--s-3))}
+
+/* 하단 바 */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:var(--z-bar);padding:var(--s-3) max(var(--s-4),env(safe-area-inset-left)) max(var(--s-3),env(safe-area-inset-bottom)) max(var(--s-4),env(safe-area-inset-right));background:var(--surface-2)}
+.cta{display:flex;align-items:center;justify-content:center;gap:var(--s-2);width:100%;max-width:528px;margin:0 auto;height:56px;border:0;border-radius:var(--r-pill);background:var(--cta-bg);color:var(--cta-ink);font-size:17px;font-weight:700;white-space:nowrap;transition:transform var(--t-press),opacity var(--t-ui)}
+.cta:active{transform:scale(.98)}
+.cta .spin{display:none;border-color:rgba(251,249,245,.3);border-top-color:var(--cta-ink)}
+.cta[aria-busy="true"] .spin{display:block}
+.cta[aria-busy="true"] .i{display:none}
+
+body.embed header,body.embed .tips,body.embed .fine,body.embed .row{display:none}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:0ms!important}
+  .spin{animation-duration:1.6s}
+  model-viewer{transition:opacity 150ms linear}
+}
+@media (max-width:360px){:root{--t-display:23px}.chip b{font-size:var(--t-caption)}.ctl button{padding:0 var(--s-3)}.ctl .lbl{display:none}}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ic-camera" viewBox="0 0 24 24"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6H8l1.2-2h5.6L16 6h1.5A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.2"/></symbol>
+  <symbol id="ic-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17.5h2"/></symbol>
+  <symbol id="ic-undo" viewBox="0 0 24 24"><path d="M8 7H4V3"/><path d="M4.5 7.2A8 8 0 1 1 4 12"/></symbol>
+  <symbol id="ic-redo" viewBox="0 0 24 24"><path d="M16 7h4V3"/><path d="M19.5 7.2A8 8 0 1 0 20 12"/></symbol>
+  <symbol id="ic-swap" viewBox="0 0 24 24"><path d="M4 9h13l-3-3"/><path d="M20 15H7l3 3"/></symbol>
+  <symbol id="ic-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="ic-plus" viewBox="0 0 24 24"><path d="M6 12h12M12 6v12"/></symbol>
+  <symbol id="ic-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="logo" viewBox="56 40 546 262"><g><g><path d="M203.971 184.968C203.327 190.016 203.006 195.763 203.006 201.778C203.006 229.976 221.997 246.787 246.085 246.787C263.199 246.787 272.695 242.651 282.191 234.434V237.925C274.573 247.431 257.512 261.074 235.034 261.074C203.059 261.074 172.64 239.805 172.64 201.778C172.64 163.752 200.162 142.806 235.034 142.806C267.33 142.806 286.643 158.972 286.643 184.968H203.971ZM255.581 173.527C255.581 160.852 248.284 152.903 234.98 152.903C219.153 152.903 210.302 161.443 205.849 176.051L255.581 173.527Z" fill="currentColor"/><path d="M354.67 257.26C347.051 256.616 339.165 256.294 330.903 256.294C322.641 256.294 315.72 256.616 308.103 257.26L307.781 255.971C314.433 253.446 317.277 249.633 317.598 242.651C317.92 234.702 318.243 214.132 318.243 152.312C318.243 104.135 317.92 78.784 317.598 67.6662C317.277 58.4819 311.912 55.9576 307.137 54.6686V53.3796C321.408 51.822 334.981 47.6864 344.798 42.2617L346.086 42.9062C344.798 60.3618 344.53 94.5746 344.53 152.258C344.53 214.078 344.852 234.702 345.174 242.597C345.496 249.258 348.339 253.071 354.991 255.917L354.67 257.206V257.26Z" fill="currentColor"/><path d="M421.462 257.26C413.844 256.616 405.957 256.294 398.018 256.294C390.077 256.294 382.513 256.616 374.895 257.26L374.573 255.971C381.225 253.446 384.069 249.633 384.391 242.651C384.713 234.702 385.034 214.132 385.034 201.778C385.034 185.934 384.713 173.259 384.391 167.565C384.069 158.381 378.704 155.857 373.929 154.568V153.279C388.2 151.721 401.773 147.586 411.591 142.161L412.878 142.806C411.591 160.261 411.322 178.629 411.322 195.118C411.322 214.132 411.644 234.756 411.966 242.651C412.288 249.311 415.131 253.125 421.784 255.971L421.462 257.26ZM396.14 115.843C386.644 115.843 379.026 108.217 379.026 99.0325C379.026 89.8482 386.644 81.8992 396.14 81.8992C405.635 81.8992 413.253 89.5259 413.253 99.0325C413.253 108.539 405.635 115.843 396.14 115.843Z" fill="currentColor"/><path d="M559.231 147.532C554.456 148.821 549.413 153.225 545.604 160.529C537.074 177.018 531.334 188.405 524.091 204.249C508.587 237.549 504.456 246.733 498.125 261.02H488.951C481.655 244.531 468.994 216.656 458.854 194.474C453.49 182.443 449.037 173.849 443.35 163.108C439.542 155.803 433.211 149.143 428.168 147.586L428.49 146.297C433.211 146.941 448.125 147.263 453.168 147.263C457.942 147.263 473.447 146.941 477.524 146.297L477.846 147.586C471.194 150.432 469.316 154.246 472.159 161.228L483.533 186.579C491.151 203.712 495.551 213.54 503.812 230.943C511.752 213.487 516.151 203.39 520.282 193.561C525.003 182.443 528.812 173.581 532.943 162.195C536.109 153.332 534.231 150.164 527.578 147.64L527.9 146.351C532.031 146.995 539.006 147.317 544.048 147.317C549.091 147.317 554.188 146.995 558.909 146.351L559.231 147.64V147.532Z" fill="currentColor"/></g><path d="M577.86 224C584.813 224 589.848 226.372 592.965 231.115C596.322 235.859 598 241.314 598 247.481C598 251.038 597.52 254.952 596.561 259.221C595.602 263.728 593.684 268.115 590.807 272.385C588.17 276.891 584.213 281.279 578.939 285.548C573.904 290.054 567.19 294.205 558.798 298L557 294.798C561.795 290.529 565.512 286.615 568.149 283.058C571.026 279.737 573.064 276.654 574.263 273.808C575.702 271.199 576.541 268.708 576.781 266.337C577.26 263.965 577.5 261.474 577.5 258.865C577.5 256.968 576.901 255.545 575.702 254.596C574.503 253.41 573.184 252.343 571.746 251.394C569.827 250.208 567.909 248.904 565.991 247.481C564.073 245.821 563.114 243.093 563.114 239.298C563.114 234.792 564.553 231.115 567.43 228.269C570.307 225.423 573.784 224 577.86 224Z" fill="currentColor"/><path d="M163.091 177.018L161.804 177.341C158.638 168.801 149.786 162.141 139.647 162.141C127.308 162.141 120.655 166.921 115.29 176.696V195.065C115.29 214.078 115.612 234.702 115.934 242.598C116.256 249.258 119.099 253.071 125.752 255.918L125.43 257.207C117.812 256.562 109.926 256.24 101.986 256.24C94.0456 256.24 86.4812 256.562 78.8631 257.207L78.5413 255.918C85.1937 253.393 88.037 249.58 88.3589 242.598C88.6807 234.649 89.0027 214.078 89.0027 198.234C89.0027 185.881 88.6808 173.205 88.3589 167.512C88.037 158.328 82.6722 155.804 77.8975 154.515V153.226C92.168 151.668 105.741 147.532 115.559 142.107L116.846 142.752C115.881 153.87 115.559 159.885 115.559 166.546C122.533 151.99 133.585 142.752 146.889 142.752C152.576 142.752 160.194 144.363 163.037 148.768V176.965L163.091 177.018Z" fill="currentColor"/></g></symbol>
+</svg>
+
 <div class="wrap">
   <header>
-    <div>
-      <div class="logo">RELIV</div>
-      <h1>우리집에 깔아보기</h1>
-      <p class="sub">휴대폰 카메라로 바닥을 비추면 고른 러그가 <b>실제 크기</b>로 깔려요.</p>
-    </div>
+    <svg class="logo" viewBox="0 0 546 262" role="img" aria-label="릴리브"><use href="#logo"/></svg>
+    <h1>우리집에 깔아보기</h1>
+    <p class="lead">휴대폰 카메라로 바닥을 비추면 고른 러그가 <strong>실제 크기</strong>로 깔려요.</p>
   </header>
 
   <div class="stage">
@@ -93,59 +164,61 @@ body.embed .wrap{padding-top:8px}
       camera-orbit="18deg 62deg 120%" min-camera-orbit="auto 15deg 70%" max-camera-orbit="auto 88deg 260%" field-of-view="28deg"
       shadow-intensity="1.1" shadow-softness="0.75" environment-image="neutral" exposure="1.0" tone-mapping="neutral"
       interaction-prompt="none" loading="eager" reveal="auto">
-      <button slot="ar-button" hidden></button>
     </model-viewer>
-    <div class="dim" id="dim">200 × 300 cm <span>거실XL</span></div>
-    <div class="loading" id="loading">불러오는 중…</div>
-    <div class="hint">끌어서 돌리기 · 두 손가락으로 확대</div>
-    <div class="zoom" aria-label="미리보기 확대 축소">
-      <button type="button" id="zoomOut" aria-label="더 넓게 보기">−</button>
-      <button type="button" id="zoomIn" aria-label="더 가까이 보기">+</button>
+    <div class="dim" id="dim" aria-live="polite">200 × 300 cm <span>거실 XL</span></div>
+    <div class="loading" id="loading"><span class="spin" aria-hidden="true"></span>불러오는 중</div>
+    <div class="ctl l" aria-label="미리보기 확대 축소">
+      <button type="button" id="zoomOut" aria-label="더 넓게 보기"><svg class="i"><use href="#ic-minus"/></svg></button>
+      <button type="button" id="zoomIn" aria-label="더 가까이 보기"><svg class="i"><use href="#ic-plus"/></svg></button>
     </div>
-    <div class="rot" aria-label="러그 회전">
-      <button type="button" id="rotL" aria-label="왼쪽으로 15도">↺</button>
-      <button type="button" id="rotR" aria-label="오른쪽으로 15도">↻</button>
-      <button type="button" id="rot90" class="wide" aria-label="가로 세로 바꾸기">가로↔세로</button>
+    <div class="ctl r" aria-label="러그 방향">
+      <button type="button" id="rotL" aria-label="왼쪽으로 15도 돌리기"><svg class="i"><use href="#ic-undo"/></svg></button>
+      <button type="button" id="rotR" aria-label="오른쪽으로 15도 돌리기"><svg class="i"><use href="#ic-redo"/></svg></button>
+      <button type="button" id="rot90" aria-label="가로세로 바꾸기"><svg class="i"><use href="#ic-swap"/></svg><span class="lbl">가로세로</span></button>
     </div>
   </div>
+  <p class="stage-note">끌어서 돌리고, 두 손가락으로 당겨서 넓게 봐요. 여기서 돌려 둔 방향 그대로 AR에 놓여요.</p>
 
-  <section>
-    <h2>사이즈</h2>
-    <div class="chips" id="sizes"></div>
+  <section class="group" aria-labelledby="h-size">
+    <h2 id="h-size">사이즈</h2>
+    <span class="sub">거실</span>
+    <div class="chips" id="sizesA" role="group" aria-label="거실 러그"></div>
+    <span class="sub">복도와 주방</span>
+    <div class="chips" id="sizesB" role="group" aria-label="복도 주방 러그"></div>
   </section>
 
-  <section>
-    <h2>색상</h2>
-    <div class="colors" id="colors"></div>
+  <section class="group" aria-labelledby="h-color">
+    <h2 id="h-color">색상</h2>
+    <div class="colors" id="colors" role="group" aria-label="색상"></div>
   </section>
 
-  <div id="arFail">이 기기에서는 AR을 열 수 없어요. 아이폰은 <b>사파리</b>, 안드로이드는 <b>크롬</b>에서 열어 주세요. 인스타그램·카카오톡 안에서 열렸다면 오른쪽 위 메뉴의 「다른 브라우저로 열기」를 눌러 주세요.</div>
+  <div class="alert" id="arFail" role="alert">이 브라우저에서는 AR이 열리지 않았어요. 아이폰은 사파리, 안드로이드는 크롬에서 열어 주세요. 인스타그램이나 카카오톡 안에서 열렸다면 오른쪽 위 메뉴에서 「다른 브라우저로 열기」를 누르면 돼요.</div>
 
   <div class="qr" id="qrBox">
     <div id="qr"></div>
-    <p><b>휴대폰으로 스캔하세요</b><br>PC에서는 카메라를 쓸 수 없어요. QR을 찍으면 지금 고른 사이즈·색·방향 그대로 열려요.</p>
+    <p><strong>휴대폰으로 스캔하세요</strong>PC에서는 카메라를 쓸 수 없어요. 지금 고른 사이즈와 색, 방향 그대로 열려요.</p>
   </div>
 
-  <section class="tips-sec">
-    <h2>이렇게 써보세요</h2>
-    <div class="tips">
-      <div><b>1</b><span>아래 버튼을 누르고 휴대폰으로 바닥을 천천히 좌우로 비춰요.</span></div>
-      <div><b>2</b><span>러그가 나타나면 <b>한 손가락</b>으로 끌어서 원하는 자리로 옮겨요.</span></div>
-      <div><b>3</b><span><b>두 손가락</b>을 돌리면 러그 방향이 돌아가요. 크기는 실제 cm 그대로 고정돼요.</span></div>
-      <div><b>4</b><span>소파 앞에 둘 땐 소파 폭보다 20~30cm 넓은 사이즈가 안정감 있어요. 최신 아이폰(Pro)은 앞에 있는 가구가 러그를 자연스럽게 가려 줘요.</span></div>
-    </div>
+  <section class="tips" aria-labelledby="h-tips">
+    <h2 id="h-tips">이렇게 써보세요</h2>
+    <ol class="steps">
+      <li><span>아래 버튼을 누르고 휴대폰으로 바닥을 천천히 좌우로 비춰요.</span></li>
+      <li><span>러그가 나타나면 <strong>한 손가락</strong>으로 끌어서 원하는 자리로 옮겨요.</span></li>
+      <li><span><strong>두 손가락</strong>을 돌리면 방향이 바뀌어요. 크기는 실제 cm 그대로예요.</span></li>
+      <li><span>큰 러그는 두세 걸음 물러나서 봐요. AR 화면에서는 카메라 배율을 바꿀 수 없어요.</span></li>
+    </ol>
   </section>
-  <div class="row"><button type="button" class="ghost" id="share">이 조합 링크 복사</button></div>
-  <p class="note">러그는 방의 밝기와 빛 색에 맞춰 자동으로 밝아지거나 어두워지고, 바닥에 그림자가 생겨요. 창문 햇빛 무늬처럼 바닥에 비친 빛은 화면 속 러그에 옮겨지지 않아서, 햇빛이 강한 곳보다 그늘진 쪽에서 볼 때 실제 색에 가장 가까워요.</p>
+  <div class="row"><button type="button" class="link" id="share"><svg class="i" style="width:16px;height:16px"><use href="#ic-link"/></svg><span id="shareText">이 조합 링크 복사</span></button></div>
+  <p class="fine">러그 색은 방의 밝기와 조명 색을 따라가고 바닥에 그림자가 생겨요. 창으로 들어온 햇빛 무늬는 러그 위에 비치지 않아서, 그늘진 쪽에서 볼 때 실제 색에 가장 가까워요.</p>
 </div>
 
-<div class="bar"><button class="cta" id="cta" type="button">📷 우리집 바닥에 깔아보기</button></div>
+<div class="bar"><button class="cta" id="cta" type="button" aria-busy="false"><span class="spin" aria-hidden="true"></span><svg class="i" aria-hidden="true"><use id="ctaIcon" href="#ic-camera"/></svg><span id="ctaText">우리집 바닥에 깔아보기</span></button></div>
 
 <script>
 const V='v=3';
 const SIZES=[
-  {k:'S',n:'거실S',w:100,h:150},{k:'M',n:'거실M',w:150,h:200},{k:'L',n:'거실L',w:200,h:250},{k:'XL',n:'거실XL',w:200,h:300},
-  {k:'hall',n:'기본 복도형',w:100,h:250},{k:'widehall',n:'넓은 복도형',w:120,h:200},{k:'module',n:'모듈형',w:100,h:200},{k:'kitchen',n:'주방형',w:45,h:115}
+  {k:'S',n:'S',g:'거실',w:100,h:150},{k:'M',n:'M',g:'거실',w:150,h:200},{k:'L',n:'L',g:'거실',w:200,h:250},{k:'XL',n:'XL',g:'거실',w:200,h:300},
+  {k:'hall',n:'기본 복도',g:'',w:100,h:250},{k:'widehall',n:'넓은 복도',g:'',w:120,h:200},{k:'module',n:'모듈',g:'',w:100,h:200},{k:'kitchen',n:'주방',g:'',w:45,h:115}
 ];
 const COLORS=[{k:'green',n:'그린',c:'#5F8987'},{k:'ivory',n:'아이보리',c:'#E0DACF'},{k:'beige',n:'베이지',c:'#CCC2B8'},{k:'gray',n:'그레이',c:'#B2AEAB'}];
 const mv=document.getElementById('mv');
@@ -172,7 +245,7 @@ async function fetchGlb(url){
   if(!cache.has(url)) cache.set(url,fetch(url).then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer();}));
   return cache.get(url);
 }
-/* GLB 의 JSON 청크를 열어 루트 노드에 Y축 회전(쿼터니언)을 심음. 이렇게 하면 iPhone Quick Look·WebXR 모두 미리보기에서 돌린 방향 그대로 열림 */
+/* GLB 의 JSON 청크를 열어 루트 노드에 Y축 회전(쿼터니언)을 심음 → iPhone Quick Look·WebXR 모두 미리보기 방향 그대로 열림 */
 function rotateGlb(buf,deg){
   const dv=new DataView(buf), u8=new Uint8Array(buf);
   const jsonLen=dv.getUint32(12,true);
@@ -187,9 +260,12 @@ function rotateGlb(buf,deg){
   out.set(rest,20+js.length+pad);
   return out.buffer;
 }
-let blobUrl=null, loadSeq=0;
+let blobUrl=null, loadSeq=0, loadTimer=null;
+const loading=document.getElementById('loading');
 async function loadModel(){
-  const seq=++loadSeq; const loading=document.getElementById('loading'); loading.classList.add('on');
+  const seq=++loadSeq;
+  clearTimeout(loadTimer); loadTimer=setTimeout(()=>loading.classList.add('on'),150);
+  mv.classList.add('swapping');
   mv.setAttribute('poster',`thumb_${color.k}.jpg?${V}`);
   try{
     if(canBlob){
@@ -199,20 +275,27 @@ async function loadModel(){
       mv.setAttribute('orientation','0deg 0deg 0deg');
       mv.src=next; if(blobUrl) URL.revokeObjectURL(blobUrl); blobUrl=next;
     }else{
-      const r90=yaw%180===90||yaw%180===-90;
+      const r90=yaw%180===90;
       mv.src=fileUrl(r90);
       mv.setAttribute('orientation',`0deg 0deg ${yaw-(r90?90:0)}deg`);
     }
   }catch(e){ console.error(e); mv.src=fileUrl(false); }
 }
-mv.addEventListener('load',()=>document.getElementById('loading').classList.remove('on'));
-mv.addEventListener('error',()=>document.getElementById('loading').classList.remove('on'));
+function doneLoading(){ clearTimeout(loadTimer); loading.classList.remove('on'); mv.classList.remove('swapping'); }
+mv.addEventListener('load',doneLoading);
+mv.addEventListener('error',doneLoading);
 
+function chip(s){
+  const long=Math.max(s.w,s.h), sw=Math.max(6,Math.round(28*s.w/long)), sh=Math.round(28*s.h/long);
+  return `<button type="button" class="chip" data-k="${s.k}" aria-pressed="${s===size}" aria-label="${s.g?s.g+' ':''}${s.n} ${s.w}×${s.h}센티미터">
+    <span class="fp" aria-hidden="true"><i style="width:${sw}px;height:${sh}px"></i></span><b>${s.n}</b><small>${s.w}×${s.h}</small></button>`;
+}
 function render(reload=true){
-  document.getElementById('sizes').innerHTML=SIZES.map(s=>`<button type="button" class="chip" data-k="${s.k}" aria-pressed="${s===size}"><b>${s.n.replace('거실','')}</b><small>${s.w}×${s.h}</small></button>`).join('');
-  document.getElementById('colors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-k="${c.k}" aria-pressed="${c===color}"><i style="background:${c.c}"></i>${c.n}</button>`).join('');
+  document.getElementById('sizesA').innerHTML=SIZES.slice(0,4).map(chip).join('');
+  document.getElementById('sizesB').innerHTML=SIZES.slice(4).map(chip).join('');
+  document.getElementById('colors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-k="${c.k}" aria-pressed="${c===color}"><i style="background:${c.c}"><svg aria-hidden="true"><use href="#ic-check"/></svg></i>${c.n}</button>`).join('');
   const turned=yaw%180===90;
-  document.getElementById('dim').innerHTML=`${turned?size.h:size.w} × ${turned?size.w:size.h} cm <span>${size.n}</span>`;
+  document.getElementById('dim').innerHTML=`${turned?size.h:size.w} × ${turned?size.w:size.h} cm <span>${size.g?size.g+' ':''}${size.n}</span>`;
   const u=new URL(location.href); u.searchParams.set('size',size.k); u.searchParams.set('color',color.k);
   if(yaw) u.searchParams.set('rot',yaw); else u.searchParams.delete('rot');
   history.replaceState(null,'',u);
@@ -220,7 +303,7 @@ function render(reload=true){
   if(reload) loadModel();
 }
 function setYaw(d){ yaw=((yaw+d)%360+360)%360; render(); }
-document.getElementById('sizes').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;size=SIZES.find(s=>s.k===b.dataset.k);render();});
+for(const id of ['sizesA','sizesB']) document.getElementById(id).addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;size=SIZES.find(s=>s.k===b.dataset.k);render();});
 document.getElementById('colors').addEventListener('click',e=>{const b=e.target.closest('.sw');if(!b)return;color=COLORS.find(c=>c.k===b.dataset.k);render();});
 document.getElementById('rotL').onclick=()=>setYaw(-15);
 document.getElementById('rotR').onclick=()=>setYaw(15);
@@ -235,23 +318,23 @@ function drawQR(){
   document.getElementById('qr').innerHTML=qr.createImgTag(4,0);
 }
 document.getElementById('share').onclick=async()=>{
-  const b=document.getElementById('share');
+  const t=document.getElementById('shareText');
   try{ if(navigator.share&&isMobile){ await navigator.share({title:'릴리브 우리집에 깔아보기',url:location.href}); return; } }catch(e){ return; }
-  try{ await navigator.clipboard.writeText(location.href); b.textContent='복사됐어요'; setTimeout(()=>b.textContent='이 조합 링크 복사',1500);}catch(e){ prompt('링크를 복사하세요',location.href); }
+  try{ await navigator.clipboard.writeText(location.href); t.textContent='링크를 복사했어요'; setTimeout(()=>t.textContent='이 조합 링크 복사',1800);}catch(e){ prompt('링크를 복사하세요',location.href); }
 };
-document.getElementById('cta').onclick=async()=>{
-  const cta=document.getElementById('cta');
+const cta=document.getElementById('cta'), ctaText=document.getElementById('ctaText'), arFail=document.getElementById('arFail');
+cta.onclick=async()=>{
   await customElements.whenDefined('model-viewer');
   if(mv.canActivateAR){
-    cta.disabled=true; cta.textContent='AR 준비 중…';
-    try{ await mv.activateAR(); }catch(e){ document.getElementById('arFail').style.display='block'; }
-    finally{ cta.disabled=false; cta.textContent='📷 우리집 바닥에 깔아보기'; }
+    cta.disabled=true; cta.setAttribute('aria-busy','true'); ctaText.textContent='AR 여는 중';
+    try{ await mv.activateAR(); }catch(e){ arFail.classList.add('on'); }
+    finally{ cta.disabled=false; cta.setAttribute('aria-busy','false'); ctaText.textContent='우리집 바닥에 깔아보기'; }
   }
   else if(!isMobile){ const b=document.getElementById('qrBox'); b.classList.add('on'); drawQR(); b.scrollIntoView({behavior:'smooth',block:'center'}); }
-  else { document.getElementById('arFail').style.display='block'; }
+  else { arFail.classList.add('on'); }
 };
-mv.addEventListener('ar-status',e=>{ if(e.detail.status==='failed') document.getElementById('arFail').style.display='block'; });
-if(!isMobile){ document.getElementById('cta').textContent='📱 휴대폰으로 열어서 깔아보기'; window.addEventListener('load',()=>{document.getElementById('qrBox').classList.add('on');drawQR();}); }
+mv.addEventListener('ar-status',e=>{ if(e.detail.status==='failed') arFail.classList.add('on'); });
+if(!isMobile){ ctaText.textContent='휴대폰으로 열어서 깔아보기'; document.getElementById('ctaIcon').setAttribute('href','#ic-phone'); window.addEventListener('load',()=>{document.getElementById('qrBox').classList.add('on');drawQR();}); }
 render();
 </script>
 </body>
