@@ -22,7 +22,7 @@ SRC_DIR = os.path.join(HERE, 'src')
 # color: (structure photo, crop box, real cm across the crop width, target base sRGB)
 SRC = {
     # 2025-10-22 실사(러그색감_AR용) 기준. 색은 흰 가구·종이를 기준으로 화이트밸런스 보정한 중앙값에 AR 조명 감쇠분을 올린 값
-    'green': ('green_tex_251022.jpg', (0, 0, 910, 1365), 60.0, (150, 176, 146)),
+    'green': ('green_tex_251022.jpg', (0, 0, 910, 1365), 60.0, (120, 157, 136)),
     'gray':  ('gray_top_251022.jpg', (0, 0, 520, 2048), 20.0, (150, 150, 147)),
     'beige': ('beige_tex_251022.jpg', (515, 0, 966, 483), 25.0, (203, 194, 180)),
     'ivory': ('ivory_tex_251022.jpg', (0, 0, 1365, 1138), 45.0, (234, 231, 224)),
