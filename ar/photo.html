@@ -13,7 +13,7 @@
   --linen-50:#F3EFE8; --linen-100:#EAE4DA; --linen-300:#CBC1AF;
   --walnut-900:#1C1813; --walnut-800:#241F17; --walnut-500:#6B6155; --walnut-400:#766B5E; --clay-500:#8F5A3C; --clay-600:#74472E;
   --bg:var(--walnut-900); --surface:#FBF9F5; --ink:var(--walnut-800); --ink-2:var(--walnut-500); --ink-3:var(--walnut-400);
-  --on-dark:#F3EFE8; --on-dark-2:rgba(243,239,232,.7); --accent:var(--clay-500); --accent-soft:#C98F6E; --focus:#E0B08F;
+  --on-dark:#F3EFE8; --on-dark-2:rgba(243,239,232,.78); --accent:var(--clay-500); --accent-soft:#C98F6E; --focus:#E0B08F;
   --font:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
   --t-body:16px; --t-small:14px; --t-caption:12px;
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px;
@@ -29,12 +29,15 @@ svg{display:block}
 .i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
 /* ── 앱 레이아웃: 상단 바 / 무대 / 도구 바 ── */
-.app{position:fixed;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;padding-top:env(safe-area-inset-top)}
+.app{position:fixed;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-columns:minmax(0,1fr);padding-top:env(safe-area-inset-top)}
+.stage,.panels,.top,.tools{min-width:0}
 .panels{display:none;padding:0 var(--s-2);min-height:0}
 .app.open .panels{display:block}
 .top{display:flex;align-items:center;gap:var(--s-2);padding:var(--s-2) max(var(--s-3),env(safe-area-inset-left)) var(--s-2) max(var(--s-3),env(safe-area-inset-right));min-height:48px}
 .top .title{flex:1;font-size:var(--t-small);font-weight:700;color:var(--on-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .title em{font-style:normal}
 .top .title span{color:var(--on-dark-2);font-weight:500;margin-left:var(--s-2);font-variant-numeric:tabular-nums}
+@media (max-width:479px){.top .title em{display:none}.top .title span{margin-left:0;color:var(--on-dark);font-weight:700}}
 .tb{display:flex;align-items:center;justify-content:center;gap:6px;min-width:44px;height:40px;padding:0 var(--s-3);border-radius:var(--r-pill);color:var(--on-dark);background:rgba(255,255,255,.08);font-size:var(--t-caption);font-weight:700;white-space:nowrap;transition:background var(--t-ui),transform var(--t-press)}
 .tb:active{transform:scale(.96)}
 .tb[aria-pressed="true"]{background:var(--on-dark);color:var(--ink)}
@@ -45,6 +48,8 @@ svg{display:block}
 .drop h1{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--on-dark)}
 .drop p{margin:0;font-size:var(--t-small);text-wrap:pretty;max-width:30em}
 .drop .btns{display:flex;gap:var(--s-2);flex-wrap:wrap;justify-content:center}
+.drop .link{min-height:44px;padding:0 var(--s-3);color:var(--on-dark);font-size:var(--t-small);font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(243,239,232,.4)}
+.drop .small{font-size:var(--t-caption);color:var(--on-dark-2);max-width:34em}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 var(--s-5);border-radius:var(--r-pill);background:var(--on-dark);color:var(--ink);font-size:var(--t-small);font-weight:700;white-space:nowrap;transition:transform var(--t-press)}
 .btn:active{transform:scale(.97)}
 .btn.ghost{background:rgba(255,255,255,.1);color:var(--on-dark)}
@@ -59,17 +64,19 @@ svg{display:block}
 .calibbar{position:absolute;left:50%;top:var(--s-3);transform:translateX(-50%);display:none;align-items:center;gap:var(--s-2);background:var(--surface);color:var(--ink);border-radius:var(--r-pill);padding:6px 6px 6px var(--s-4);box-shadow:0 6px 24px rgba(0,0,0,.35);font-size:var(--t-caption);font-weight:600;white-space:nowrap;z-index:4}
 .app.calib .calibbar{display:flex}
 .calibbar .pb{min-height:36px}
-.hint{position:absolute;left:50%;bottom:var(--s-3);transform:translateX(-50%);background:rgba(28,24,19,.75);color:var(--on-dark);font-size:var(--t-caption);padding:6px var(--s-3);border-radius:var(--r-pill);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity var(--t-ui)}
+.hint{position:absolute;left:50%;bottom:var(--s-3);transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);background:rgba(28,24,19,.78);color:var(--on-dark);font-size:var(--t-caption);line-height:1.4;padding:6px var(--s-3);border-radius:14px;text-align:center;pointer-events:none;opacity:0;transition:opacity var(--t-ui)}
 .hint.on{opacity:1}
 
 /* 도구 바 */
 .tools{display:flex;justify-content:space-around;align-items:center;gap:var(--s-1);padding:var(--s-2) max(var(--s-2),env(safe-area-inset-left)) max(var(--s-2),env(safe-area-inset-bottom)) max(var(--s-2),env(safe-area-inset-right))}
-.tool{display:flex;flex-direction:column;align-items:center;gap:3px;width:60px;height:var(--tool);border-radius:var(--r-chip);color:var(--on-dark-2);font-size:11px;font-weight:600;transition:background var(--t-ui),color var(--t-ui)}
+.tool{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:60px;height:var(--tool);border-radius:var(--r-chip);color:var(--on-dark-2);font-size:12px;font-weight:600;transition:background var(--t-ui),color var(--t-ui)}
 .tool .i{width:24px;height:24px}
 .tools .tool{width:52px}
 .tool[aria-expanded="true"]{color:var(--ink);background:var(--on-dark)}
 .tool.primary{color:var(--on-dark)}
 .app:not(.has) .tools{visibility:hidden}
+.app:not(.has) .top .tb:not(#toAr){display:none}
+.app.before canvas{filter:none}
 
 /* 패널 (도구 위로 뜸) */
 .panel{background:var(--surface);color:var(--ink);border-radius:var(--r-surface);padding:var(--s-3) var(--s-4);display:none;max-height:min(44dvh,340px);overflow:auto}
@@ -135,6 +142,7 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
   <symbol id="ic-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2s0-2 1.5-2h1.5a4 4 0 0 0 4-4c0-5-4-10-8.5-10z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/></symbol>
   <symbol id="ic-move" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M8 6l4-4 4 4M8 18l4 4 4-4M6 8l-4 4 4 4M18 8l4 4-4 4"/></symbol>
   <symbol id="ic-corners" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></symbol>
+  <symbol id="ic-eye" viewBox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="ic-grid" viewBox="0 0 24 24"><path d="M3 18h18M5 13h14M7 8h10M9 4h6"/><path d="M9 4L3 18M15 4l6 14M12 4v14"/></symbol>
   <symbol id="ic-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
   <symbol id="ic-ar" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M12 7l5 2.5v5L12 17l-5-2.5v-5z"/><path d="M12 12l5-2.5M12 12v5M12 12L7 9.5"/></symbol>
@@ -144,8 +152,9 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
 <div class="app" id="app">
   <div class="top">
     <a class="tb" id="toAr" href="index.html" aria-label="카메라 AR로 보기"><svg class="i"><use href="#ic-ar"/></svg>AR</a>
-    <div class="title">사진으로 깔아보기<span id="dim">200 × 300 cm</span></div>
+    <div class="title"><em>사진으로 깔아보기</em><span id="dim">200 × 300 cm</span></div>
         <button type="button" class="tb" id="toggleHandles" aria-pressed="false" aria-label="바닥 끝선 숨기기"><svg class="i"><use href="#ic-corners"/></svg></button>
+    <button type="button" class="tb" id="before" aria-label="원래 사진 보기 (누르고 있기)"><svg class="i"><use href="#ic-eye"/></svg></button>
     <button type="button" class="tb" id="gridBtn" aria-pressed="false" aria-label="바닥 격자 보기"><svg class="i"><use href="#ic-grid"/></svg></button>
     <button type="button" class="tb" id="change" aria-label="다른 사진"><svg class="i"><use href="#ic-image"/></svg></button>
   </div>
@@ -153,14 +162,16 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
   <div class="stage" id="stage">
     <div class="frame" id="frame">
       <canvas id="cv"></canvas>
-      <div class="horizon" id="horizon" role="slider" aria-label="바닥과 벽이 만나는 선" tabindex="0"><span class="grip">바닥 끝선 · 위아래로 끌기</span></div>
+      <div class="horizon" id="horizon" role="slider" aria-label="바닥과 벽이 만나는 선" tabindex="0"><span class="grip">바닥 끝선</span></div>
       <div class="hint" id="hint">동그라미를 러그 모서리 자리로 끌어 주세요</div>
     </div>
     <div class="drop">
       <svg class="logo" viewBox="0 0 546 262" role="img" aria-label="릴리브" style="width:72px;height:auto;color:var(--on-dark)"><use href="#logo"/></svg>
-      <h1>사진으로 깔아보기</h1>
-      <p>거실 사진에 러그를 올려 <strong>색과 분위기</strong>를 봐요. 사진 속 빛과 그림자가 러그에 그대로 비쳐요. 바닥이 넓게 보이게, 살짝 위에서 내려다본 사진이 잘 맞아요. 사진은 휴대폰 밖으로 나가지 않아요.<br><span style="font-size:13px">실제 크기가 맞는지는 「AR」에서 확인하는 게 정확해요.</span></p>
+      <h1>우리집 사진에 깔아보기</h1>
+      <p>거실 사진을 올리면 고른 러그가 바닥에 깔려요. 사진 속 빛과 그림자가 러그에 그대로 비쳐서 색과 분위기를 볼 수 있어요.</p>
       <div class="btns"><button type="button" class="btn" id="pick"><svg class="i"><use href="#ic-image"/></svg>앨범에서 고르기</button><button type="button" class="btn ghost" id="shoot"><svg class="i"><use href="#ic-camera"/></svg>지금 찍기</button></div>
+      <button type="button" class="link" id="sample">사진이 없으면 예시 거실로 해보기</button>
+      <p class="small">바닥이 넓게 보이게 살짝 내려다본 사진이 잘 맞아요 · 사진은 휴대폰 밖으로 나가지 않아요 · 실제 크기 확인은 「AR」에서</p>
     </div>
 
   </div>
@@ -202,7 +213,7 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
 <input type="file" id="fileCam" accept="image/*" capture="environment" class="hidden">
 
 <script>
-const V='v=17';
+const V='v=19';
 const SIZES=[
   {k:'S',n:'S',g:'거실',w:100,h:150},{k:'M',n:'M',g:'거실',w:150,h:200},{k:'L',n:'L',g:'거실',w:200,h:250},{k:'XL',n:'XL',g:'거실',w:200,h:300},
   {k:'hall',n:'기본 복도',g:'',w:100,h:250},{k:'widehall',n:'넓은 복도',g:'',w:120,h:200},{k:'module',n:'모듈',g:'',w:100,h:200},{k:'kitchen',n:'주방',g:'',w:45,h:115}
@@ -214,6 +225,8 @@ let color=COLORS.find(c=>c.k===q.get('color'))||COLORS[0];
 const $=id=>document.getElementById(id);
 const app=$('app'), stage=$('stage'), frame=$('frame'), cv=$('cv'), ctx=cv.getContext('2d',{willReadFrequently:true});
 const tools=[...document.querySelectorAll('.tool[data-panel]')];
+function closePanels(){tools.forEach(t=>{t.setAttribute('aria-expanded','false'); $(t.dataset.panel).classList.remove('on');}); app.classList.remove('open'); requestAnimationFrame(fit);}
+tools.forEach(t=>t.onclick=()=>{const open=t.getAttribute('aria-expanded')==='true'; closePanels(); if(!open){t.setAttribute('aria-expanded','true'); $(t.dataset.panel).classList.add('on'); app.classList.add('open'); requestAnimationFrame(fit);}});
 let photo=null, W=0, H=0, quad=null, Hm=null, swapped=false, rot=0;
 /* 바닥 평면 = 핀홀 카메라가 pitch 만큼 내려다본 평면. 지평선(바닥 끝선) 위치로 pitch 를 정하고, 카메라 높이로 스케일을 정함 */
 let cam={f:1,cx:0,cy:0,pitch:35*Math.PI/180,h:150};   // h: 카메라 높이(cm), 사진 속 크기 느낌을 정함
@@ -359,6 +372,8 @@ cv.addEventListener('pointermove',e=>{ if(!g||!ptrs.has(e.pointerId)) return; pt
     cam.h=Math.min(600,Math.max(40,g.h0*g.d0/Math.max(10,d))); rot=Math.round(g.r0+(an-g.a0)*180/Math.PI); rot=((rot+90)%360+360)%360-90; $('rot').value=rot; $('scale').value=Math.round(150/cam.h*100); syncOut(); quadFromPlane(); render(); } });
 const gUp=e=>{ ptrs.delete(e.pointerId); if(ptrs.size===0) g=null; else if(ptrs.size===1){ const [u,v]=[...ptrs.values()][0]; g={mode:'move',last:unproj(u,v)}; } };
 cv.addEventListener('pointerup',gUp); cv.addEventListener('pointercancel',gUp);
+const bf=$('before'); const showBefore=on=>{ if(!photo) return; if(on){ ctx.clearRect(0,0,W,H); ctx.drawImage(photo,0,0,W,H); app.classList.add('before'); } else { app.classList.remove('before'); render(); } };
+bf.addEventListener('pointerdown',e=>{showBefore(true); bf.setPointerCapture(e.pointerId);}); bf.addEventListener('pointerup',()=>showBefore(false)); bf.addEventListener('pointercancel',()=>showBefore(false)); bf.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){showBefore(true);}}); bf.addEventListener('keyup',()=>showBefore(false));
 $('gridBtn').onclick=()=>{ clearTimeout(gridT); grid=!grid; $('gridBtn').setAttribute('aria-pressed',grid); render(); };
 $('toggleHandles').onclick=()=>{const on=app.classList.toggle('clean'); $('toggleHandles').setAttribute('aria-pressed',on); $('toggleHandles').setAttribute('aria-label',on?'바닥 끝선 보이기':'바닥 끝선 숨기기');};
 stage.addEventListener('pointerdown',e=>{ if(e.target===stage) closePanels(); });
@@ -385,7 +400,8 @@ $('shadow').oninput=e=>{light.shadow=+e.target.value/100;syncOut();render();};
 $('tex').oninput=e=>{light.tex=+e.target.value/100;syncOut();render();};
 $('swap').onclick=()=>{swapped=!swapped;renderControls();if(calibrated){quadFromPlane();render();}};
 $('resetQuad').onclick=()=>{if(photo)resetQuad();};
-$('pick').onclick=()=>$('file').click(); $('shoot').onclick=()=>$('fileCam').click(); $('change').onclick=()=>$('file').click();
+$('pick').onclick=()=>$('file').click();
+$('sample').onclick=()=>{ const im=new Image(); im.onload=()=>{ photo=im; const maxW=1400,r=Math.min(1,maxW/Math.max(im.naturalWidth,im.naturalHeight)); W=Math.round(im.naturalWidth*r); H=Math.round(im.naturalHeight*r); cv.width=W; cv.height=H; needLum=true; cam.cx=W/2; cam.cy=H/2; cam.f=Math.hypot(W,H)/1.665; app.classList.add('has'); fit(); setHorizon(H*0.33); resetQuad(); showHint('예시 거실이에요 · 한 손가락 옮기기 · 두 손가락 크기·회전',3500); }; im.src='sample_room.jpg?'+V; }; $('shoot').onclick=()=>$('fileCam').click(); $('change').onclick=()=>$('file').click();
 $('file').onchange=e=>loadFile(e.target.files[0]); $('fileCam').onchange=e=>loadFile(e.target.files[0]);
 stage.addEventListener('dragover',e=>e.preventDefault()); stage.addEventListener('drop',e=>{e.preventDefault();loadFile(e.dataTransfer.files[0]);});
 
