@@ -52,10 +52,7 @@ svg{display:block}
 .handle{position:absolute;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;display:grid;place-items:center;cursor:grab;touch-action:none}
 .handle::after{content:"";width:18px;height:18px;border-radius:50%;background:#FFFFFF;border:3px solid var(--accent);box-shadow:0 1px 6px rgba(0,0,0,.4)}
 .handle.on::after{transform:scale(1.25)}
-.app:not(.calib) .handle{display:none}
-.app.calib .rugbox{pointer-events:none}
-.refline{position:absolute;inset:0;pointer-events:none}
-.app:not(.calib) .refline{display:none}
+.app:not(.has) .handle,.app.clean .handle{display:none}
 .calibbar{position:absolute;left:50%;top:var(--s-3);transform:translateX(-50%);display:none;align-items:center;gap:var(--s-2);background:var(--surface);color:var(--ink);border-radius:var(--r-pill);padding:6px 6px 6px var(--s-4);box-shadow:0 6px 24px rgba(0,0,0,.35);font-size:var(--t-caption);font-weight:600;white-space:nowrap;z-index:4}
 .app.calib .calibbar{display:flex}
 .calibbar .pb{min-height:36px}
@@ -144,7 +141,8 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
   <div class="top">
     <a class="tb" id="toAr" href="index.html" aria-label="카메라 AR로 보기"><svg class="i"><use href="#ic-ar"/></svg>AR</a>
     <div class="title">사진으로 깔아보기<span id="dim">200 × 300 cm</span></div>
-        <button type="button" class="tb" id="change" aria-label="다른 사진"><svg class="i"><use href="#ic-image"/></svg></button>
+        <button type="button" class="tb" id="toggleHandles" aria-pressed="false" aria-label="모서리 핸들 숨기기"><svg class="i"><use href="#ic-corners"/></svg></button>
+    <button type="button" class="tb" id="change" aria-label="다른 사진"><svg class="i"><use href="#ic-image"/></svg></button>
   </div>
 
   <div class="stage" id="stage">
@@ -154,8 +152,6 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
       <div class="handle" data-i="1" aria-label="오른쪽 위 모서리"></div>
       <div class="handle" data-i="2" aria-label="오른쪽 아래 모서리"></div>
       <div class="handle" data-i="3" aria-label="왼쪽 아래 모서리"></div>
-      <svg class="refline" id="refline" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon id="refpoly" points="" fill="rgba(143,90,60,.12)" stroke="#E0B08F" stroke-width="0.4" vector-effect="non-scaling-stroke" stroke-dasharray="4 3"/></svg>
-      <div class="calibbar" id="calibbar"><span id="calibLabel">A4 종이 21×29.7</span><button type="button" class="pb" id="calibChange">바꾸기</button><button type="button" class="pb" id="calibDone2" style="background:var(--ink);color:var(--surface)">기준 확정</button></div>
       <div class="hint" id="hint">동그라미를 러그 모서리 자리로 끌어 주세요</div>
     </div>
     <div class="drop">
@@ -174,17 +170,10 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
       <h2>복도와 주방</h2><div class="chips" id="sizesB"></div>
     </div>
     <div class="panel" id="p-color" role="group" aria-label="색상"><h2>색상</h2><div class="sw-row" id="colors"></div></div>
-    <div class="panel" id="p-calib" role="group" aria-label="크기 기준">
-      <h2>사진 속에서 크기를 아는 물건</h2>
-      <div class="sw-row" id="refs"></div>
-      <div class="sl" id="refSizeRow"><label for="refW">가로×세로</label><div style="display:flex;gap:6px;align-items:center"><input type="number" id="refW" inputmode="decimal" min="5" max="600" step="0.1" style="width:72px;height:40px;border:2px solid var(--linen-300);border-radius:8px;padding:0 8px;font:inherit;font-size:14px">×<input type="number" id="refH" inputmode="decimal" min="5" max="600" step="0.1" style="width:72px;height:40px;border:2px solid var(--linen-300);border-radius:8px;padding:0 8px;font:inherit;font-size:14px"><span style="font-size:13px;color:var(--ink-2)">cm</span></div><span></span></div>
-      <div class="row"><button type="button" class="pb" id="calibStart"><svg class="i"><use href="#ic-corners"/></svg>모서리 찍기</button><button type="button" class="pb" id="calibDone" style="background:var(--ink);color:var(--surface)">기준 확정</button></div>
-      <p class="note">그 물건의 네 모서리에 동그라미를 맞추고 「기준 확정」을 누르면, 그다음부터 러그가 실제 cm로 그려져요. 바닥에 놓인 물건이어야 해요(테이블 위 X).</p>
-    </div>
     <div class="panel" id="p-place" role="group" aria-label="놓기">
       <div class="sl"><label for="rot">방향</label><input type="range" id="rot" min="-90" max="90" step="1" value="0"><output for="rot" id="rotOut">0°</output></div>
-      <div class="row"><button type="button" class="pb" id="swap"><svg class="i"><use href="#ic-swap"/></svg>가로세로</button><button type="button" class="pb" id="resetQuad"><svg class="i"><use href="#ic-reset"/></svg>기준 자리로</button></div>
-      <p class="note">러그를 한 손가락으로 끌어서 옮겨요. 크기는 고른 사이즈 그대로 고정돼요.</p>
+      <div class="row"><button type="button" class="pb" id="swap"><svg class="i"><use href="#ic-swap"/></svg>가로세로</button><button type="button" class="pb" id="resetQuad"><svg class="i"><use href="#ic-reset"/></svg>자리 초기화</button></div>
+      <p class="note">모서리 동그라미로 러그 자리를 맞추면 그 자리가 기준이 돼요. 이후 사이즈를 바꾸면 같은 자리에서 비율대로 커지고 작아져요. 러그 가운데를 끌면 옮겨져요.</p>
     </div>
     <div class="panel" id="p-light" role="group" aria-label="빛">
       <div class="sl"><label for="bright">밝기</label><input type="range" id="bright" min="60" max="140" step="1" value="100"><output for="bright" id="brightOut">100%</output></div>
@@ -197,7 +186,6 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
   </div>
 
   <div class="tools" role="toolbar" aria-label="편집 도구">
-    <button type="button" class="tool" data-panel="p-calib" aria-expanded="false"><svg class="i"><use href="#ic-corners"/></svg>기준</button>
     <button type="button" class="tool" data-panel="p-size" aria-expanded="false"><svg class="i"><use href="#ic-rug"/></svg>사이즈</button>
     <button type="button" class="tool" data-panel="p-color" aria-expanded="false"><svg class="i"><use href="#ic-palette"/></svg>색상</button>
     <button type="button" class="tool" data-panel="p-place" aria-expanded="false"><svg class="i"><use href="#ic-move"/></svg>놓기</button>
@@ -210,7 +198,7 @@ input[type=range]:focus-visible{outline:2px solid var(--clay-600);outline-offset
 <input type="file" id="fileCam" accept="image/*" capture="environment" class="hidden">
 
 <script>
-const V='v=13';
+const V='v=14';
 const SIZES=[
   {k:'S',n:'S',g:'거실',w:100,h:150},{k:'M',n:'M',g:'거실',w:150,h:200},{k:'L',n:'L',g:'거실',w:200,h:250},{k:'XL',n:'XL',g:'거실',w:200,h:300},
   {k:'hall',n:'기본 복도',g:'',w:100,h:250},{k:'widehall',n:'넓은 복도',g:'',w:120,h:200},{k:'module',n:'모듈',g:'',w:100,h:200},{k:'kitchen',n:'주방',g:'',w:45,h:115}
@@ -223,8 +211,7 @@ const $=id=>document.getElementById(id);
 const app=$('app'), stage=$('stage'), frame=$('frame'), cv=$('cv'), ctx=cv.getContext('2d',{willReadFrequently:true});
 const tools=[...document.querySelectorAll('.tool[data-panel]')];
 let photo=null, W=0, H=0, quad=null, Hm=null, swapped=false, rot=0;
-let refQuad=null, refDims={w:21,h:29.7}, refKind='a4', calibrated=false, center=[0,0];   // 바닥 평면 기준
-const REFS=[{k:'a4',n:'A4 종이',w:21,h:29.7},{k:'tile',n:'바닥 타일 1장',w:60,h:60},{k:'rug',n:'지금 깔린 러그',w:150,h:200},{k:'custom',n:'직접 입력',w:50,h:50}];
+let center=[0,0], calibrated=false;   // 바닥 평면: 처음 모서리로 맞춘 러그 자리가 기준
 const light={bright:1,warm:0,pass:.9,shadow:.45,tex:1,dir:1};
 const texCache=new Map(); let lumMap=null, needLum=true;
 const DIRS=[[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]];
@@ -242,13 +229,12 @@ function invert(m){const [a,b,c,d,e,f,g,h,i]=m;const A=e*i-f*h,B=-(d*i-f*g),C=d*
 function dims(){return swapped?{w:size.h,h:size.w}:{w:size.w,h:size.h};}
 function rectCm(){const {w,h}=dims(),a=rot*Math.PI/180,c=Math.cos(a),si=Math.sin(a);return [[-w/2,-h/2],[w/2,-h/2],[w/2,h/2],[-w/2,h/2]].map(([x,y])=>[x*c-y*si+center[0],x*si+y*c+center[1]]);}
 function quadFromPlane(){quad=rectCm().map(([x,y])=>apply(Hm,x,y));}
-function refRectCm(){const {w,h}=refDims;return [[-w/2,-h/2],[w/2,-h/2],[w/2,h/2],[-w/2,h/2]];}
-function planeFromRef(){Hm=solveH(refRectCm(),refQuad);}
+function planeFromQuad(){Hm=solveH(rectCm(),quad); calibrated=true;}
 
 /* ---------- 사진·레이아웃 ---------- */
 function loadFile(f){
   if(!f) return; const url=URL.createObjectURL(f); const im=new Image();
-  im.onload=()=>{URL.revokeObjectURL(url); photo=im; const maxW=1400, r=Math.min(1,maxW/Math.max(im.naturalWidth,im.naturalHeight)); W=Math.round(im.naturalWidth*r); H=Math.round(im.naturalHeight*r); cv.width=W; cv.height=H; needLum=true; app.classList.add('has'); fit(); startCalib(true);};
+  im.onload=()=>{URL.revokeObjectURL(url); photo=im; const maxW=1400, r=Math.min(1,maxW/Math.max(im.naturalWidth,im.naturalHeight)); W=Math.round(im.naturalWidth*r); H=Math.round(im.naturalHeight*r); cv.width=W; cv.height=H; needLum=true; app.classList.add('has'); fit(); resetQuad(); showHint('동그라미를 러그 모서리 자리로 끌어 주세요',2600);};
   im.src=url;
 }
 function fit(){ // 무대 안에 사진 비율대로 최대 크기
@@ -256,21 +242,12 @@ function fit(){ // 무대 안에 사진 비율대로 최대 크기
   frame.style.width=Math.floor(W*k)+'px'; frame.style.height=Math.floor(H*k)+'px'; placeHandles();
 }
 window.addEventListener('resize',fit); window.addEventListener('orientationchange',()=>setTimeout(fit,200));
-function resetQuad(){ rot=0; $('rot').value=0; syncOut(); center=[0,0]; if(calibrated){quadFromPlane();render();} }
-/* 기준 잡기: 사진 속 물건의 네 모서리 */
-function startCalib(first){
-  app.classList.add('calib'); closePanels();
-  if(!refQuad){ const cx=W/2, cy=H*0.72, k=Math.min(W,H)*0.12; refQuad=[[cx-k,cy-k*0.8],[cx+k,cy-k*0.8],[cx+k*1.3,cy+k*0.8],[cx-k*1.3,cy+k*0.8]]; }
-  placeHandles(); drawRefPoly(); if(first) openPanel('p-calib');
-  showHint(first?'먼저 크기 기준: 바닥에 있는 A4 종이·타일·러그의 네 모서리를 맞춰 주세요':'네 모서리를 맞추고 「기준 확정」',3500);
-  if(!calibrated){ ctx.clearRect(0,0,W,H); ctx.drawImage(photo,0,0,W,H); }
+function resetQuad(){
+  rot=0; $('rot').value=0; syncOut(); center=[0,0];
+  const cx=W/2, top=H*0.55, bot=H*0.92, {w,h}=dims(); const asp=w/h;
+  const bw=Math.min(W*0.8,(bot-top)*asp*1.6), tw=bw*0.62;
+  quad=[[cx-tw/2,top],[cx+tw/2,top],[cx+bw/2,bot],[cx-bw/2,bot]]; planeFromQuad(); render();
 }
-function finishCalib(){
-  planeFromRef(); calibrated=true; app.classList.remove('calib'); closePanels();
-  center=[0,0]; rot=0; $('rot').value=0; syncOut(); quadFromPlane(); render();
-  showHint('러그를 손가락으로 끌어서 옮겨요 · 사이즈는 실제 cm 그대로',3000);
-}
-function drawRefPoly(){ if(!refQuad) return; $('refpoly').setAttribute('points',refQuad.map(([x,y])=>`${x/W*100},${y/H*100}`).join(' ')); }
 function openPanel(id){ closePanels(); const t=tools.find(t=>t.dataset.panel===id); if(t){t.setAttribute('aria-expanded','true'); $(id).classList.add('on'); app.classList.add('open'); requestAnimationFrame(fit);} }
 let hintT=null; function showHint(t,ms){ const h=$('hint'); h.textContent=t; h.classList.add('on'); clearTimeout(hintT); hintT=setTimeout(()=>h.classList.remove('on'),ms||1800); }
 
@@ -337,37 +314,27 @@ function rotTex(tex){const key='r:'+texUrl(); if(texCache.has(key)) return texCa
 
 /* ---------- 핸들 ---------- */
 const handles=[...document.querySelectorAll('.handle')];
-function placeHandles(){ if(!refQuad) return; const r=frame.getBoundingClientRect(); const kx=r.width/W, ky=r.height/H; handles.forEach((h,i)=>{h.style.left=refQuad[i][0]*kx+'px'; h.style.top=refQuad[i][1]*ky+'px';}); }
+function placeHandles(){ if(!quad) return; const r=frame.getBoundingClientRect(); const kx=r.width/W, ky=r.height/H; handles.forEach((h,i)=>{h.style.left=quad[i][0]*kx+'px'; h.style.top=quad[i][1]*ky+'px';}); }
 let drag=null;
 handles.forEach(h=>{
   h.addEventListener('pointerdown',e=>{drag={i:+h.dataset.i,id:e.pointerId}; h.setPointerCapture(e.pointerId); h.classList.add('on'); closePanels(); e.preventDefault();});
-  h.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId) return; const r=frame.getBoundingClientRect(); const x=Math.min(W,Math.max(0,(e.clientX-r.left)*W/r.width)), y=Math.min(H,Math.max(0,(e.clientY-r.top)*H/r.height)); refQuad[drag.i]=[x,y]; placeHandles(); drawRefPoly();});
+  h.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId) return; const r=frame.getBoundingClientRect(); const x=Math.min(W,Math.max(0,(e.clientX-r.left)*W/r.width)), y=Math.min(H,Math.max(0,(e.clientY-r.top)*H/r.height)); quad[drag.i]=[x,y]; placeHandles(); planeFromQuad(); render();});
   const up=()=>{if(!drag) return; h.classList.remove('on'); drag=null;};
   h.addEventListener('pointerup',up); h.addEventListener('pointercancel',up);
 });
 /* 러그 끌어서 옮기기 (바닥 평면 좌표로 이동) */
 let rugDrag=null;
-cv.addEventListener('pointerdown',e=>{ if(!calibrated||app.classList.contains('calib')) return; const r=frame.getBoundingClientRect(); const x=(e.clientX-r.left)*W/r.width, y=(e.clientY-r.top)*H/r.height; if(!inQuad(x,y)) return; const Hi=invert(Hm); rugDrag={id:e.pointerId,last:apply(Hi,x,y)}; cv.setPointerCapture(e.pointerId); closePanels(); e.preventDefault(); });
+cv.addEventListener('pointerdown',e=>{ if(!calibrated) return; const r=frame.getBoundingClientRect(); const x=(e.clientX-r.left)*W/r.width, y=(e.clientY-r.top)*H/r.height; if(!inQuad(x,y)) return; const Hi=invert(Hm); rugDrag={id:e.pointerId,last:apply(Hi,x,y)}; cv.setPointerCapture(e.pointerId); closePanels(); e.preventDefault(); });
 cv.addEventListener('pointermove',e=>{ if(!rugDrag||rugDrag.id!==e.pointerId) return; const r=frame.getBoundingClientRect(); const x=(e.clientX-r.left)*W/r.width, y=(e.clientY-r.top)*H/r.height; const Hi=invert(Hm); const p=apply(Hi,x,y); center=[center[0]+p[0]-rugDrag.last[0],center[1]+p[1]-rugDrag.last[1]]; rugDrag.last=p; quadFromPlane(); render(); });
 const rugUp=e=>{ if(rugDrag&&rugDrag.id===e.pointerId) rugDrag=null; }; cv.addEventListener('pointerup',rugUp); cv.addEventListener('pointercancel',rugUp);
-/* 기준 패널 */
-function renderRefs(){ $('refs').innerHTML=REFS.map(r=>`<button type="button" class="sw" data-k="${r.k}" aria-pressed="${r.k===refKind}">${r.n}</button>`).join(''); $('refW').value=refDims.w; $('refH').value=refDims.h; $('calibLabel').textContent=`${REFS.find(r=>r.k===refKind).n} ${refDims.w}×${refDims.h}cm`; }
-$('refs').addEventListener('click',e=>{const b=e.target.closest('.sw');if(!b)return;refKind=b.dataset.k;const r=REFS.find(r=>r.k===refKind);refDims={w:r.w,h:r.h};renderRefs();});
-$('refW').oninput=e=>{refDims.w=+e.target.value||refDims.w;renderRefs();}; $('refH').oninput=e=>{refDims.h=+e.target.value||refDims.h;renderRefs();};
-$('calibChange').onclick=()=>openPanel('p-calib'); $('calibDone2').onclick=()=>$('calibDone').click();
-$('calibStart').onclick=()=>{ if(photo){ startCalib(false); closePanels(); } };
-$('calibDone').onclick=()=>{ if(!photo) return; if(!(refDims.w>=5&&refDims.h>=5)){showHint('기준 물건의 가로×세로를 cm로 넣어 주세요');return;} finishCalib(); };
-
-/* ---------- 패널·도구 ---------- */
-function closePanels(){tools.forEach(t=>{t.setAttribute('aria-expanded','false'); $(t.dataset.panel).classList.remove('on');}); app.classList.remove('open'); requestAnimationFrame(fit);}
-tools.forEach(t=>t.onclick=()=>{const open=t.getAttribute('aria-expanded')==='true'; closePanels(); if(!open){t.setAttribute('aria-expanded','true'); $(t.dataset.panel).classList.add('on'); app.classList.add('open'); requestAnimationFrame(fit);}});
+$('toggleHandles').onclick=()=>{const on=app.classList.toggle('clean'); $('toggleHandles').setAttribute('aria-pressed',on); $('toggleHandles').setAttribute('aria-label',on?'모서리 핸들 보이기':'모서리 핸들 숨기기');};
 stage.addEventListener('pointerdown',e=>{ if(e.target===stage) closePanels(); });
 function chip(s){return `<button type="button" class="chip" data-k="${s.k}" aria-pressed="${s===size}" aria-label="${s.g?s.g+' ':''}${s.n} ${s.w}×${s.h}센티미터"><b>${s.n}</b><small>${s.w}×${s.h}</small></button>`;}
 function renderControls(){
-  renderRefs(); $('sizesA').innerHTML=SIZES.slice(0,4).map(chip).join(''); $('sizesB').innerHTML=SIZES.slice(4).map(chip).join('');
+  $('sizesA').innerHTML=SIZES.slice(0,4).map(chip).join(''); $('sizesB').innerHTML=SIZES.slice(4).map(chip).join('');
   $('colors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-k="${c.k}" aria-pressed="${c===color}"><i style="background:${c.c}"></i>${c.n}</button>`).join('');
   $('dirs').innerHTML=DIRS.map((_,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===light.dir}" aria-label="빛 방향 ${i+1}"><svg viewBox="0 0 24 24" style="transform:rotate(${i*45}deg)"><path d="M12 19V5M7 10l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`).join('');
-  const {w,h}=dims(); $('dim').textContent=`${w} × ${h} cm`; const t=tools.find(t=>t.dataset.panel==='p-calib'); if(t) t.style.color=calibrated?'':'var(--accent-soft)';
+  const {w,h}=dims(); $('dim').textContent=`${w} × ${h} cm`;
   const u=new URL(location.href); u.searchParams.set('size',size.k); u.searchParams.set('color',color.k); history.replaceState(null,'',u);
   $('toAr').href=`index.html?size=${size.k}&color=${color.k}`;
 }
@@ -388,7 +355,7 @@ $('file').onchange=e=>loadFile(e.target.files[0]); $('fileCam').onchange=e=>load
 stage.addEventListener('dragover',e=>e.preventDefault()); stage.addEventListener('drop',e=>{e.preventDefault();loadFile(e.dataTransfer.files[0]);});
 
 /* ---------- 저장·공유 ---------- */
-function finalBlob(cb){ if(!photo){$('file').click();return;} if(!calibrated){showHint('먼저 크기 기준을 확정해 주세요');openPanel('p-calib');return;} draw(); setTimeout(()=>cv.toBlob(cb,'image/jpeg',0.92),80); }
+function finalBlob(cb){ if(!photo){$('file').click();return;} draw(); setTimeout(()=>cv.toBlob(cb,'image/jpeg',0.92),80); }
 function fileName(){const {w,h}=dims();return `reliv_${color.k}_${size.k}_${w}x${h}.jpg`;}
 $('save').onclick=()=>finalBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fileName();a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);showHint('저장했어요');});
 $('share').onclick=()=>finalBlob(async b=>{const f=new File([b],fileName(),{type:'image/jpeg'}); if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'릴리브 사진으로 깔아보기'});}catch(e){}} else $('save').click();});
