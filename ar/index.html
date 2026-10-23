@@ -55,6 +55,12 @@ h1{margin:var(--s-1) 0 0;font-size:var(--t-display);font-weight:800;line-height:
 .lead{margin:0;color:var(--ink-2);font-size:var(--t-body);text-wrap:pretty;max-width:34em}
 .lead strong{color:var(--ink);font-weight:700}
 
+/* 탭 */
+.tabs{display:flex;gap:var(--s-2)}
+.tabs a{flex:1;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-pill);background:var(--surface);color:var(--ink-2);text-decoration:none;font-size:var(--t-small);font-weight:700;border:2px solid transparent}
+.tabs a[aria-current]{border-color:var(--accent);background:#FFFFFF;color:var(--ink)}
+body.embed .tabs{display:none}
+
 /* 3D 무대 */
 .stage{position:relative;border-radius:var(--r-surface);overflow:hidden;background:radial-gradient(120% 90% at 50% 10%,var(--stage) 0%,var(--stage-2) 100%);aspect-ratio:4/5;max-height:62dvh}
 model-viewer{width:100%;height:100%;background:transparent;--poster-color:transparent;--progress-bar-color:var(--accent);--progress-bar-height:3px;transition:opacity var(--t-ui) var(--ease-out)}
@@ -164,6 +170,11 @@ body.embed header,body.embed .tips,body.embed .fine,body.embed .row{display:none
     <p class="lead">휴대폰 카메라로 바닥을 비추면 고른 러그가 <strong>실제 크기</strong>로 깔려요.</p>
   </header>
 
+  <nav class="tabs" aria-label="보기 방식">
+    <a href="index.html" aria-current="page">카메라로 (AR)</a>
+    <a href="photo.html" id="toPhoto">사진으로</a>
+  </nav>
+
   <div class="stage">
     <model-viewer id="mv"
       alt="릴리브 펫슬리브 러그 3D 미리보기"
@@ -236,7 +247,7 @@ body.embed header,body.embed .tips,body.embed .fine,body.embed .row{display:none
 <div class="bar"><button class="cta" id="cta" type="button" aria-busy="false"><span class="spin" aria-hidden="true"></span><svg class="i" aria-hidden="true"><use id="ctaIcon" href="#ic-camera"/></svg><span id="ctaText">우리집 바닥에 깔아보기</span></button></div>
 
 <script>
-const V='v=11';
+const V='v=12';
 const SIZES=[
   {k:'S',n:'S',g:'거실',w:100,h:150},{k:'M',n:'M',g:'거실',w:150,h:200},{k:'L',n:'L',g:'거실',w:200,h:250},{k:'XL',n:'XL',g:'거실',w:200,h:300},
   {k:'hall',n:'기본 복도',g:'',w:100,h:250},{k:'widehall',n:'넓은 복도',g:'',w:120,h:200},{k:'module',n:'모듈',g:'',w:100,h:200},{k:'kitchen',n:'주방',g:'',w:45,h:115}
@@ -320,6 +331,7 @@ function render(reload=true){
   const u=new URL(location.href); u.searchParams.set('size',size.k); u.searchParams.set('color',color.k);
   if(yaw) u.searchParams.set('rot',yaw); else u.searchParams.delete('rot');
   history.replaceState(null,'',u);
+  document.getElementById('toPhoto').href=`photo.html?size=${size.k}&color=${color.k}`;
   drawQR();
   if(reload) loadModel();
 }

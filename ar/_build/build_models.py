@@ -272,4 +272,7 @@ if __name__ == '__main__':
             open(path.replace('.glb', '_r90.glb'), 'wb').write(glb(w, h, b1.getvalue(), b2.getvalue(), backing, f'reliv_{col}_{key}_r90', rot90=True))
             if key == 'XL':
                 alb.resize((alb.width // 2, alb.height // 2), Image.LANCZOS).save(os.path.join(OUT, f'thumb_{col}.jpg'), quality=85)
+            # 사진 합성(photo.html)용 평면 이미지: 긴 변 900px
+            os.makedirs(os.path.join(OUT, 'tex'), exist_ok=True)
+            tf = 900 / max(alb.size); alb.resize((max(8, int(alb.width * tf)), max(8, int(alb.height * tf))), Image.LANCZOS).save(os.path.join(OUT, 'tex', f'{col}_{key}.jpg'), quality=86)
             print(f'{col} {key} {W}x{H} {os.path.getsize(path) // 1024} KB', flush=True)

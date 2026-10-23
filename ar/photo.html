@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3EFE8">
+<title>릴리브 사진으로 깔아보기</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --linen-50:#F3EFE8; --linen-100:#EAE4DA; --linen-200:#DED6C9; --linen-300:#CBC1AF;
+  --walnut-800:#241F17; --walnut-500:#6B6155; --walnut-400:#766B5E; --clay-500:#8F5A3C; --clay-600:#74472E;
+  --bg:var(--linen-50); --surface:#FBF9F5; --surface-2:var(--linen-100); --ink:var(--walnut-800); --ink-2:var(--walnut-500); --ink-3:var(--walnut-400);
+  --accent:var(--clay-500); --focus:var(--clay-600); --cta-bg:var(--ink); --cta-ink:#FBF9F5;
+  --font:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  --t-display:26px; --t-body:16px; --t-small:14px; --t-caption:13px;
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px;
+  --r-pill:999px; --r-surface:16px; --r-chip:12px; --t-press:120ms; --t-ui:220ms; --ease-out:cubic-bezier(.16,1,.3,1); --bar-h:84px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:var(--t-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointer;outline:2px solid transparent;outline-offset:2px}
+button:focus-visible{outline-color:var(--focus)}
+button:disabled{opacity:.5;cursor:not-allowed}
+svg{display:block}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{max-width:560px;margin:0 auto;padding:var(--s-5) max(var(--s-4),env(safe-area-inset-left)) calc(var(--bar-h) + var(--s-6) + env(safe-area-inset-bottom)) max(var(--s-4),env(safe-area-inset-right));display:flex;flex-direction:column;gap:var(--s-6)}
+header{display:flex;flex-direction:column;gap:var(--s-2)}
+.logo{width:64px;height:auto;color:var(--ink)}
+h1{margin:var(--s-1) 0 0;font-size:var(--t-display);font-weight:800;line-height:1.15;letter-spacing:-.025em;text-wrap:balance}
+.lead{margin:0;color:var(--ink-2);text-wrap:pretty;max-width:34em}
+.lead strong{color:var(--ink)}
+.tabs{display:flex;gap:var(--s-2)}
+.tabs a{flex:1;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-pill);background:var(--surface);color:var(--ink-2);text-decoration:none;font-size:var(--t-small);font-weight:700;border:2px solid transparent}
+.tabs a[aria-current]{border-color:var(--accent);background:#FFFFFF;color:var(--ink)}
+
+/* 작업대 */
+.board{position:relative;border-radius:var(--r-surface);overflow:hidden;background:var(--surface-2);aspect-ratio:3/4;max-height:70dvh;touch-action:none;user-select:none;-webkit-user-select:none}
+.board canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.board .drop{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s-3);padding:var(--s-6);text-align:center;color:var(--ink-2)}
+.board .drop p{margin:0;font-size:var(--t-small);text-wrap:pretty}
+.board.has .drop{display:none}
+.handle{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;display:grid;place-items:center;cursor:grab;touch-action:none}
+.handle::after{content:"";width:18px;height:18px;border-radius:50%;background:#FFFFFF;border:3px solid var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.handle.on::after{transform:scale(1.2)}
+.board:not(.has) .handle,.board.final .handle{display:none}
+.chipbtn{position:absolute;right:var(--s-3);top:var(--s-3);height:40px;padding:0 var(--s-3);border:0;border-radius:var(--r-pill);background:var(--surface);font-size:var(--t-caption);font-weight:700;display:flex;align-items:center;gap:6px}
+.board:not(.has) .chipbtn{display:none}
+.tip{margin:calc(-1 * var(--s-3)) 0 0;font-size:var(--t-caption);color:var(--ink-3);text-wrap:pretty}
+
+/* 컨트롤 */
+.group h2{margin:0 0 var(--s-3);font-size:var(--t-body);font-weight:700}
+.sub{display:block;margin:var(--s-4) 0 var(--s-2);font-size:var(--t-small);color:var(--ink-2);font-weight:500}
+.sub:first-of-type{margin-top:0}
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s-2)}
+.chip{display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--s-2) var(--s-1);min-height:44px;border:2px solid transparent;border-radius:var(--r-chip);background:var(--surface);white-space:nowrap;transition:transform var(--t-press),border-color var(--t-ui)}
+.chip:active{transform:scale(.97)}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:#FFFFFF}
+.chip b{font-size:var(--t-small)}
+.chip small{font-size:var(--t-caption);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.colors{display:flex;gap:var(--s-2);flex-wrap:wrap}
+.sw{display:flex;align-items:center;gap:var(--s-2);min-height:44px;padding:0 var(--s-4) 0 var(--s-2);border:2px solid transparent;border-radius:var(--r-pill);background:var(--surface);font-size:var(--t-small);font-weight:600;white-space:nowrap}
+.sw i{width:26px;height:26px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(36,31,23,.12)}
+.sw[aria-pressed="true"]{border-color:var(--accent);background:#FFFFFF}
+.sliders{display:grid;gap:var(--s-2);background:var(--surface);border-radius:var(--r-surface);padding:var(--s-3) var(--s-4);min-width:0}
+.sl{display:grid;grid-template-columns:72px minmax(0,1fr) 44px;align-items:center;gap:var(--s-2);font-size:var(--t-small);min-width:0}
+.sl input{min-width:0}
+.sl output{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:var(--t-caption)}
+input[type=range]{width:100%;height:44px;margin:0;background:transparent;-webkit-appearance:none;appearance:none}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:var(--linen-300)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:#FFFFFF;border:3px solid var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--linen-300)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#FFFFFF;border:3px solid var(--accent)}
+input[type=range]:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:var(--r-pill)}
+.dial{display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:var(--s-2);font-size:var(--t-small)}
+.dirs{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+.dirs button{width:100%;aspect-ratio:1;max-width:40px;min-height:30px;border:2px solid transparent;border-radius:50%;background:var(--surface-2);display:grid;place-items:center}
+.dirs button[aria-pressed="true"]{border-color:var(--accent);background:#FFFFFF}
+.dirs svg{width:18px;height:18px}
+.row{display:flex;gap:var(--s-2);flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 var(--s-4);border:2px solid transparent;border-radius:var(--r-pill);background:var(--surface);font-size:var(--t-small);font-weight:700;white-space:nowrap;transition:transform var(--t-press)}
+.btn:active{transform:scale(.97)}
+.fine{margin:0;font-size:var(--t-caption);color:var(--ink-3);text-wrap:pretty}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:200;padding:var(--s-3) max(var(--s-4),env(safe-area-inset-left)) max(var(--s-3),env(safe-area-inset-bottom)) max(var(--s-4),env(safe-area-inset-right));background:var(--surface-2)}
+.cta{display:flex;align-items:center;justify-content:center;gap:var(--s-2);width:100%;max-width:528px;margin:0 auto;height:56px;border:0;border-radius:var(--r-pill);background:var(--cta-bg);color:var(--cta-ink);font-size:17px;font-weight:700;white-space:nowrap;transition:transform var(--t-press)}
+.cta:active{transform:scale(.98)}
+.hidden{display:none!important}
+@media (hover:hover) and (pointer:fine){.chip:hover,.sw:hover,.btn:hover{background:#FFFFFF}}
+@media (prefers-reduced-motion:reduce){*{transition-duration:0ms!important}}
+@media (max-width:360px){:root{--t-display:23px}.sl{grid-template-columns:60px minmax(0,1fr) 40px}.dial{grid-template-columns:60px minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ic-camera" viewBox="0 0 24 24"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6H8l1.2-2h5.6L16 6h1.5A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.2"/></symbol>
+  <symbol id="ic-image" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 16l4.5-4.5 3.5 3.5 3-3L20 17"/><circle cx="15.5" cy="9.5" r="1.3"/></symbol>
+  <symbol id="ic-down" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 19h14"/></symbol>
+  <symbol id="ic-share" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 12v7h14v-7"/></symbol>
+  <symbol id="ic-swap" viewBox="0 0 24 24"><path d="M4 9h13l-3-3"/><path d="M20 15H7l3 3"/></symbol>
+  <symbol id="ic-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.7"/><path d="M4 4v4.5h4.5"/></symbol>
+  <symbol id="logo" viewBox="56 40 546 262"><g><g><path d="M203.971 184.968C203.327 190.016 203.006 195.763 203.006 201.778C203.006 229.976 221.997 246.787 246.085 246.787C263.199 246.787 272.695 242.651 282.191 234.434V237.925C274.573 247.431 257.512 261.074 235.034 261.074C203.059 261.074 172.64 239.805 172.64 201.778C172.64 163.752 200.162 142.806 235.034 142.806C267.33 142.806 286.643 158.972 286.643 184.968H203.971ZM255.581 173.527C255.581 160.852 248.284 152.903 234.98 152.903C219.153 152.903 210.302 161.443 205.849 176.051L255.581 173.527Z" fill="currentColor"/><path d="M354.67 257.26C347.051 256.616 339.165 256.294 330.903 256.294C322.641 256.294 315.72 256.616 308.103 257.26L307.781 255.971C314.433 253.446 317.277 249.633 317.598 242.651C317.92 234.702 318.243 214.132 318.243 152.312C318.243 104.135 317.92 78.784 317.598 67.6662C317.277 58.4819 311.912 55.9576 307.137 54.6686V53.3796C321.408 51.822 334.981 47.6864 344.798 42.2617L346.086 42.9062C344.798 60.3618 344.53 94.5746 344.53 152.258C344.53 214.078 344.852 234.702 345.174 242.597C345.496 249.258 348.339 253.071 354.991 255.917L354.67 257.206V257.26Z" fill="currentColor"/><path d="M421.462 257.26C413.844 256.616 405.957 256.294 398.018 256.294C390.077 256.294 382.513 256.616 374.895 257.26L374.573 255.971C381.225 253.446 384.069 249.633 384.391 242.651C384.713 234.702 385.034 214.132 385.034 201.778C385.034 185.934 384.713 173.259 384.391 167.565C384.069 158.381 378.704 155.857 373.929 154.568V153.279C388.2 151.721 401.773 147.586 411.591 142.161L412.878 142.806C411.591 160.261 411.322 178.629 411.322 195.118C411.322 214.132 411.644 234.756 411.966 242.651C412.288 249.311 415.131 253.125 421.784 255.971L421.462 257.26ZM396.14 115.843C386.644 115.843 379.026 108.217 379.026 99.0325C379.026 89.8482 386.644 81.8992 396.14 81.8992C405.635 81.8992 413.253 89.5259 413.253 99.0325C413.253 108.539 405.635 115.843 396.14 115.843Z" fill="currentColor"/><path d="M559.231 147.532C554.456 148.821 549.413 153.225 545.604 160.529C537.074 177.018 531.334 188.405 524.091 204.249C508.587 237.549 504.456 246.733 498.125 261.02H488.951C481.655 244.531 468.994 216.656 458.854 194.474C453.49 182.443 449.037 173.849 443.35 163.108C439.542 155.803 433.211 149.143 428.168 147.586L428.49 146.297C433.211 146.941 448.125 147.263 453.168 147.263C457.942 147.263 473.447 146.941 477.524 146.297L477.846 147.586C471.194 150.432 469.316 154.246 472.159 161.228L483.533 186.579C491.151 203.712 495.551 213.54 503.812 230.943C511.752 213.487 516.151 203.39 520.282 193.561C525.003 182.443 528.812 173.581 532.943 162.195C536.109 153.332 534.231 150.164 527.578 147.64L527.9 146.351C532.031 146.995 539.006 147.317 544.048 147.317C549.091 147.317 554.188 146.995 558.909 146.351L559.231 147.64V147.532Z" fill="currentColor"/></g><path d="M577.86 224C584.813 224 589.848 226.372 592.965 231.115C596.322 235.859 598 241.314 598 247.481C598 251.038 597.52 254.952 596.561 259.221C595.602 263.728 593.684 268.115 590.807 272.385C588.17 276.891 584.213 281.279 578.939 285.548C573.904 290.054 567.19 294.205 558.798 298L557 294.798C561.795 290.529 565.512 286.615 568.149 283.058C571.026 279.737 573.064 276.654 574.263 273.808C575.702 271.199 576.541 268.708 576.781 266.337C577.26 263.965 577.5 261.474 577.5 258.865C577.5 256.968 576.901 255.545 575.702 254.596C574.503 253.41 573.184 252.343 571.746 251.394C569.827 250.208 567.909 248.904 565.991 247.481C564.073 245.821 563.114 243.093 563.114 239.298C563.114 234.792 564.553 231.115 567.43 228.269C570.307 225.423 573.784 224 577.86 224Z" fill="currentColor"/><path d="M163.091 177.018L161.804 177.341C158.638 168.801 149.786 162.141 139.647 162.141C127.308 162.141 120.655 166.921 115.29 176.696V195.065C115.29 214.078 115.612 234.702 115.934 242.598C116.256 249.258 119.099 253.071 125.752 255.918L125.43 257.207C117.812 256.562 109.926 256.24 101.986 256.24C94.0456 256.24 86.4812 256.562 78.8631 257.207L78.5413 255.918C85.1937 253.393 88.037 249.58 88.3589 242.598C88.6807 234.649 89.0027 214.078 89.0027 198.234C89.0027 185.881 88.6808 173.205 88.3589 167.512C88.037 158.328 82.6722 155.804 77.8975 154.515V153.226C92.168 151.668 105.741 147.532 115.559 142.107L116.846 142.752C115.881 153.87 115.559 159.885 115.559 166.546C122.533 151.99 133.585 142.752 146.889 142.752C152.576 142.752 160.194 144.363 163.037 148.768V176.965L163.091 177.018Z" fill="currentColor"/></g></symbol>
+  <symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header>
+    <svg class="logo" viewBox="0 0 546 262" role="img" aria-label="릴리브"><use href="#logo"/></svg>
+    <h1>사진으로 깔아보기</h1>
+    <p class="lead">거실 사진을 올리고 러그 놓을 자리를 끌어서 맞추면, 사진 속 빛과 그림자를 따라 러그가 깔려요. 사진은 휴대폰 밖으로 나가지 않아요.</p>
+  </header>
+
+  <nav class="tabs" aria-label="보기 방식">
+    <a href="index.html" id="toAr">카메라로 (AR)</a>
+    <a href="photo.html" aria-current="page">사진으로</a>
+  </nav>
+
+  <div class="board" id="board">
+    <canvas id="cv"></canvas>
+    <div class="drop">
+      <svg class="i" style="width:40px;height:40px;stroke-width:1.4"><use href="#ic-image"/></svg>
+      <p><strong>거실 사진을 올려 주세요</strong><br>바닥이 넓게 보이게, 약간 위에서 내려다본 사진이 잘 맞아요.</p>
+      <div class="row">
+        <button type="button" class="btn" id="pick"><svg class="i"><use href="#ic-image"/></svg>앨범에서 고르기</button>
+        <button type="button" class="btn" id="shoot"><svg class="i"><use href="#ic-camera"/></svg>지금 찍기</button>
+      </div>
+    </div>
+    <div class="handle" data-i="0" aria-label="왼쪽 위 모서리"></div>
+    <div class="handle" data-i="1" aria-label="오른쪽 위 모서리"></div>
+    <div class="handle" data-i="2" aria-label="오른쪽 아래 모서리"></div>
+    <div class="handle" data-i="3" aria-label="왼쪽 아래 모서리"></div>
+    <button type="button" class="chipbtn" id="toggleHandles" aria-pressed="false">모서리 숨기기</button>
+  </div>
+  <p class="tip" id="tip">동그라미 네 개를 러그 모서리가 올 자리로 끌어 주세요. 사이즈를 바꾸면 그 비율로 다시 그려져요.</p>
+  <input type="file" id="file" accept="image/*" class="hidden">
+  <input type="file" id="fileCam" accept="image/*" capture="environment" class="hidden">
+
+  <section class="group" aria-labelledby="h-size">
+    <h2 id="h-size">사이즈</h2>
+    <span class="sub">거실</span>
+    <div class="chips" id="sizesA" role="group" aria-label="거실 러그"></div>
+    <span class="sub">복도와 주방</span>
+    <div class="chips" id="sizesB" role="group" aria-label="복도 주방 러그"></div>
+  </section>
+
+  <section class="group" aria-labelledby="h-color">
+    <h2 id="h-color">색상</h2>
+    <div class="colors" id="colors" role="group" aria-label="색상"></div>
+  </section>
+
+  <section class="group" aria-labelledby="h-place">
+    <h2 id="h-place">놓기</h2>
+    <div class="sliders">
+      <div class="sl"><label for="rot">방향</label><input type="range" id="rot" min="-90" max="90" step="1" value="0"><output for="rot" id="rotOut">0°</output></div>
+      <div class="sl"><label for="scale">크기 보정</label><input type="range" id="scale" min="60" max="160" step="1" value="100"><output for="scale" id="scaleOut">100%</output></div>
+      <div class="row"><button type="button" class="btn" id="swap"><svg class="i"><use href="#ic-swap"/></svg>가로세로</button><button type="button" class="btn" id="resetQuad"><svg class="i"><use href="#ic-reset"/></svg>자리 초기화</button></div>
+    </div>
+  </section>
+
+  <section class="group" aria-labelledby="h-light">
+    <h2 id="h-light">빛</h2>
+    <div class="sliders">
+      <div class="sl"><label for="bright">밝기</label><input type="range" id="bright" min="60" max="140" step="1" value="100"><output for="bright" id="brightOut">100%</output></div>
+      <div class="sl"><label for="warm">조명 색</label><input type="range" id="warm" min="-40" max="40" step="1" value="0"><output for="warm" id="warmOut">중간</output></div>
+      <div class="sl"><label for="pass">바닥 빛 반영</label><input type="range" id="pass" min="0" max="150" step="1" value="90"><output for="pass" id="passOut">90%</output></div>
+      <div class="sl"><label for="shadow">그림자</label><input type="range" id="shadow" min="0" max="100" step="1" value="45"><output for="shadow" id="shadowOut">45%</output></div>
+      <div class="sl"><label for="tex">질감</label><input type="range" id="tex" min="0" max="200" step="1" value="100"><output for="tex" id="texOut">100%</output></div>
+      <div class="dial"><span>빛 방향</span><div class="dirs" id="dirs" role="group" aria-label="빛이 오는 방향"></div></div>
+    </div>
+  </section>
+
+  <div class="row"><button type="button" class="btn" id="save"><svg class="i"><use href="#ic-down"/></svg>이미지 저장</button><button type="button" class="btn" id="share"><svg class="i"><use href="#ic-share"/></svg>공유</button></div>
+  <p class="fine">사진 합성은 분위기와 색을 보는 용도예요. 실제 크기는 「카메라로 (AR)」에서 확인하는 게 정확해요. 러그 색은 사진의 조명에 맞춰 조절되므로 실물과는 차이가 있을 수 있어요.</p>
+</div>
+
+<div class="bar"><button class="cta" id="cta" type="button"><svg class="i" aria-hidden="true"><use href="#ic-image"/></svg><span id="ctaText">거실 사진 올리기</span></button></div>
+
+<script>
+const V='v=11';
+const SIZES=[
+  {k:'S',n:'S',g:'거실',w:100,h:150},{k:'M',n:'M',g:'거실',w:150,h:200},{k:'L',n:'L',g:'거실',w:200,h:250},{k:'XL',n:'XL',g:'거실',w:200,h:300},
+  {k:'hall',n:'기본 복도',g:'',w:100,h:250},{k:'widehall',n:'넓은 복도',g:'',w:120,h:200},{k:'module',n:'모듈',g:'',w:100,h:200},{k:'kitchen',n:'주방',g:'',w:45,h:115}
+];
+const COLORS=[{k:'green',n:'그린',c:'#809A80'},{k:'ivory',n:'아이보리',c:'#F0EDE5'},{k:'beige',n:'베이지',c:'#C0B9B0'},{k:'gray',n:'그레이',c:'#BEBEBB'}];
+const q=new URLSearchParams(location.search);
+let size=SIZES.find(s=>s.k===q.get('size'))||SIZES[3];
+let color=COLORS.find(c=>c.k===q.get('color'))||COLORS[0];
+document.getElementById('toAr').href=`index.html?size=${size.k}&color=${color.k}`;
+
+const board=document.getElementById('board'), cv=document.getElementById('cv'), ctx=cv.getContext('2d',{willReadFrequently:true});
+const $=id=>document.getElementById(id);
+let photo=null;            // HTMLImageElement
+let W=0,H=0;               // canvas px
+let quad=null;             // 4 image-space points, rug corners (TL,TR,BR,BL in rug space)
+let Hm=null;               // homography rug-plane(cm) -> image
+let swapped=false, rot=0, scalePct=100;
+const light={bright:1,warm:0,pass:.9,shadow:.45,tex:1,dir:5}; // dir 0..7 (0=top, clockwise), 5 = bottom-left-ish
+const texCache=new Map();
+let lumMap=null;           // Float32Array W*H, floor luminance normalised (1 = median)
+let needLum=true;
+
+/* ---------- 수학: 호모그래피 ---------- */
+function solveH(src,dst){ // 4점 대응 -> 3x3 (DLT, 8x8 가우스 소거)
+  const A=[],b=[];
+  for(let i=0;i<4;i++){const [x,y]=src[i],[u,v]=dst[i];
+    A.push([x,y,1,0,0,0,-u*x,-u*y]); b.push(u);
+    A.push([0,0,0,x,y,1,-v*x,-v*y]); b.push(v);}
+  const n=8; for(let i=0;i<n;i++){let p=i;for(let r=i+1;r<n;r++) if(Math.abs(A[r][i])>Math.abs(A[p][i]))p=r; [A[i],A[p]]=[A[p],A[i]];[b[i],b[p]]=[b[p],b[i]];
+    const d=A[i][i]||1e-9; for(let r=0;r<n;r++){ if(r===i)continue; const f=A[r][i]/d; for(let c=i;c<n;c++)A[r][c]-=f*A[i][c]; b[r]-=f*b[i]; } }
+  const h=b.map((v,i)=>v/(A[i][i]||1e-9)); return [h[0],h[1],h[2],h[3],h[4],h[5],h[6],h[7],1];
+}
+function apply(Hh,x,y){const d=Hh[6]*x+Hh[7]*y+Hh[8];return [(Hh[0]*x+Hh[1]*y+Hh[2])/d,(Hh[3]*x+Hh[4]*y+Hh[5])/d];}
+function invert(m){const [a,b,c,d,e,f,g,h,i]=m;const A=e*i-f*h,B=-(d*i-f*g),C=d*h-e*g,D=-(b*i-c*h),E=a*i-c*g,F=-(a*h-b*g),G=b*f-c*e,Hh=-(a*f-c*d),I=a*e-b*d;const det=a*A+b*B+c*C||1e-9;return [A,D,G,B,E,Hh,C,F,I].map(v=>v/det);}
+function dims(){return swapped?{w:size.h,h:size.w}:{w:size.w,h:size.h};}
+function rectCm(){ // 러그 사각형(cm, 중심 0) 회전·보정 적용
+  const {w,h}=dims(), s=scalePct/100, a=rot*Math.PI/180, c=Math.cos(a), si=Math.sin(a);
+  return [[-w/2,-h/2],[w/2,-h/2],[w/2,h/2],[-w/2,h/2]].map(([x,y])=>[(x*c-y*si)*s,(x*si+y*c)*s]);
+}
+/* 바닥 평면 호모그래피: quad = 현재 rectCm() 의 투영이라고 보고 역산. 사이즈·회전을 바꾸면 같은 평면 위에서 다시 투영 */
+function planeFromQuad(){ Hm=solveH(rectCm(),quad); }
+function quadFromPlane(){ quad=rectCm().map(([x,y])=>apply(Hm,x,y)); }
+
+/* ---------- 사진 ---------- */
+function loadFile(f){
+  if(!f) return; const url=URL.createObjectURL(f); const im=new Image();
+  im.onload=()=>{ URL.revokeObjectURL(url); photo=im; setupCanvas(); board.classList.add('has'); $('ctaText').textContent='이미지 저장'; $('cta').querySelector('use').setAttribute('href','#ic-down'); resetQuad(); };
+  im.src=url;
+}
+function setupCanvas(){
+  const maxW=1400; const r=Math.min(1,maxW/photo.naturalWidth); W=Math.round(photo.naturalWidth*r); H=Math.round(photo.naturalHeight*r);
+  cv.width=W; cv.height=H; board.style.aspectRatio=`${W}/${H}`; needLum=true;
+}
+function resetQuad(){
+  rot=0; scalePct=100; $('rot').value=0; $('scale').value=100; syncOut();
+  // 기본 자리: 화면 아래쪽 가운데, 위가 좁은 사다리꼴(바닥 원근)
+  const cx=W/2, top=H*0.55, bot=H*0.92, {w,h}=dims(); const asp=w/h;
+  const bw=Math.min(W*0.8, (bot-top)*asp*1.6), tw=bw*0.62;
+  quad=[[cx-tw/2,top],[cx+tw/2,top],[cx+bw/2,bot],[cx-bw/2,bot]];
+  planeFromQuad(); render();
+}
+
+/* ---------- 바닥 빛 맵 ---------- */
+function buildLum(){
+  const t=document.createElement('canvas'); const s=4; t.width=Math.ceil(W/s); t.height=Math.ceil(H/s); const c=t.getContext('2d');
+  c.filter='blur(3px)'; c.drawImage(photo,0,0,t.width,t.height); const d=c.getImageData(0,0,t.width,t.height).data;
+  const L=new Float32Array(t.width*t.height); for(let i=0;i<L.length;i++){const r=d[i*4],g=d[i*4+1],b=d[i*4+2]; L[i]=0.2126*r+0.7152*g+0.0722*b;}
+  lumMap={L,w:t.width,h:t.height,s}; needLum=false;
+}
+function quadMedianLum(){
+  const {L,w,h,s}=lumMap; const xs=quad.map(p=>p[0]),ys=quad.map(p=>p[1]);
+  const x0=Math.max(0,Math.floor(Math.min(...xs)/s)),x1=Math.min(w-1,Math.ceil(Math.max(...xs)/s)),y0=Math.max(0,Math.floor(Math.min(...ys)/s)),y1=Math.min(h-1,Math.ceil(Math.max(...ys)/s));
+  const vals=[]; for(let y=y0;y<=y1;y+=2)for(let x=x0;x<=x1;x+=2) if(inQuad(x*s,y*s)) vals.push(L[y*w+x]);
+  if(!vals.length) return 128; vals.sort((a,b)=>a-b); return vals[vals.length>>1]||128;
+}
+function inQuad(x,y){ let inside=false; for(let i=0,j=3;i<4;j=i++){const [xi,yi]=quad[i],[xj,yj]=quad[j]; if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi)) inside=!inside;} return inside; }
+
+/* ---------- 러그 텍스처 ---------- */
+function texUrl(){return `tex/${color.k}_${size.k}.jpg?${V}`;}
+function getTex(cb){
+  const u=texUrl(); if(texCache.has(u)){cb(texCache.get(u));return;}
+  const im=new Image(); im.onload=()=>{texCache.set(u,im);cb(im);}; im.src=u;
+}
+const DIRS=[[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]]; // 빛이 오는 방향 (화면 기준)
+
+/* ---------- 렌더 ---------- */
+let raf=0; function render(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(draw); }
+function draw(){
+  if(!photo){ return; }
+  getTex(tex=>{
+    if(needLum) buildLum();
+    ctx.clearRect(0,0,W,H); ctx.drawImage(photo,0,0,W,H);
+    const {w,h}=dims(); const tw=tex.width, th=tex.height;
+    const rug=swapped?rotTex(tex):tex;                       // 가로세로 바꾸면 텍스처도 90도
+    const rw=rug.width, rh=rug.height;
+    // 러그 공간(cm, 중심 0) -> 텍스처 px
+    const cm=rectCm(); const HmT=solveH(cm,quad);              // 회전·보정 포함한 러그 사각형 -> 이미지
+    // 1) 그림자: 빛 반대 방향으로 밀린 부드러운 어두운 사각형
+    const [lx,ly]=DIRS[light.dir]; const sh=light.shadow;
+    if(sh>0){
+      const off=Math.max(W,H)*0.012*sh; const sc=ctx; sc.save(); sc.filter=`blur(${Math.max(2,off*0.8)}px)`; sc.globalAlpha=0.55*sh;
+      sc.fillStyle='#1a140c'; sc.beginPath(); quad.forEach(([x,y],i)=>{const px=x-lx*off,py=y-ly*off*0.6; i?sc.lineTo(px,py):sc.moveTo(px,py);}); sc.closePath(); sc.fill(); sc.restore();
+      // 접지 그림자(가장자리 바로 밑)
+      sc.save(); sc.filter=`blur(${Math.max(1.5,off*0.25)}px)`; sc.globalAlpha=0.35*sh; sc.fillStyle='#1a140c'; sc.beginPath(); quad.forEach(([x,y],i)=>{const px=x+lx*off*0.08,py=y+Math.abs(ly)*off*0.15+off*0.1; i?sc.lineTo(px,py):sc.moveTo(px,py);}); sc.closePath(); sc.fill(); sc.restore();
+    }
+    // 2) 러그를 원근 워프 (삼각형 메시)
+    const off=document.createElement('canvas'); off.width=W; off.height=H; const oc=off.getContext('2d');
+    const N=18; const {w:cw,h:ch}=dims(); const s=scalePct/100, a=rot*Math.PI/180, co=Math.cos(a), si=Math.sin(a);
+    const P=(u,v)=>{ const x=(u-0.5)*cw, y=(v-0.5)*ch; return apply(HmT,(x*co-y*si)*s,(x*si+y*co)*s); };
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+      const u0=i/N,u1=(i+1)/N,v0=j/N,v1=(j+1)/N;
+      tri(oc,rug,[u0*rw,v0*rh],[u1*rw,v0*rh],[u0*rw,v1*rh],P(u0,v0),P(u1,v0),P(u0,v1));
+      tri(oc,rug,[u1*rw,v0*rh],[u1*rw,v1*rh],[u0*rw,v1*rh],P(u1,v0),P(u1,v1),P(u0,v1));
+    }
+    // 3) 조명: 바닥 밝기 전달 + 밝기 + 색온도 + 방향 그라데이션 + 질감 세기
+    const id=oc.getImageData(0,0,W,H), d=id.data; const {L,w:lw,s:ls}=lumMap; const med=quadMedianLum();
+    const xs=quad.map(p=>p[0]),ys=quad.map(p=>p[1]); const x0=Math.max(0,Math.floor(Math.min(...xs))),x1=Math.min(W-1,Math.ceil(Math.max(...xs))),y0=Math.max(0,Math.floor(Math.min(...ys))),y1=Math.min(H-1,Math.ceil(Math.max(...ys)));
+    const cx=(x0+x1)/2, cy=(y0+y1)/2, span=Math.max(x1-x0,y1-y0)||1;
+    const warm=light.warm/100; const rG=1+warm*0.35, bG=1-warm*0.35; const br=light.bright; const texK=light.tex;
+    const base=baseRGB(tex);
+    for(let y=y0;y<=y1;y++){ const ly_=Math.min(lumMap.h-1,(y/ls)|0);
+      for(let x=x0;x<=x1;x++){ const p=(y*W+x)*4; if(d[p+3]===0) continue;
+        let f=Math.pow(L[ly_*lw+Math.min(lw-1,(x/ls)|0)]/med, light.pass); f=Math.min(1.8,Math.max(0.35,f));
+        const g=1+0.10*(((x-cx)*lx+(y-cy)*ly)/span);             // 빛 오는 쪽이 살짝 밝게
+        const k=f*g*br;
+        for(let c=0;c<3;c++){ let v=d[p+c]; v=base[c]+(v-base[c])*texK; v*=k*(c===0?rG:c===2?bG:1); d[p+c]=v<0?0:v>255?255:v; }
+      } }
+    oc.putImageData(id,0,0);
+    ctx.drawImage(off,0,0);
+    placeHandles();
+  });
+}
+function baseRGB(tex){ const key='b:'+tex.src; if(texCache.has(key)) return texCache.get(key); const t=document.createElement('canvas'); t.width=8;t.height=8; const c=t.getContext('2d'); c.drawImage(tex,0,0,8,8); const d=c.getImageData(0,0,8,8).data; const o=[0,0,0]; for(let i=0;i<64;i++){o[0]+=d[i*4];o[1]+=d[i*4+1];o[2]+=d[i*4+2];} const r=o.map(v=>v/64); texCache.set(key,r); return r; }
+function rotTex(tex){ const key='r:'+tex.src; if(texCache.has(key)) return texCache.get(key); const t=document.createElement('canvas'); t.width=tex.height; t.height=tex.width; const c=t.getContext('2d'); c.translate(t.width/2,t.height/2); c.rotate(Math.PI/2); c.drawImage(tex,-tex.width/2,-tex.height/2); texCache.set(key,t); return t; }
+function tri(c,img,s0,s1,s2,d0,d1,d2){ // 아핀 삼각형 워프
+  const [x0,y0]=s0,[x1,y1]=s1,[x2,y2]=s2,[u0,v0]=d0,[u1,v1]=d1,[u2,v2]=d2;
+  const det=(x1-x0)*(y2-y0)-(x2-x0)*(y1-y0); if(!det) return;
+  const a=((u1-u0)*(y2-y0)-(u2-u0)*(y1-y0))/det, b=((u2-u0)*(x1-x0)-(u1-u0)*(x2-x0))/det, cc=((v1-v0)*(y2-y0)-(v2-v0)*(y1-y0))/det, dd=((v2-v0)*(x1-x0)-(v1-v0)*(x2-x0))/det;
+  const e=u0-a*x0-b*y0, f=v0-cc*x0-dd*y0;
+  c.save(); c.beginPath(); c.moveTo(u0,v0); c.lineTo(u1,v1); c.lineTo(u2,v2); c.closePath();
+  // 이음새 틈 방지: 0.6px 확장
+  c.lineWidth=1.2; c.strokeStyle='rgba(0,0,0,0)'; c.clip(); c.setTransform(a,cc,b,dd,e,f); c.drawImage(img,0,0); c.restore();
+}
+
+/* ---------- 모서리 핸들 ---------- */
+const handles=[...document.querySelectorAll('.handle')];
+function placeHandles(){ if(!quad) return; const r=board.getBoundingClientRect(); const kx=r.width/W, ky=r.height/H; handles.forEach((h,i)=>{h.style.left=quad[i][0]*kx+'px'; h.style.top=quad[i][1]*ky+'px';}); }
+let drag=null;
+handles.forEach(h=>{
+  h.addEventListener('pointerdown',e=>{ drag={i:+h.dataset.i,id:e.pointerId}; h.setPointerCapture(e.pointerId); h.classList.add('on'); e.preventDefault(); });
+  h.addEventListener('pointermove',e=>{ if(!drag||drag.id!==e.pointerId) return; const r=board.getBoundingClientRect(); const x=Math.min(W,Math.max(0,(e.clientX-r.left)*W/r.width)), y=Math.min(H,Math.max(0,(e.clientY-r.top)*H/r.height)); quad[drag.i]=[x,y]; placeHandles(); render(); });
+  const up=e=>{ if(!drag) return; h.classList.remove('on'); drag=null; planeFromQuad(); };
+  h.addEventListener('pointerup',up); h.addEventListener('pointercancel',up);
+});
+window.addEventListener('resize',placeHandles);
+$('toggleHandles').onclick=()=>{ const on=board.classList.toggle('final'); $('toggleHandles').setAttribute('aria-pressed',on); $('toggleHandles').textContent=on?'모서리 보이기':'모서리 숨기기'; };
+
+/* ---------- 컨트롤 ---------- */
+function chip(s){ const long=Math.max(s.w,s.h), sw=Math.max(6,Math.round(28*s.w/long)), sh=Math.round(28*s.h/long);
+  return `<button type="button" class="chip" data-k="${s.k}" aria-pressed="${s===size}" aria-label="${s.g?s.g+' ':''}${s.n} ${s.w}×${s.h}센티미터"><b>${s.n}</b><small>${s.w}×${s.h}</small></button>`; }
+function renderControls(){
+  $('sizesA').innerHTML=SIZES.slice(0,4).map(chip).join(''); $('sizesB').innerHTML=SIZES.slice(4).map(chip).join('');
+  $('colors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-k="${c.k}" aria-pressed="${c===color}"><i style="background:${c.c}"></i>${c.n}</button>`).join('');
+  $('dirs').innerHTML=DIRS.map(([x,y],i)=>`<button type="button" data-i="${i}" aria-pressed="${i===light.dir}" aria-label="빛 방향 ${i}"><svg viewBox="0 0 24 24" style="transform:rotate(${i*45}deg)"><path d="M12 19V5M7 10l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`).join('');
+  const u=new URL(location.href); u.searchParams.set('size',size.k); u.searchParams.set('color',color.k); history.replaceState(null,'',u);
+  $('toAr').href=`index.html?size=${size.k}&color=${color.k}`;
+}
+for(const id of ['sizesA','sizesB']) $(id).addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;size=SIZES.find(s=>s.k===b.dataset.k);renderControls(); if(quad){quadFromPlane();render();}});
+$('colors').addEventListener('click',e=>{const b=e.target.closest('.sw');if(!b)return;color=COLORS.find(c=>c.k===b.dataset.k);renderControls();render();});
+$('dirs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;light.dir=+b.dataset.i;renderControls();render();});
+function syncOut(){ $('rotOut').textContent=`${rot}°`; $('scaleOut').textContent=`${scalePct}%`; $('brightOut').textContent=`${Math.round(light.bright*100)}%`; $('warmOut').textContent=light.warm<-8?'차갑게':light.warm>8?'따뜻하게':'중간'; $('passOut').textContent=`${Math.round(light.pass*100)}%`; $('shadowOut').textContent=`${Math.round(light.shadow*100)}%`; $('texOut').textContent=`${Math.round(light.tex*100)}%`; }
+$('rot').oninput=e=>{rot=+e.target.value; syncOut(); if(quad){quadFromPlane();render();}};
+$('scale').oninput=e=>{scalePct=+e.target.value; syncOut(); if(quad){quadFromPlane();render();}};
+$('bright').oninput=e=>{light.bright=+e.target.value/100; syncOut(); render();};
+$('warm').oninput=e=>{light.warm=+e.target.value; syncOut(); render();};
+$('pass').oninput=e=>{light.pass=+e.target.value/100; syncOut(); render();};
+$('shadow').oninput=e=>{light.shadow=+e.target.value/100; syncOut(); render();};
+$('tex').oninput=e=>{light.tex=+e.target.value/100; syncOut(); render();};
+$('swap').onclick=()=>{ swapped=!swapped; if(quad){ quadFromPlane(); render(); } };
+$('resetQuad').onclick=()=>{ if(photo) resetQuad(); };
+$('pick').onclick=()=>$('file').click(); $('shoot').onclick=()=>$('fileCam').click();
+$('file').onchange=e=>loadFile(e.target.files[0]); $('fileCam').onchange=e=>loadFile(e.target.files[0]);
+board.addEventListener('dragover',e=>e.preventDefault()); board.addEventListener('drop',e=>{e.preventDefault(); loadFile(e.dataTransfer.files[0]);});
+
+/* ---------- 저장·공유 ---------- */
+function finalBlob(cb){ const wasFinal=board.classList.contains('final'); board.classList.add('final'); draw(); setTimeout(()=>{ cv.toBlob(b=>{ if(!wasFinal) board.classList.remove('final'); cb(b); },'image/jpeg',0.92); },60); }
+function fileName(){ const {w,h}=dims(); return `reliv_${color.k}_${size.k}_${w}x${h}.jpg`; }
+$('save').onclick=()=>{ if(!photo){$('file').click();return;} finalBlob(b=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=fileName(); a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); }); };
+$('share').onclick=()=>{ if(!photo){$('file').click();return;} finalBlob(async b=>{ const f=new File([b],fileName(),{type:'image/jpeg'}); if(navigator.canShare&&navigator.canShare({files:[f]})){ try{ await navigator.share({files:[f],title:'릴리브 사진으로 깔아보기'}); }catch(e){} } else $('save').click(); }); };
+$('cta').onclick=()=>{ if(!photo) $('file').click(); else $('save').click(); };
+renderControls(); syncOut();
+</script>
+</body>
+</html>
