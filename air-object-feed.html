@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>릴리브 에어 오브제 · 인스타 피드 가이드</title>
+<meta name="description" content="릴리브 에어 오브제 인스타그램 피드 촬영·업로드 가이드">
+<meta property="og:title" content="릴리브 에어 오브제 · 인스타 피드 가이드">
+<meta property="og:description" content="릴리브 에어 오브제 인스타그램 피드 촬영·업로드 가이드">
+<meta name="theme-color" content="#2a2724">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f0ea; --paper:#fbfaf7; --card:#ffffff; --ink:#1d1b18; --sub:#5d5850; --faint:#948d82;
+  --line:#e4dfd5; --line2:#d6cfc2; --stone:#2a2724; --stone2:#3a3530;
+  --accent:#8a7559; --accent-soft:#f1ebe1; --accent-line:#e2d6c3;
+  --ok:#4f6b4a; --ok-bg:#edf1ea; --no:#a2503a; --no-bg:#f8ece8;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;letter-spacing:-.005em;
+  word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;
+  padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+.wrap{max-width:640px;margin:0 auto;padding:0 20px}
+a{color:inherit}
+.serif{font-family:"Cormorant Garamond","Times New Roman",serif;font-weight:500;letter-spacing:0}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;background:var(--stone);color:#f4efe7;padding:44px 0 40px}
+.hero::before{content:"";position:absolute;inset:-40% -30% auto auto;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,rgba(214,196,168,.22),rgba(214,196,168,0) 62%);pointer-events:none}
+.hero .wrap{position:relative}
+.topline{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.24em;font-weight:600;color:rgba(244,239,231,.62)}
+.chip{letter-spacing:.06em;font-size:12px;font-weight:700;color:var(--stone);background:#e9dfcf;border-radius:999px;padding:4px 11px}
+.hero-grid{display:grid;grid-template-columns:1fr 112px;gap:18px;align-items:end;margin-top:34px}
+.hero .en{font-size:20px;font-style:italic;color:#d9cab2}
+.hero h1{font-size:34px;line-height:1.22;font-weight:800;letter-spacing:-.035em;margin-top:6px}
+.hero h1 span{display:block;font-weight:300;color:#d9cab2}
+.obj{width:112px;height:150px;position:relative}
+.obj .body{position:absolute;left:8px;right:8px;bottom:6px;top:22px;border-radius:46% 46% 40% 40% / 38% 38% 30% 30%;
+  background:radial-gradient(ellipse at 35% 25%,#f3ece0 0%,#ddd2c1 45%,#b9ab95 100%);
+  box-shadow:inset -10px -14px 24px rgba(80,62,40,.28),0 18px 30px rgba(0,0,0,.35)}
+.obj .top{position:absolute;left:30px;right:30px;top:14px;height:20px;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 40%,#8f816c,#5d5244);box-shadow:inset 0 2px 4px rgba(0,0,0,.35)}
+.obj .shadow{position:absolute;left:4px;right:4px;bottom:-4px;height:12px;border-radius:50%;background:rgba(0,0,0,.35);filter:blur(6px)}
+.oneline{margin-top:30px;border-top:1px solid rgba(244,239,231,.18);padding-top:20px}
+.oneline small{display:block;font-size:12px;letter-spacing:.14em;font-weight:700;color:#c8b79c}
+.oneline strong{display:block;font-size:20px;line-height:1.5;font-weight:700;margin-top:6px;letter-spacing:-.02em}
+.oneline p{margin-top:8px;font-size:15px;color:rgba(244,239,231,.72)}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:20;background:rgba(243,240,234,.9);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;gap:4px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;color:var(--sub);font-size:14px;font-weight:600;padding:7px 12px;border-radius:999px;transition:background .15s,color .15s}
+.nav a.on{background:var(--stone);color:#f4efe7}
+
+/* SECTIONS */
+section{padding:52px 0 4px;scroll-margin-top:52px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--accent)}
+h2{font-size:25px;line-height:1.35;font-weight:800;letter-spacing:-.03em;margin-top:6px}
+.lead{color:var(--sub);font-size:15.5px;margin-top:8px}
+h3{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:30px 0 12px}
+
+/* summary card */
+.sum{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.sum .row{display:flex;gap:14px;padding:15px 18px;border-top:1px solid var(--line)}
+.sum .row:first-child{border-top:0}
+.sum dt{flex:0 0 78px;font-size:13.5px;font-weight:700;color:var(--faint);padding-top:1px}
+.sum dd{font-size:15.5px;font-weight:600}
+.sum dd small{display:block;font-weight:500;color:var(--sub);font-size:14px;margin-top:2px}
+.sum .hl dd{color:var(--accent)}
+
+/* product */
+.prod{margin-top:20px;display:grid;gap:10px}
+.prod .p{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.prod .p b{display:block;font-size:16px;letter-spacing:-.01em}
+.prod .p span{display:block;font-size:14.5px;color:var(--sub);margin-top:3px}
+.scent{margin-top:10px;background:var(--stone2);color:#f1ebe2;border-radius:18px;padding:20px 20px 18px}
+.scent .en{font-size:24px;font-style:italic;color:#e3d4bb;line-height:1}
+.scent p{font-size:14.5px;color:rgba(241,235,226,.78);margin-top:8px}
+.notes{display:grid;grid-template-columns:62px 1fr;gap:6px 10px;margin-top:14px;font-size:13.5px}
+.notes dt{font-weight:700;letter-spacing:.1em;color:#c8b79c;font-size:12px;padding-top:2px}
+.notes dd{color:#f1ebe2}
+.kw{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.kw span{font-size:12.5px;border:1px solid rgba(241,235,226,.28);border-radius:999px;padding:3px 10px;color:#e8dfd1}
+
+/* steps */
+.steps{margin-top:20px;display:grid;gap:10px}
+.st{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.st .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--stone);color:#f4efe7;font-size:13px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+.st b{display:block;font-size:16px}
+.st span{display:block;font-size:14.5px;color:var(--sub);margin-top:2px}
+.st em{font-style:normal;color:var(--accent);font-weight:700}
+
+/* cut cards */
+.cuts{margin-top:20px;display:grid;gap:12px}
+.cut{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 16px;scroll-margin-top:64px}
+.cut-head{display:flex;align-items:center;gap:8px}
+.cut .no{font-size:13px;font-weight:800;color:var(--accent);letter-spacing:.06em}
+.cut .time{font-size:12px;font-weight:700;color:var(--faint);letter-spacing:.04em}
+.must{margin-left:auto;font-size:11.5px;font-weight:800;color:#f4efe7;background:var(--stone);border-radius:999px;padding:3px 9px}
+.opt{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--faint);border:1px solid var(--line2);border-radius:999px;padding:2px 9px}
+.cut h4{font-size:18.5px;font-weight:800;letter-spacing:-.025em;margin-top:6px;line-height:1.4}
+.why{margin-top:10px;font-size:14.5px;font-weight:600;color:var(--ink);background:var(--accent-soft);border-radius:10px;padding:10px 12px}
+.why small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.12em;color:var(--accent)}
+.how{margin-top:10px;font-size:15px;color:var(--sub)}
+.how b{color:var(--ink)}
+.caps{margin-top:12px}
+.caps .l{font-size:12px;font-weight:700;color:var(--faint);letter-spacing:.06em}
+.cap{margin-top:6px;font-size:15px;font-weight:600;padding:9px 12px;border-radius:10px;border:1px dashed var(--line2);background:var(--paper)}
+.tipline{margin-top:10px;font-size:13.5px;color:#6b5435;background:#fbf4e8;border:1px solid #efe1c8;border-radius:10px;padding:9px 12px}
+.tipline b{color:#4f3c22}
+
+/* hook cards */
+.hooks{margin-top:16px;display:grid;gap:10px}
+.hook{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.hook b{display:block;font-size:16px}
+.hook span{display:block;font-size:14.5px;color:var(--sub);margin-top:2px}
+.hook .cap{margin-top:10px}
+
+/* list cards */
+ul.li{list-style:none;margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:2px 18px}
+ul.li li{padding:14px 0;border-top:1px solid var(--line);font-size:15px}
+ul.li li:first-child{border-top:0}
+ul.li b{display:block;font-size:15.5px}
+ul.li span{display:block;color:var(--sub);font-size:14.5px;margin-top:1px}
+ol.musts{list-style:none;counter-reset:m;margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:2px 18px}
+ol.musts li{counter-increment:m;position:relative;padding:14px 0 14px 36px;border-top:1px solid var(--line)}
+ol.musts li:first-child{border-top:0}
+ol.musts li::before{content:counter(m);position:absolute;left:0;top:15px;width:24px;height:24px;border-radius:50%;background:var(--stone);color:#f4efe7;font-size:12px;font-weight:800;display:grid;place-items:center}
+ol.musts b{display:block;font-size:15.5px}
+ol.musts span{display:block;font-size:14.5px;color:var(--sub);margin-top:1px}
+ol.musts span b{display:inline;color:var(--ink);font-size:inherit}
+
+/* points (blog) */
+.pts{margin-top:16px;display:grid;gap:8px}
+.pt{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 16px;font-size:15px}
+.pt i{flex:none;font-style:normal;font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.06em;padding-top:2px;width:22px}
+.pt b{display:block}
+.pt span{display:block;color:var(--sub);font-size:14px}
+
+/* copy box */
+.box{margin-top:12px;border-radius:16px;padding:16px 18px;background:var(--card);border:1px solid var(--line)}
+.box.dark{background:var(--stone);border-color:var(--stone);color:#f4efe7}
+.box-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--faint);letter-spacing:.04em}
+.box.dark .box-head{color:#c8b79c}
+.box .tx{margin-top:8px;font-size:16px;font-weight:700;line-height:1.75}
+.box .tx .tg{white-space:nowrap}
+.btn-copy{flex:none;font:inherit;font-size:13px;font-weight:700;letter-spacing:0;cursor:pointer;border-radius:999px;padding:5px 13px;border:1px solid var(--line2);background:#fff;color:var(--ink)}
+.box.dark .btn-copy{background:#f4efe7;border-color:#f4efe7;color:var(--stone)}
+.example{margin-top:8px;white-space:pre-line;font-size:15px;line-height:1.8;color:var(--sub);user-select:none;-webkit-user-select:none}
+.nocopy{margin-top:10px;font-size:13.5px;color:#6b5435;background:#fbf4e8;border:1px solid #efe1c8;border-radius:10px;padding:9px 12px}
+.ph{background:#f6e7c4;color:#5b4320;border-radius:5px;padding:0 5px;font-weight:700}
+
+/* do / don't */
+.dd{margin-top:16px;display:grid;gap:10px}
+.dd-row{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.dd-row div{display:flex;gap:10px;padding:11px 16px;font-size:15px}
+.dd-row .ok{background:var(--ok-bg);font-weight:600}
+.dd-row .no{color:var(--sub)}
+.dd-row b{flex:none;width:16px;font-weight:800}
+.dd-row .ok b{color:var(--ok)} .dd-row .no b{color:var(--no)}
+
+/* checklist */
+.check{list-style:none;margin-top:16px;display:grid;gap:8px}
+.check label{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 16px;font-size:15px;cursor:pointer}
+.check input{flex:none;width:21px;height:21px;accent-color:var(--stone)}
+.check input:checked + span{color:var(--faint);text-decoration:line-through}
+.check small{display:block;color:var(--faint);font-size:13px}
+
+/* buttons */
+.cta{display:grid;gap:10px;margin-top:16px}
+.cta a{display:flex;justify-content:space-between;align-items:center;text-decoration:none;border-radius:16px;padding:17px 18px;font-weight:800;font-size:16.5px}
+.cta a small{display:block;font-size:13px;font-weight:600;opacity:.7}
+.cta .pri{background:var(--stone);color:#f4efe7}
+.cta .sec{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.cta a::after{content:"→";font-weight:500}
+
+.reuse{margin-top:14px;font-size:14px;color:var(--sub);background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 16px}
+.reuse b{color:var(--ink)}
+
+footer{margin-top:56px;padding:26px 0 8px;border-top:1px solid var(--line);font-size:13px;color:var(--faint)}
+footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;margin-bottom:4px}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(251,250,247,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px 20px calc(10px + env(safe-area-inset-bottom))}
+.bar .in{max-width:640px;margin:0 auto;display:flex;gap:8px}
+.bar a{flex:1;text-align:center;text-decoration:none;font-weight:800;font-size:15px;border-radius:14px;padding:14px 8px}
+.bar .pri{background:var(--stone);color:#f4efe7}
+.bar .ghost{background:var(--accent-soft);color:var(--stone)}
+.toast{position:fixed;left:50%;bottom:98px;transform:translate(-50%,8px);background:var(--stone);color:#f4efe7;padding:9px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;transition:.2s;pointer-events:none;z-index:40}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:420px){
+  .wrap{padding:0 16px} .nav .wrap{padding:10px 16px}
+  .hero h1{font-size:29px} .hero-grid{grid-template-columns:1fr 86px} .obj{transform:scale(.78);transform-origin:bottom right}
+  h2{font-size:22px} .cut h4{font-size:17.5px}
+  .sum dt{flex-basis:66px}
+}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="topline"><span>RELIV</span><span class="chip">INSTAGRAM FEED</span></div>
+  <div class="hero-grid">
+    <div>
+      <div class="en serif">Air Object</div>
+      <h1>인스타 피드<span>콘텐츠 가이드</span></h1>
+    </div>
+    <div class="obj" aria-hidden="true"><div class="shadow"></div><div class="body"></div><div class="top"></div></div>
+  </div>
+  <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong>“아이와 사는 우리 집, 꺼내두고 싶은 탈취제”</strong><p>냄새 고민이 있던 자리에 오브제를 두고, 공간에 자연스럽게 어우러진 모습을 사진으로 담아주세요.</p></div>
+</div></header>
+<nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#cuts">사진 컷</a><a href="#caption">캡션</a><a href="#rules">표현</a><a href="#upload">업로드·PA</a><a href="#tips">팁</a><a href="#submit">제출</a></div></nav>
+<main class="wrap">
+
+<section id="overview">
+  <div class="eyebrow">00 · OVERVIEW</div>
+  <h2>한눈에 보는 진행 내용</h2>
+  <dl class="sum">
+    <div class="row"><dt>채널</dt><dd>인스타그램 피드 (사진 캐러셀) 1회</dd></div>
+    <div class="row"><dt>제공 제품</dt><dd>릴리브 에어 오브제</dd></div>
+    <div class="row hl"><dt>기한</dt><dd>제품 수령 후 7일 이내<small>피드 업로드 + 원본 사진 제출 모두 같은 기한이에요.</small></dd></div>
+    <div class="row"><dt>사진</dt><dd>세로 4:5 · 업로드 5장 이상 · 원본 10장 이상 제출</dd></div>
+    <div class="row"><dt>광고 활용</dt><dd>파트너십 광고(PA)로 집행돼요<small>업로드 후 광고 코드만 DM으로 보내주세요.</small></dd></div>
+  </dl>
+  <div class="steps"><div class="st"><div class="n">1</div><div><b>제품 수령 · 촬영</b><span>아래 컷 가이드를 보고 자연광에서 찍어주세요.</span></div></div><div class="st"><div class="n">2</div><div><b>피드 업로드</b><span><em>수령 후 7일 이내</em> · 유료 파트너십 라벨 + 필수 표기</span></div></div><div class="st"><div class="n">3</div><div><b>광고 코드 DM · 원본 제출</b><span>업로드 직후 광고 코드 DM, 원본 사진은 제출 폼으로</span></div></div></div>
+</section>
+
+
+<section id="product">
+  <div class="eyebrow">01 · PRODUCT</div>
+  <h2>릴리브 에어 오브제는요</h2>
+  <p class="lead">반려동물과 함께 사는 공간의 냄새를 <b>향으로만 가리지 않고 관리</b>하도록 설계한 오브제형 고체 탈취제예요. 숨겨두는 탈취제가 아니라, 거실에 꺼내두고 싶은 오브제를 목표로 만들었어요.</p>
+  <div class="prod">
+    <div class="p"><b>향으로만 덮지 않는 탈취</b><span>냄새를 먼저 관리하고, 향은 그 위에 은은하게 남도록 설계했어요.</span></div>
+    <div class="p"><b>꺼내두는 오브제 디자인</b><span>기성 용기가 아닌 릴리브 자체 설계. 무광·뉴트럴 톤의 세라믹 무드라 선반, 협탁, 콘솔 어디에 둬도 자연스러워요.</span></div>
+    <div class="p"><b>내용물은 안쪽에, 탈취는 공간으로</b><span>반려생활을 고려해 내용물이 그대로 노출되지 않도록 구조를 설계했어요.</span></div>
+    <div class="p"><b>오브제는 그대로, 리필만 교체</b><span>외장 오브제는 계속 쓰고 안쪽 내용물만 갈아 끼우는 리필 구조예요.</span></div>
+  </div>
+  <div class="scent">
+    <div class="en serif">Laundry Day</div>
+    <p>갓 세탁한 패브릭과 비누처럼 깨끗하고 산뜻한 클린 무드의 향</p>
+    <dl class="notes">
+      <dt>TOP</dt><dd>그린 · 피치 · 파인애플 · 애플</dd>
+      <dt>MIDDLE</dt><dd>오키드 · 릴리 · 시클라멘 · 가드니아 · 로즈</dd>
+      <dt>BASE</dt><dd>머스크 · 샌달우드</dd>
+    </dl>
+    <div class="kw"><span>Laundry</span><span>Linen</span><span>Clean</span><span>Soft</span><span>Fresh</span></div>
+  </div>
+</section>
+
+
+<section id="cuts">
+  <div class="eyebrow">02 · PHOTO CUTS</div>
+  <h2>이렇게 찍어주세요</h2>
+  <p class="lead">냄새는 사진에 보이지 않으니, <b>아이와 함께 사는 공간에 자연스럽게 놓인 오브제</b>를 보여주는 게 핵심이에요. 필수 컷은 꼭, 나머지는 자유롭게 골라주세요.</p>
+  <div class="cuts">
+    <article class="cut"><div class="cut-head"><span class="no">01</span><span class="must">필수</span></div>
+<h4>공간 속 오브제 (넓은 뷰)</h4><div class="why"><small>이 장면의 목적</small>집 안에 자연스럽게 어우러지는 오브제라는 것</div><p class="how">거실·현관처럼 생활공간 전체가 보이게 찍고, 오브제는 화면 안에 작게 놓여 있어도 괜찮아요. <b>캐러셀 첫 장으로 추천</b>해요.</p></article>
+    <article class="cut"><div class="cut-head"><span class="no">02</span><span class="must">필수</span></div>
+<h4>놓인 자리 (좁은 뷰)</h4><div class="why"><small>이 장면의 목적</small>어디에 두는 제품인지 바로 이해되게</div><p class="how">협탁, 진열장 선반, 현관 콘솔 위에 놓인 모습을 가까이. 주변 소품(책, 화병, 캔들)과 함께면 더 좋아요.</p></article>
+    <article class="cut"><div class="cut-head"><span class="no">03</span><span class="must">필수</span></div>
+<h4>아이와 오브제가 한 화면에</h4><div class="why"><small>이 장면의 목적</small>누구를 위한 제품인지 한눈에</div><p class="how">오브제 옆에서 쉬거나 지나가는 아이. <b>아이와 제품이 한 컷에</b> 함께 나와야 해요.</p></article>
+    <article class="cut"><div class="cut-head"><span class="no">04</span><span class="must">필수</span></div>
+<h4>냄새가 신경 쓰이던 자리</h4><div class="why"><small>이 장면의 목적</small>어떤 고민을 해결하는 제품인지</div><p class="how">배변패드 근처, 고양이 화장실 옆, 러그·소파 주변처럼 <b>평소 냄새가 신경 쓰이던 곳</b>에 둔 모습이에요. 너무 적나라하지 않게, 정돈된 상태로 담아주세요.</p></article>
+    <article class="cut"><div class="cut-head"><span class="no">05</span><span class="must">필수</span></div>
+<h4>디테일 클로즈업</h4><div class="why"><small>이 장면의 목적</small>질감과 완성도로 프리미엄을 납득시키기</div><p class="how">표면 질감, 상단 구조, 실루엣이 보이게 가까이. <b>필터 없이 실제 색 그대로</b> 찍어주세요.</p></article>
+    <article class="cut"><div class="cut-head"><span class="no">06</span><span class="opt">선택</span></div>
+<h4>손으로 리필 교체</h4><div class="why"><small>이 장면의 목적</small>오브제는 그대로, 리필만 갈아 끼우는 구조</div><p class="how">오브제를 열고 리필을 넣는 손 컷. 순서대로 2~3장 이어서 찍으면 캐러셀에 딱 좋아요.</p></article>
+    <article class="cut"><div class="cut-head"><span class="no">07</span><span class="opt">선택</span></div>
+<h4>향 무드컷</h4><div class="why"><small>이 장면의 목적</small>Laundry Day의 깨끗한 무드를 상상하게</div><p class="how">갓 갠 수건, 린넨 패브릭, 햇살 드는 창가 곁에 놓인 오브제. 맑고 정돈된 분위기면 충분해요.</p></article>
+    <article class="cut"><div class="cut-head"><span class="no">08</span><span class="opt">선택</span></div>
+<h4>보호자와 함께하는 일상</h4><div class="why"><small>이 장면의 목적</small>사람도 편하게 머무는 공간이라는 인상</div><p class="how">소파에서 쉬는 보호자 곁의 아이와 오브제. 얼굴 없이 손·발만 나와도 괜찮아요.</p></article>
+  </div>
+</section>
+
+<section id="caption">
+  <div class="eyebrow">03 · CAPTION</div>
+  <h2>캡션은 이 네 가지만</h2>
+  <p class="lead">평소 피드처럼 본인 말투로 써주세요. 아래 네 가지만 들어가면 돼요.</p>
+  <ol class="musts">
+    <li><b>신제품 소식</b><span>릴리브에서 <b>에어 오브제</b>가 새로 나왔다는 내용</span></li>
+    <li><b>우리 집 냄새 고민 한 가지</b><span>배변 공간, 고양이 화장실, 거실 생활 냄새, 강한 방향제가 부담스러웠던 경험 중 하나</span></li>
+    <li><b>직접 써본 느낌 한 가지</b><span>은은한 향, 꺼내두고 싶은 디자인, 리필 구조 중 가장 와닿은 점</span></li>
+    <li><b>광고 표기 · 계정 태그 · 해시태그</b><span>첫 줄 <b>#광고</b>, <b>@reliv.today</b> 태그, 아래 해시태그</span></li>
+  </ol>
+  <div class="box dark"><div class="box-head"><span>필수 해시태그</span><button type="button" class="btn-copy" data-copy="tags" data-msg="해시태그를 복사했어요">복사</button></div><p class="tx" id="tags"><span class="tg">#광고</span> <span class="tg">#릴리브</span> <span class="tg">#릴리브에어오브제</span> <span class="tg">#고체탈취제</span> <span class="tg">#반려동물탈취제</span> <span class="tg">#펫탈취제</span></p></div>
+  <div class="box">
+    <div class="box-head"><span>캡션 예시 · 흐름만 참고</span></div>
+    <div class="nocopy">예시 문장을 그대로 쓰지 말고, <b>본인 말투와 경험으로 새로 써주세요.</b></div>
+    <p class="example">#광고 @reliv.today
+배변패드 치우고 나서도 거실에 남던 그 냄새 🫠
+방향제를 뿌리면 향이랑 섞여서 더 애매했는데,
+릴리브에서 새로 나온 에어 오브제를 거실 선반에 올려뒀어요.
+
+향으로 덮는 느낌이 아니라 은은하게 남는 게 좋고,
+솔직히 탈취제라고 말 안 하면 아무도 모를 디자인 🤍
+
+#릴리브 #릴리브에어오브제 #고체탈취제 #반려동물탈취제 #펫탈취제</p>
+  </div>
+</section>
+
+
+<section id="rules">
+  <div class="eyebrow">EXPRESSION</div>
+  <h2>표현은 이렇게 해주세요</h2>
+  <p class="lead">광고로 집행될 수 있는 콘텐츠라, 아래 표현만 꼭 지켜주세요. 나머지는 본인 말투 그대로가 가장 좋아요.</p>
+  <div class="dd">
+    <div class="dd-row"><div class="ok"><b>O</b>향으로만 가리지 않는 탈취제</div><div class="no"><b>X</b>무향 탈취제, 향 없이 냄새 제거</div></div>
+    <div class="dd-row"><div class="ok"><b>O</b>냄새가 덜 신경 쓰여요 (써본 느낌)</div><div class="no"><b>X</b>냄새 완전 제거, 100% 탈취</div></div>
+    <div class="dd-row"><div class="ok"><b>O</b>반려생활을 고려한 구조라 마음이 놓여요</div><div class="no"><b>X</b>반려동물에게 절대 안전, 만져도 안전</div></div>
+    <div class="dd-row"><div class="ok"><b>O</b>세라믹 무드, 도자기 같은 질감</div><div class="no"><b>X</b>세라믹 용기, 도자기로 만든 탈취제</div></div>
+    <div class="dd-row"><div class="ok"><b>O</b>탈취 후 은은하게 남는 향</div><div class="no"><b>X</b>살균, 균 제거, 특허·인증 등 기술 단정</div></div>
+    
+  </div>
+</section>
+
+
+<section id="upload">
+  <div class="eyebrow">04 · UPLOAD</div>
+  <h2>업로드할 때 꼭</h2>
+  <ul class="li">
+    <li><b>유료 파트너십 라벨</b><span>게시 전 고급 설정 → 브랜드 파트너십 라벨 추가 → <b>릴리브(@reliv.today)</b> 선택</span></li>
+    <li><b>본문 첫 줄 #광고</b><span>해시태그 묶음 맨 앞이 아니라 본문 첫 줄에 넣어주세요.</span></li>
+    <li><b>사진은 4:5 세로, 5장 이상</b><span>첫 장은 01 공간 속 오브제 컷을 추천해요.</span></li>
+  </ul>
+  
+<h3>업로드 후 · 파트너십 광고 코드 보내기</h3>
+<ol class="musts">
+  <li><b>업로드한 게시물 오른쪽 위 ⋯ 메뉴</b><span>→ <b>파트너십 라벨 및 광고</b> 로 들어가 주세요.</span></li>
+  <li><b>파트너십 광고 코드 받기</b><span>코드를 복사해서 <b>@reliv.today</b> 인스타그램 DM으로 보내주시면 끝이에요.</span></li>
+  <li><b>광고 권한 요청이 오면 승인</b><span>릴리브가 보내는 파트너십 광고 권한 요청을 승인해주세요. 게시물은 회원님 계정 그대로 유지돼요.</span></li>
+</ol>
+
+</section>
+
+<section id="tips">
+  <div class="eyebrow">05 · TIPS</div>
+  <h2>퀄리티를 올리는 촬영 팁</h2>
+  <ul class="li">
+    <li><b>낮 시간 자연광, 필터 없이</b><span>무광 뉴트럴 톤이라 조명이 노랗거나 필터가 강하면 색이 달라 보여요.</span></li>
+    <li><b>주변을 정돈하고 여백 있게</b><span>오브제 주변 물건을 한두 개만 남기면 훨씬 고급스러워 보여요.</span></li>
+    <li><b>눈높이보다 살짝 낮게</b><span>선반 위 오브제는 정면 또는 살짝 아래에서 찍으면 형태가 예쁘게 살아요.</span></li>
+    <li><b>원본은 압축 없이, B컷도 함께</b><span>캡처·메신저 전송본 말고 원본 파일로 보내주세요.</span></li>
+  </ul>
+</section>
+
+
+<section id="submit">
+  <div class="eyebrow">SUBMIT</div>
+  <h2>제출하기</h2>
+  <p class="lead">아래 항목이 모두 체크되면 완료예요. 원본은 압축하지 말고 그대로 보내주세요.</p>
+  <ul class="check"><li><label><input type="checkbox"><span>피드 업로드 완료 (유료 파트너십 라벨 · #광고 · @reliv.today)</span></label></li><li><label><input type="checkbox"><span>파트너십 광고 코드 DM 전송</span></label></li><li><label><input type="checkbox"><span>원본 사진 10장 이상 제출 (필수 컷 포함)</span></label></li><li><label><input type="checkbox"><span>제출 폼에 업로드 게시물 링크 기재</span></label></li></ul>
+  
+  <div class="cta">
+    <a class="pri" href="https://docs.google.com/forms/d/e/1FAIpQLSd_2muJ0Ya4GB7OIKR5RZaNaburzlqZPvcuaFTz5YXqgxnjGA/viewform" target="_blank" rel="noopener"><span><small>사진 · 영상 원본</small>촬영본 제출하기</span></a>
+  </div>
+  <div class="reuse">제출해주신 사진·영상(원본 포함)은 릴리브 상세페이지, SNS, 광고 소재 등으로 <b>편집·가공되어 2차 활용</b>될 수 있어요. 진행해주시면 동의하신 것으로 안내드려요.</div>
+</section>
+
+
+<footer><span class="en serif">made to live together</span>궁금한 점은 인스타그램 DM <a href="https://www.instagram.com/reliv.today/" target="_blank" rel="noopener">@reliv.today</a> 또는 hello@reliv.co.kr 로 편하게 물어봐 주세요.</footer>
+</main>
+<div class="bar"><div class="in"><a class="ghost" href="#cuts">컷 가이드</a><a class="pri" href="https://docs.google.com/forms/d/e/1FAIpQLSd_2muJ0Ya4GB7OIKR5RZaNaburzlqZPvcuaFTz5YXqgxnjGA/viewform" target="_blank" rel="noopener">원본 제출하기</a></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var toast=document.getElementById('toast');
+  function show(m){toast.textContent=m;toast.classList.add('show');setTimeout(function(){toast.classList.remove('show')},1500)}
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=document.getElementById(b.dataset.copy).innerText.replace(/\s+\n/g,'\n').trim();
+      var ok=function(){show(b.dataset.msg||'복사했어요')};
+      if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,function(){fallback(t,ok)})}else{fallback(t,ok)}
+    });
+  });
+  function fallback(t,ok){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){show('길게 눌러 복사해주세요')}ta.remove()}
+  // checklist memory
+  var key='airobj-'+location.pathname;
+  var boxes=[].slice.call(document.querySelectorAll('.check input'));
+  try{var saved=JSON.parse(localStorage.getItem(key)||'[]');boxes.forEach(function(c,i){c.checked=!!saved[i]})}catch(e){}
+  boxes.forEach(function(c){c.addEventListener('change',function(){try{localStorage.setItem(key,JSON.stringify(boxes.map(function(x){return x.checked})))}catch(e){}})});
+  // nav highlight
+  var links=[].slice.call(document.querySelectorAll('.nav a'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var i=secs.indexOf(e.target);links.forEach(function(l,j){l.classList.toggle('on',i===j)});var a=links[i];if(a&&a.scrollIntoView){a.parentNode.scrollTo({left:a.offsetLeft-20,behavior:'smooth'})}}})},{rootMargin:'-45% 0px -50% 0px'});
+    secs.forEach(function(s){s&&io.observe(s)});
+  }
+})();
+</script>
+
+</body>
+</html>
