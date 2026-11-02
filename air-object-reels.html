@@ -194,6 +194,29 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 .toast{position:fixed;left:50%;bottom:98px;transform:translate(-50%,8px);background:var(--stone);color:#f4efe7;padding:9px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;transition:.2s;pointer-events:none;z-index:40}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
+/* REFERENCE */
+.ref-intro{margin-top:14px;font-size:13.5px;color:#6b5435;background:#fbf4e8;border:1px solid #efe1c8;border-radius:12px;padding:10px 13px}
+.ref-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:18px -20px 0;padding:0 20px}
+.ref-tabs::-webkit-scrollbar{display:none}
+.ref-tabs button{flex:none;font:inherit;font-size:14px;font-weight:700;cursor:pointer;border-radius:999px;padding:8px 14px;border:1px solid var(--line2);background:var(--card);color:var(--sub)}
+.ref-tabs button.on{background:var(--stone);border-color:var(--stone);color:#f4efe7}
+.ref-group{margin-top:22px}
+.ref-group[hidden]{display:none}
+.ref-group h4{font-size:16.5px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.ref-group h4 .own{font-size:11px;font-weight:800;color:#f4efe7;background:var(--accent);border-radius:999px;padding:2px 8px}
+.ref-group > p{font-size:14px;color:var(--sub);margin-top:3px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.ref-grid figure{position:relative;border-radius:14px;overflow:hidden;background:var(--accent-soft);cursor:zoom-in;aspect-ratio:4/5}
+.ref-grid img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.ref-grid figure:hover img{transform:scale(1.03)}
+.ref-grid figcaption{position:absolute;left:8px;right:8px;bottom:8px;font-size:12px;font-weight:700;color:#fff;background:rgba(29,27,24,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:8px;padding:5px 8px;line-height:1.4}
+.see-ref{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:14px;font-weight:700;text-decoration:none;color:var(--stone);border:1px solid var(--line2);background:var(--card);border-radius:999px;padding:7px 14px}
+.lb{position:fixed;inset:0;z-index:60;background:rgba(18,17,15,.92);display:none;align-items:center;justify-content:center;padding:24px;flex-direction:column;gap:12px}
+.lb.open{display:flex}
+.lb img{max-width:100%;max-height:78vh;border-radius:12px}
+.lb p{color:#eae2d5;font-size:14px;font-weight:600;text-align:center;max-width:520px}
+.lb button{position:absolute;top:14px;right:14px;font:inherit;font-size:22px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer}
+
 @media (max-width:420px){
   .wrap{padding:0 16px} .nav .wrap{padding:10px 16px}
   .hero h1{font-size:29px} .hero-grid{grid-template-columns:1fr 86px} .obj{transform:scale(.78);transform-origin:bottom right}
@@ -214,7 +237,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
   </div>
   <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong>“치워도 남던 냄새, 이제 향으로만 가리지 않아요”</strong><p>냄새가 신경 쓰이던 순간 → 오브제 등장 → 달라진 일상. 이 흐름 하나만 기억해주세요.</p></div>
 </div></header>
-<nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#scenes">장면</a><a href="#hooks">훅</a><a href="#caption">캡션</a><a href="#rules">표현</a><a href="#shoot">팁·PA</a><a href="#submit">제출</a></div></nav>
+<nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#scenes">장면</a><a href="#hooks">훅</a><a href="#refs">레퍼런스</a><a href="#caption">캡션</a><a href="#rules">표현</a><a href="#shoot">팁·PA</a><a href="#submit">제출</a></div></nav>
 <main class="wrap">
 
 <section id="overview">
@@ -272,6 +295,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
     <article class="cut"><div class="cut-head"><span class="no">06</span><span class="time">32~40초</span><span class="must">필수</span></div>
 <h4>마무리 · 오브제 컷 + 한 줄 후기</h4><div class="why"><small>이 장면의 목적</small>공간 속 오브제로 기억에 남기기</div><p class="how">공간에 놓인 오브제를 천천히 보여주며 솔직한 한 줄 후기. 거실 풀샷으로 끝나도 좋아요.</p><div class="caps"><div class="l">자막 예시 · 본인 말투로 바꿔도 좋아요</div><div class="cap">진작 꺼내둘 수 있는 걸로 살 걸</div><div class="cap">탈취제인데 인테리어 소품 같아요</div></div></article>
   </div>
+  <a class="see-ref" href="#refs">레퍼런스 사진 보기 →</a>
 </section>
 
 <section id="hooks">
@@ -285,8 +309,19 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
   </div>
 </section>
 
+
+<section id="refs">
+  <div class="eyebrow">04 · REFERENCE</div>
+  <h2>레퍼런스 사진</h2>
+  <p class="lead">장면을 찍을 때 공간 톤과 오브제 배치를 참고해주세요. 영상도 이런 밝기·여백이면 가장 좋아요.</p>
+  <div class="ref-intro">‘실제 제품’ 표시가 없는 사진은 <b>구도·분위기 참고용</b>이에요. 그대로 따라 하지 않아도 되고, 우리 집에서 비슷한 느낌만 내주시면 충분해요. 사진을 누르면 크게 볼 수 있어요.</div>
+  <div class="ref-tabs"><button type="button" class="on" data-g="all">전체</button><button type="button" data-g="own">에어 오브제가 놓인 모습</button><button type="button" data-g="spot">냄새가 신경 쓰이던 자리</button><button type="button" data-g="pet">아이와 함께하는 공간</button><button type="button" data-g="mood">공간 무드 · 넓은 뷰</button></div>
+  <div class="ref-group" data-g="own"><h4>에어 오브제가 놓인 모습<span class="own">실제 제품</span></h4><p>실제 에어 오브제 연출 이미지예요. 선반·협탁·테이블 위 높이와 주변 여백을 참고해주세요.</p><div class="ref-grid"><figure><img src="air-object/ref/a1.jpg" alt="수납장 위 · 제품 디테일이 보이는 거리" loading="lazy" decoding="async"><figcaption>수납장 위 · 제품 디테일이 보이는 거리</figcaption></figure><figure><img src="air-object/ref/a2.jpg" alt="침실 협탁 · 책과 함께" loading="lazy" decoding="async"><figcaption>침실 협탁 · 책과 함께</figcaption></figure><figure><img src="air-object/ref/a3.jpg" alt="다이닝 테이블 · 오브제 소품과 함께" loading="lazy" decoding="async"><figcaption>다이닝 테이블 · 오브제 소품과 함께</figcaption></figure><figure><img src="air-object/ref/a4.jpg" alt="사이드 테이블 · 자연광" loading="lazy" decoding="async"><figcaption>사이드 테이블 · 자연광</figcaption></figure></div></div><div class="ref-group" data-g="spot"><h4>냄새가 신경 쓰이던 자리</h4><p>배변 공간·고양이 화장실은 이렇게 정돈된 모습으로 담아주세요. 오브제를 이 근처에 두면 돼요.</p><div class="ref-grid"><figure><img src="air-object/ref/b1.jpg" alt="강아지 배변 공간" loading="lazy" decoding="async"><figcaption>강아지 배변 공간</figcaption></figure><figure><img src="air-object/ref/b2.jpg" alt="고양이 화장실 코너" loading="lazy" decoding="async"><figcaption>고양이 화장실 코너</figcaption></figure><figure><img src="air-object/ref/b3.jpg" alt="거실 속 화장실 수납장" loading="lazy" decoding="async"><figcaption>거실 속 화장실 수납장</figcaption></figure><figure><img src="air-object/ref/b4.jpg" alt="화장실 하우스 · 선반 위 소품" loading="lazy" decoding="async"><figcaption>화장실 하우스 · 선반 위 소품</figcaption></figure></div></div><div class="ref-group" data-g="pet"><h4>아이와 함께하는 공간</h4><p>아이가 편하게 머무는 장면의 구도·톤 참고용이에요. 오브제가 화면 한쪽에 함께 보이면 좋아요.</p><div class="ref-grid"><figure><img src="air-object/ref/c1.jpg" alt="거실 러그 위 아이 · 넓은 뷰" loading="lazy" decoding="async"><figcaption>거실 러그 위 아이 · 넓은 뷰</figcaption></figure><figure><img src="air-object/ref/c2.jpg" alt="펫 소파에서 쉬는 아이" loading="lazy" decoding="async"><figcaption>펫 소파에서 쉬는 아이</figcaption></figure><figure><img src="air-object/ref/c3.jpg" alt="창가 쿠션 · 따뜻한 자연광" loading="lazy" decoding="async"><figcaption>창가 쿠션 · 따뜻한 자연광</figcaption></figure><figure><img src="air-object/ref/c4.jpg" alt="선반 아래 아이 자리" loading="lazy" decoding="async"><figcaption>선반 아래 아이 자리</figcaption></figure><figure><img src="air-object/ref/c5.jpg" alt="보호자와 함께 소파 위" loading="lazy" decoding="async"><figcaption>보호자와 함께 소파 위</figcaption></figure><figure><img src="air-object/ref/c6.jpg" alt="일상 속 보호자와 아이" loading="lazy" decoding="async"><figcaption>일상 속 보호자와 아이</figcaption></figure><figure><img src="air-object/ref/c7.jpg" alt="러그 위에서 함께 쉬기" loading="lazy" decoding="async"><figcaption>러그 위에서 함께 쉬기</figcaption></figure><figure><img src="air-object/ref/c8.jpg" alt="강아지·고양이 함께 있는 거실" loading="lazy" decoding="async"><figcaption>강아지·고양이 함께 있는 거실</figcaption></figure></div></div><div class="ref-group" data-g="mood"><h4>공간 무드 · 넓은 뷰</h4><p>뉴트럴 톤, 정돈된 여백, 낮 시간 자연광. 이런 분위기면 에어 오브제가 가장 예쁘게 보여요.</p><div class="ref-grid"><figure><img src="air-object/ref/d1.jpg" alt="웜 뉴트럴 거실" loading="lazy" decoding="async"><figcaption>웜 뉴트럴 거실</figcaption></figure><figure><img src="air-object/ref/d2.jpg" alt="현관 콘솔 · 간접조명" loading="lazy" decoding="async"><figcaption>현관 콘솔 · 간접조명</figcaption></figure><figure><img src="air-object/ref/d3.jpg" alt="여백 있는 벽면 · 낮은 벤치" loading="lazy" decoding="async"><figcaption>여백 있는 벽면 · 낮은 벤치</figcaption></figure><figure><img src="air-object/ref/d4.jpg" alt="원목 수납 · 따뜻한 톤" loading="lazy" decoding="async"><figcaption>원목 수납 · 따뜻한 톤</figcaption></figure></div></div>
+</section>
+
+
 <section id="caption">
-  <div class="eyebrow">04 · CAPTION</div>
+  <div class="eyebrow">05 · CAPTION</div>
   <h2>캡션과 필수 표기</h2>
   <ol class="musts">
     <li><b>본문 첫 줄 #광고</b><span>+ 유료 파트너십 라벨 (릴리브 @reliv.today)</span></li>
@@ -313,7 +348,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 
 
 <section id="shoot">
-  <div class="eyebrow">05 · TIPS</div>
+  <div class="eyebrow">06 · TIPS</div>
   <h2>촬영 팁</h2>
   <ul class="li">
     <li><b>클립은 장면별로 따로</b><span>한 장면 = 한 클립. 광고 버전을 여러 개 만들 때 그대로 쓰여요.</span></li>
@@ -349,6 +384,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 <footer><span class="en serif">made to live together</span>궁금한 점은 인스타그램 DM <a href="https://www.instagram.com/reliv.today/" target="_blank" rel="noopener">@reliv.today</a> 또는 hello@reliv.co.kr 로 편하게 물어봐 주세요.</footer>
 </main>
 <div class="bar"><div class="in"><a class="ghost" href="#scenes">장면 가이드</a><a class="pri" href="https://docs.google.com/forms/d/e/1FAIpQLSd_2muJ0Ya4GB7OIKR5RZaNaburzlqZPvcuaFTz5YXqgxnjGA/viewform" target="_blank" rel="noopener">원본 제출하기</a></div></div>
+<div class="lb" id="lb" role="dialog" aria-label="레퍼런스 크게 보기"><button type="button" aria-label="닫기">×</button><img alt=""><p></p></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -363,6 +399,21 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
     });
   });
   function fallback(t,ok){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){show('길게 눌러 복사해주세요')}ta.remove()}
+  // reference tabs + lightbox
+  var tabs=[].slice.call(document.querySelectorAll('.ref-tabs button'));
+  tabs.forEach(function(b){b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.toggle('on',x===b)});
+    document.querySelectorAll('.ref-group').forEach(function(g){g.hidden=!(b.dataset.g==='all'||g.dataset.g===b.dataset.g)});
+  })});
+  var lb=document.getElementById('lb');
+  if(lb){
+    var li=lb.querySelector('img'),lp=lb.querySelector('p');
+    document.querySelectorAll('.ref-grid figure').forEach(function(f){f.addEventListener('click',function(){
+      var im=f.querySelector('img');li.src=im.src;li.alt=im.alt;lp.textContent=(f.querySelector('figcaption')||{}).textContent||'';lb.classList.add('open');
+    })});
+    lb.addEventListener('click',function(){lb.classList.remove('open')});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open')});
+  }
   // checklist memory
   var key='airobj-'+location.pathname;
   var boxes=[].slice.call(document.querySelectorAll('.check input'));
