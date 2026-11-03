@@ -10,7 +10,8 @@
 <meta name="theme-color" content="#fffbf7">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css">
 <style>
 :root{
   --bg:#f3f0ea; --paper:#fbfaf7; --card:#ffffff; --ink:#1d1b18; --sub:#5d5850; --faint:#948d82;
@@ -238,6 +239,12 @@ body[data-pet="dog"] .only-cat, body[data-pet="cat"] .only-dog{display:none !imp
 .ref-grid figure.wide{aspect-ratio:auto}
 .ref-grid figure.wide img{height:auto;aspect-ratio:1130/431}
 .ref-grid figure.wide figcaption{position:static;background:none;color:var(--sub);backdrop-filter:none;-webkit-backdrop-filter:none;padding:2px 12px 10px}
+/* display type: MaruBuri (Naver) → Noto Serif KR */
+.htitle, h2, h3, .cut h4, .oneline strong, .gate-cards b, .pc b, .sc b{font-family:"MaruBuri","Noto Serif KR","Apple SD Gothic Neo",serif;font-weight:700;letter-spacing:-.02em}
+.htitle{font-size:29px;line-height:1.32}
+h2{font-size:24px;line-height:1.4}
+.cut h4{font-size:18px}
+.oneline strong{font-weight:600;line-height:1.55}
 /* hero v3 — product-photo paper, packaging wordmark, olive band */
 .hero2{background:#fffbf7;color:#23211b;position:relative;overflow:hidden}
 .hero2>.wrap{position:relative;padding-top:20px}
