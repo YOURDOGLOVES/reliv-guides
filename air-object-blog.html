@@ -226,9 +226,47 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
   h2{font-size:22px} .cut h4{font-size:17.5px}
   .sum dt{flex-basis:66px}
 }
+
+/* pet switch */
+.petbar{margin-top:22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.petbar small{font-size:12px;letter-spacing:.14em;font-weight:700;color:#c8b79c}
+.seg{display:inline-flex;background:rgba(244,239,231,.1);border:1px solid rgba(244,239,231,.2);border-radius:999px;padding:3px}
+.seg button{font:inherit;font-size:14px;font-weight:700;border:0;cursor:pointer;border-radius:999px;padding:8px 16px;background:transparent;color:rgba(244,239,231,.75)}
+.seg button.on{background:#f4efe7;color:var(--stone)}
+body span.only-dog, body span.only-cat{display:inline;font-size:inherit;color:inherit;margin:0;font-weight:inherit;line-height:inherit}
+body[data-pet="dog"] .only-cat, body[data-pet="cat"] .only-dog{display:none !important}
+/* product cards with image */
+.pcards{margin-top:20px;display:grid;gap:10px}
+.pc{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+.pc .n{flex:none;font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.06em;width:22px;padding-top:2px}
+.pc b{display:block;font-size:16px;letter-spacing:-.01em}
+.pc span{display:block;font-size:14.5px;color:var(--sub);margin-top:2px}
+.odor{margin-top:10px;width:100%;border-collapse:collapse;font-size:13.5px}
+.odor td{padding:6px 0;border-top:1px solid var(--line);vertical-align:top}
+.odor td:last-child{text-align:right;font-weight:800;color:var(--ink);white-space:nowrap;padding-left:10px}
+.odor small{display:block;color:var(--faint);font-size:12px}
+.fine{margin-top:8px;font-size:12px;color:var(--faint);line-height:1.6}
+.scents{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sc{border-radius:16px;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.sc img{display:block;width:100%;aspect-ratio:6/5;object-fit:cover;background:#fbfaf7}
+.sc div{padding:12px 14px 14px}
+.sc b{display:block;font-size:15px}
+.sc span{display:block;font-size:13px;color:var(--sub);margin-top:2px}
+.sc.pick{border-color:var(--stone);box-shadow:0 0 0 1px var(--stone)}
+.sc .tagp{display:inline-block;margin-bottom:6px;font-size:11px;font-weight:800;color:#f4efe7;background:var(--stone);border-radius:999px;padding:2px 8px}
+.spec{margin-top:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.spec div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center}
+.spec b{display:block;font-size:15px}
+.spec span{display:block;font-size:11.5px;color:var(--faint);margin-top:1px}
+.place{margin-top:16px;display:grid;gap:8px}
+.pl{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 16px}
+.pl b{flex:0 0 108px;font-size:14.5px}
+.pl span{font-size:14.5px;color:var(--sub)}
+.pl em{font-style:normal;font-size:11.5px;font-weight:800;color:var(--accent);margin-left:4px}
+@media (max-width:420px){ .spec{grid-template-columns:repeat(2,1fr)} .pl{flex-direction:column;gap:2px} .pl b{flex:none} }
 </style>
 </head>
-<body>
+<body data-pet="dog">
 <header class="hero"><div class="wrap">
   <div class="topline"><span>RELIV</span><span class="chip">NAVER BLOG</span></div>
   <div class="hero-top">
@@ -236,11 +274,12 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
       <div class="en serif">Air Object</div>
       <h1>블로그 포스팅<span>원고 가이드</span></h1>
     </div>
-    <figure class="hero-photo"><img src="air-object/ref/h2.jpg" alt="릴리브 에어 오브제 실제 제품" style="object-position:50% 50%" fetchpriority="high"></figure>
+    <figure class="hero-photo"><img src="air-object/ref/hp.jpg" alt="릴리브 에어 오브제 실제 제품" fetchpriority="high"></figure>
   </div>
-  <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong>“반려생활 냄새 고민, 그리고 꺼내두고 싶은 탈취제”</strong><p>우리 집 냄새 고민 사연으로 시작해, 직접 써본 솔직한 경험으로 마무리해주세요.</p></div>
+  <div class="petbar"><small>우리 아이는</small><div class="seg" role="group" aria-label="반려동물 선택"><button type="button" data-pet="dog">강아지</button><button type="button" data-pet="cat">고양이</button></div></div>
+  <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong><span class="only-dog">“반려생활 냄새 고민, 그리고 꺼내두고 싶은 탈취제”</span><span class="only-cat">“향에 예민한 고양이 집, 무향 탈취제로 바꾼 이야기”</span></strong><p><span class="only-dog">우리 집 냄새 고민 사연으로 시작해, 직접 써본 솔직한 경험으로 마무리해주세요.</span><span class="only-cat">고양이 때문에 향 있는 제품을 망설였던 사연으로 시작해, 무향을 써본 솔직한 경험으로 마무리해주세요.</span></p></div>
 </div></header>
-<nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#story">원고</a><a href="#photo">사진·영상</a><a href="#refs">레퍼런스</a><a href="#keyword">키워드</a><a href="#link">링크·표기</a><a href="#rules">표현</a><a href="#submit">제출</a></div></nav>
+<nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#place">두는 곳</a><a href="#story">원고</a><a href="#photo">사진·영상</a><a href="#refs">레퍼런스</a><a href="#keyword">키워드</a><a href="#link">링크·표기</a><a href="#rules">표현</a><a href="#submit">제출</a></div></nav>
 <main class="wrap">
 
 <section id="overview">
@@ -248,122 +287,136 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
   <h2>한눈에 보는 진행 내용</h2>
   <dl class="sum">
     <div class="row"><dt>채널</dt><dd>네이버 블로그 포스팅 1회</dd></div>
-    <div class="row"><dt>제공 제품</dt><dd>릴리브 에어 오브제</dd></div>
-    <div class="row"><dt>보호자</dt><dd>노출 필수 아니에요<small>얼굴 없이 손·발만 나와도 충분해요. 아이와 공간 위주로 담아주세요.</small></dd></div>
-    <div class="row hl"><dt>기한</dt><dd>제품 수령 후 7일 이내<small>포스팅 + 사진·영상 원본 제출 모두 같은 기한이에요.</small></dd></div>
+    <div class="row"><dt>제공 제품</dt><dd><span class="only-dog">에어 오브제 세트 (외장 오브제 + 리필)<small>향은 받으신 제품 기준이에요 · 런드리 데이 또는 무향</small></span><span class="only-cat">에어 오브제 세트 (외장 오브제 + 무향 리필)<small>고양이 집사님께는 향료를 넣지 않은 무향으로 보내드려요</small></span></dd></div>
+    <div class="row hl"><dt>기한</dt><dd>제품 수령 후 7일 이내<small>업로드 + 원본 제출 모두 같은 기한이에요.</small></dd></div>
     <div class="row"><dt>분량</dt><dd>사진 18장 이상 · 영상 1개 이상</dd></div>
     <div class="row"><dt>유지 기간</dt><dd>포스팅 노출 6개월 유지<small>6개월 전 삭제 시 제공 제품 금액이 청구될 수 있어요.</small></dd></div>
-  </dl>
-  <div class="steps"><div class="st"><div class="n">1</div><div><b>제품 수령 · 촬영</b><span>사진 18장 이상, 영상 1개 이상 찍어주세요.</span></div></div><div class="st"><div class="n">2</div><div><b>포스팅 발행</b><span><em>수령 후 7일 이내</em> · 메일로 받은 키워드·링크 넣기</span></div></div><div class="st"><div class="n">3</div><div><b>링크 + 원본 제출</b><span>포스팅 링크와 사용한 사진·영상 원본을 제출 폼으로</span></div></div></div>
+    <div class="row"><dt>보호자</dt><dd>노출 필수 아니에요<small>얼굴 없이 손·발만 나와도 충분해요. 아이와 공간 위주로 담아주세요.</small></dd></div></dl>
+  <div class="steps"><div class="st"><div class="n">1</div><div><b>제품 수령 · 촬영</b><span>사진 18장 이상, 영상 1개 이상 찍어주세요.</span></div></div><div class="st"><div class="n">2</div><div><b>포스팅 발행</b><span><em>수령 후 7일 이내</em> · 아래 키워드와 메일로 받은 링크 넣기</span></div></div><div class="st"><div class="n">3</div><div><b>링크 + 원본 제출</b><span>포스팅 링크와 사용한 사진·영상 원본을 제출 폼으로</span></div></div></div>
 </section>
-
-
 <section id="product">
   <div class="eyebrow">01 · PRODUCT</div>
   <h2>릴리브 에어 오브제는요</h2>
-  <p class="lead">반려동물과 함께 사는 공간의 냄새를 <b>향으로만 가리지 않고 관리</b>하도록 설계한 오브제형 고체 탈취제예요. 숨겨두는 탈취제가 아니라, 거실에 꺼내두고 싶은 오브제를 목표로 만들었어요.</p>
-  <div class="prod">
-    <div class="p"><b>향으로만 덮지 않는 탈취</b><span>냄새를 먼저 관리하고, 향은 그 위에 은은하게 남도록 설계했어요.</span></div>
-    <div class="p"><b>꺼내두는 오브제 디자인</b><span>기성 용기가 아닌 릴리브 자체 설계. 무광·뉴트럴 톤의 세라믹 무드라 선반, 협탁, 콘솔 어디에 둬도 자연스러워요.</span></div>
-    <div class="p"><b>내용물은 안쪽에, 탈취는 공간으로</b><span>반려생활을 고려해 내용물이 그대로 노출되지 않도록 구조를 설계했어요.</span></div>
-    <div class="p"><b>오브제는 그대로, 리필만 교체</b><span>외장 오브제는 계속 쓰고 안쪽 내용물만 갈아 끼우는 리필 구조예요.</span></div>
+  <p class="lead"><span class="only-dog">반려생활 냄새를 <b>향으로만 가리지 않고 줄이도록</b> 만든 오브제형 고체 탈취제예요. 외장 오브제는 꺼내두고, 안쪽 리필만 갈아 끼워요.</span><span class="only-cat">고양이 곁에 두도록 <b>향료를 넣지 않은 무향</b>으로 권해드리는 오브제형 고체 탈취제예요. 향을 더하지 않고, 탈취 성분만으로 냄새를 줄이는 데 집중했어요.</span></p>
+  <div class="pcards">
+    <div class="pc"><i class="n">01</i><div><b>5대 악취 탈취 시험</b><span>반려생활 대표 악취 물질 5가지로 탈취율을 시험했어요.</span>
+      <table class="odor">
+        <tr><td>암모니아<small><span class="only-dog">배변패드의 찌린 소변 냄새</span><span class="only-cat">모래 화장실의 찌린 소변 냄새</span></small></td><td>99%</td></tr>
+        <tr><td>트리메틸아민<small><span class="only-dog">생선 원료 사료·간식의 비릿한 냄새</span><span class="only-cat">생선 원료 사료·습식캔의 비릿한 냄새</span></small></td><td>97%</td></tr>
+        <tr><td>아세트산<small>남은 사료·음식물이 상하며 나는 시큼한 냄새</small></td><td>99% 초과</td></tr>
+        <tr><td>포름알데히드<small><span class="only-dog">새로 들인 하우스·가구의 새집 냄새</span><span class="only-cat">새로 들인 캣타워·숨숨집의 새집 냄새</span></small></td><td>99.8%</td></tr>
+        <tr><td>메틸메르캅탄<small>배변 냄새, 입 냄새</small></td><td>84.7%</td></tr>
+      </table>
+      <p class="fine">개별 물질 시험 결과예요. 실제 집 냄새는 여러 물질이 섞여 있어서, 공간 냄새가 같은 비율로 줄어든다는 뜻은 아니에요.</p></div></div>
+    <div class="pc"><i class="n">02</i><div><b>향으로 덮지 않는 탈취 원리</b><span><span class="only-dog">흡착 → 분해·중화 → 무취화로 냄새 물질 자체를 줄이고, 런드리 데이는 그 위에 은은한 향을 더해요.</span><span class="only-cat">흡착 → 분해·중화 → 무취화. 무향은 향을 더하지 않고 냄새를 줄이는 데에만 집중해요.</span></span></div></div>
+    <div class="pc"><i class="n">03</i><div><b>식물·발효 유래 6가지 성분</b><span>8대 중금속 불검출 · CMIT/MIT 불검출 시험을 거쳤고, 인공색소는 넣지 않았어요.</span></div></div>
+    <div class="pc"><i class="n">04</i><div><b><span class="only-dog">반려생활을 기준으로 만든 구멍 뚜껑</span><span class="only-cat">고양이를 고려한 구멍 뚜껑</span></b><span>내용물이 그대로 드러나지 않도록 구멍 뚜껑으로 한 번 더 감쌌어요. <span class="only-dog">호기심 많은 코와 앞발</span><span class="only-cat">킁킁대고 앞발로 건드려보는 고양이</span>가 내용물에 직접 닿을 가능성을 줄이려고 금형부터 직접 만들었어요.</span></div></div>
+    <div class="pc"><i class="n">05</i><div><b>오브제는 그대로, 리필만 새롭게</b><span>세라믹 무드의 외장 오브제(Cream Ivory / Dark Brown)는 계속 쓰고, 다 쓴 리필만 갈아 끼워요.</span></div></div>
   </div>
-  <div class="scent">
-    <div class="en serif">Laundry Day</div>
-    <p>갓 세탁한 패브릭과 비누처럼 깨끗하고 산뜻한 클린 무드의 향</p>
-    <dl class="notes">
-      <dt>TOP</dt><dd>그린 · 피치 · 파인애플 · 애플</dd>
-      <dt>MIDDLE</dt><dd>오키드 · 릴리 · 시클라멘 · 가드니아 · 로즈</dd>
-      <dt>BASE</dt><dd>머스크 · 샌달우드</dd>
-    </dl>
-    <div class="kw"><span>Laundry</span><span>Linen</span><span>Clean</span><span>Soft</span><span>Fresh</span></div>
+  <div class="spec"><div><b>220mL</b><span>리필 용량</span></div><div><b>4~6평</b><span>1개 기준</span></div><div><b>1~2개월</b><span>사용 환경에 따라</span></div><div><b>2 colors</b><span>Ivory · Brown</span></div></div>
+
+  <h3>향은 이렇게 달라요</h3>
+  <div class="scents">
+    <div class="sc only-dog"><img src="air-object/ref/p_laundry.jpg" alt="런드리 데이 리필" loading="lazy"><div><b>Laundry Day</b><span>갓 세탁한 패브릭처럼 깨끗하고 산뜻한 향. 은은한 향을 더하고 싶은 공간에.</span></div></div>
+    <div class="sc only-dog"><img src="air-object/ref/p_unscented.jpg" alt="무향 리필" loading="lazy"><div><b>Unscented · 무향</b><span>향료를 넣지 않은 타입. 향 없이 탈취에만 집중하고 싶은 공간에.</span></div></div>
+    <div class="sc pick only-cat"><img src="air-object/ref/p_unscented.jpg" alt="무향 리필" loading="lazy"><div><i class="tagp">고양이 곁엔 이것</i><b>Unscented · 무향</b><span>고양이는 사람보다 후각이 훨씬 예민해요. 그래서 고양이가 머무는 공간엔 향료를 넣지 않은 무향을 권해요.</span></div></div>
+    <div class="sc only-cat"><img src="air-object/ref/p_laundry.jpg" alt="런드리 데이 리필" loading="lazy"><div><b>Laundry Day</b><span>신발장·드레스룸처럼 고양이가 들어가지 않는 공간이라면 이 향도 선택할 수 있어요.</span></div></div>
   </div>
+  <p class="fine">무향은 ‘향료 무첨가’라는 뜻이에요. 원료 자체의 냄새는 날 수 있어서, 콘텐츠에서 “아무 냄새도 안 나요”라고 쓰진 말아주세요.</p>
 </section>
 
+<section id="place">
+  <div class="eyebrow">02 · PLACE</div>
+  <h2>어디에 두고 찍나요</h2>
+  <p class="lead"><span class="only-dog">냄새가 신경 쓰이는 자리 가까이, <b>아이가 직접 닿거나 넘어뜨리지 않는 안정적인 곳</b>에 두면 돼요.</span><span class="only-cat">고양이는 높은 곳까지 오르니까, 오브제는 <b>바닥처럼 낮고 안정된 곳</b>에 두는 게 기본이에요. 떨어질 걱정이 덜해요.</span></p>
+  <div class="place only-dog">
+    <div class="pl"><b>배변패드 주변</b><span>배변 공간 가까이, 아이 동선에서 벗어난 안정적인 곳에</span></div>
+    <div class="pl"><b>방석·하우스 주변</b><span>아이가 쉬는 자리 가까운 선반이나 수납장 위에</span></div>
+    <div class="pl"><b>거실 소파·러그 곁</b><span>함께 머무는 거실의 사이드테이블이나 선반 위에</span></div>
+    <div class="pl"><b>현관·신발장</b><span>외출 후 처음 마주하는 현관 콘솔이나 신발장 위에</span></div>
+  </div>
+  <div class="place only-cat">
+    <div class="pl"><b>고양이 화장실 근처<em>오브제</em></b><span>모래 화장실에서 한 걸음 떨어진, 평평하고 흔들리지 않는 바닥에</span></div>
+    <div class="pl"><b>캣타워·숨숨집 주변<em>오브제</em></b><span>아이가 쉬는 자리 가까운 바닥 쪽에</span></div>
+    <div class="pl"><b>거실 소파·러그 곁<em>오브제</em></b><span>함께 머무는 거실의 낮고 안정된 자리에</span></div>
+    <div class="pl"><b>신발장·수납장<em>리필 단독</em></b><span>문이 닫히는 신발장·수납장 안에만. 아이가 오가는 곳엔 꼭 뚜껑 있는 오브제와 함께 두세요.</span></div>
+  </div>
+  <div class="tipline"><span class="only-dog">다견 가정이나 넓은 집이라면 배변 공간과 거실에 하나씩 두는 모습도 좋아요.</span><span class="only-cat">다묘 가정이라면 화장실 근처와 거실에 하나씩 두는 모습도 좋아요. 높은 선반·캣타워 위에는 올려두지 말아주세요.</span></div>
+</section>
 
 <section id="story">
-  <div class="eyebrow">02 · WRITING</div>
+  <div class="eyebrow">03 · WRITING</div>
   <h2>원고는 이렇게</h2>
   <p class="lead">정해진 문장은 없어요. 아래 흐름을 참고해 본인 경험으로 편하게 써주세요.</p>
   <ol class="musts">
-    <li><b>우리 집 냄새 고민 사연</b><span>배변 공간, 고양이 화장실, 거실 생활 냄새, 방향제가 부담스러웠던 경험 등 <b>짧은 실제 사연</b>으로 시작해주세요.</span></li>
-    <li><b>신제품 소개</b><span>릴리브에서 반려생활 공간을 위한 <b>에어 오브제</b>가 새로 나왔다는 내용</span></li>
-    <li><b>설치 · 사용 과정</b><span>언박싱 → 리필 넣기 → 자리에 두기 순서로 사진과 함께</span></li>
-    <li><b>써본 솔직한 느낌</b><span>아래 장점 중 와닿은 것을 골라 자연스럽게</span></li>
+    <li><b>우리 집 냄새 고민 사연</b><span><span class="only-dog">배변 후에도 남는 냄새, 귀가했을 때 집 냄새, 환기하기 어려운 날 같은 <b>짧은 실제 사연</b>으로 시작해주세요.</span><span class="only-cat">모래를 갈아도 올라오는 화장실 냄새, 향 때문에 방향제를 못 쓰던 고민 같은 <b>짧은 실제 사연</b>으로 시작해주세요.</span></span></li>
+    <li><b>신제품 소개</b><span>릴리브에서 반려생활 공간을 위한 <b>에어 오브제</b><span class="only-dog"></span><span class="only-cat"> 무향</span>이 새로 나왔다는 내용</span></li>
+    <li><b>설치 · 사용 과정</b><span>언박싱 → 리필 넣기 → <span class="only-dog">자리에 두기</span><span class="only-cat">낮고 안정된 자리에 두기</span> 순서로 사진과 함께</span></li>
+    <li><b>써본 솔직한 느낌</b><span>아래 포인트 중 와닿은 것을 골라 자연스럽게</span></li>
   </ol>
   <h3>골라서 언급해주세요</h3>
   <div class="pts">
-    <div class="pt"><i>01</i><div><b>향으로만 가리지 않는 탈취</b><span>냄새를 먼저 관리하고, 향은 은은하게 남는 느낌</span></div></div>
-    <div class="pt"><i>02</i><div><b>꺼내두고 싶은 오브제 디자인</b><span>세라믹 무드의 무광 질감, 거실 선반·협탁에 둬도 자연스러움</span></div></div>
-    <div class="pt"><i>03</i><div><b>Laundry Day 향</b><span>갓 세탁한 패브릭 같은 깨끗하고 산뜻한 향</span></div></div>
-    <div class="pt"><i>04</i><div><b>반려생활을 고려한 구조</b><span>내용물이 그대로 드러나지 않도록 설계해 마음이 놓임</span></div></div>
-    <div class="pt"><i>05</i><div><b>리필 구조</b><span>오브제는 계속 쓰고 안쪽 리필만 갈아 끼우면 됨</span></div></div>
-    <div class="pt"><i>06</i><div><b>배변 공간 · 거실 어디든</b><span>두 군데 이상 두면 공간별로 관리하기 좋음</span></div></div>
+    <div class="pt"><i>01</i><div><b>향으로 덮지 않는 탈취</b><span><span class="only-dog">냄새 물질 자체를 줄이는 방식, 런드리 데이는 은은한 향까지</span><span class="only-cat">향을 더하지 않고 냄새만 덜어내는 무향</span></span></div></div>
+    <div class="pt"><i>02</i><div><b>5대 악취 탈취 시험</b><span>암모니아 99%, 포름알데히드 99.8% 등 (‘시험 결과’라고 함께 적어주세요)</span></div></div>
+    <div class="pt"><i>03</i><div><b>식물·발효 유래 6가지 성분</b><span>8대 중금속·CMIT/MIT 불검출 시험, 인공색소 무첨가</span></div></div>
+    <div class="pt"><i>04</i><div><b>구멍 뚜껑</b><span><span class="only-dog">코와 앞발이 내용물에 닿을 일을 줄인 구조</span><span class="only-cat">킁킁대고 건드려보는 고양이를 고려한 구조</span></span></div></div>
+    <div class="pt"><i>05</i><div><b>꺼내두고 싶은 오브제</b><span>세라믹 무드의 무광 질감, Cream Ivory / Dark Brown</span></div></div>
+    <div class="pt"><i>06</i><div><b>리필 구조와 사양</b><span>오브제는 그대로 리필만 교체, 220mL · 1개 약 4~6평 · 약 1~2개월</span></div></div>
   </div>
 </section>
 
 <section id="photo">
-  <div class="eyebrow">03 · PHOTO & VIDEO</div>
+  <div class="eyebrow">04 · PHOTO & VIDEO</div>
   <h2>사진·영상 가이드</h2>
   <p class="lead">사진 18장 이상, 영상 1개 이상. 아래 컷을 골고루 담아주세요.</p>
   <div class="cuts">
     <article class="cut"><div class="cut-head"><span class="no">01</span><span class="must">필수</span></div>
-<h4>언박싱 · 첫인상</h4><div class="why"><small>이 장면의 목적</small>포장부터 고급스러운 제품이라는 인상</div><p class="how">상자를 열고 오브제를 꺼내는 과정을 2~3장으로.</p></article>
+<h4>언박싱 · 첫인상</h4><div class="why"><small>이 장면의 목적</small>포장부터 고급스러운 제품이라는 인상</div><p class="how"><span class="only-dog">상자를 열고 오브제를 꺼내는 과정을 2~3장으로.</span><span class="only-cat">상자를 열고 오브제와 무향 리필(‘Unscented’ 라벨)을 꺼내는 과정을 2~3장으로.</span></p></article>
     <article class="cut"><div class="cut-head"><span class="no">02</span><span class="must">필수</span></div>
-<h4>리필 넣는 과정</h4><div class="why"><small>이 장면의 목적</small>리필만 교체하는 구조를 이해시키기</div><p class="how">오브제를 열고 리필을 넣는 손 컷을 순서대로.</p></article>
+<h4>리필 넣는 과정</h4><div class="why"><small>이 장면의 목적</small>리필만 교체하는 구조를 이해시키기</div><p class="how">뚜껑 열기 → 밀봉 캡 떼고 넣기 → 닫기를 손 컷으로 순서대로.</p></article>
     <article class="cut"><div class="cut-head"><span class="no">03</span><span class="must">필수</span></div>
-<h4>냄새가 신경 쓰이던 자리에 둔 모습</h4><div class="why"><small>이 장면의 목적</small>어떤 고민을 해결하는 제품인지</div><p class="how">배변패드 근처, 고양이 화장실 옆, 소파·러그 주변 등. 정돈된 상태로 담아주세요.</p></article>
+<h4>구멍 뚜껑 클로즈업</h4><div class="why"><small>이 장면의 목적</small>내용물이 드러나지 않는 구조</div><p class="how">닫은 뒤 위에서 내려다본 구멍 뚜껑과 로고 각인을 가까이.</p></article>
     <article class="cut"><div class="cut-head"><span class="no">04</span><span class="must">필수</span></div>
-<h4>아이와 함께</h4><div class="why"><small>이 장면의 목적</small>반려생활 공간을 위한 제품이라는 것</div><p class="how">오브제 근처에서 쉬거나 지나가는 아이. 아이와 제품이 한 컷에 나오게.</p></article>
+<h4>냄새가 신경 쓰이던 자리에 둔 모습</h4><div class="why"><small>이 장면의 목적</small>어떤 고민을 해결하는 제품인지</div><p class="how"><span class="only-dog">배변패드 근처, 소파·러그 주변의 안정적인 자리. 정돈된 상태로 담아주세요.</span><span class="only-cat">모래 화장실에서 한 걸음 떨어진 바닥, 캣타워 옆 바닥. 정돈된 상태로 담아주세요.</span></p></article>
     <article class="cut"><div class="cut-head"><span class="no">05</span><span class="must">필수</span></div>
-<h4>인테리어 컷</h4><div class="why"><small>이 장면의 목적</small>꺼내두는 오브제 디자인</div><p class="how">거실 전체 또는 선반·협탁 위에 놓인 모습. 주변 소품과 함께면 좋아요.</p></article>
+<h4>아이와 함께</h4><div class="why"><small>이 장면의 목적</small>반려생활 공간을 위한 제품이라는 것</div><p class="how">오브제 근처에서 쉬거나 지나가는 아이. 아이와 제품이 한 컷에 나오게.</p><div class="tipline">아이가 뚜껑에 코를 대고 킁킁대는 장면도 좋아요. 핥거나 물지 않도록 바로 옆에서 지켜봐 주세요.</div></article>
     <article class="cut"><div class="cut-head"><span class="no">06</span><span class="must">필수</span></div>
-<h4>디테일 클로즈업</h4><div class="why"><small>이 장면의 목적</small>질감과 완성도</div><p class="how">표면, 상단 구조, 실루엣을 필터 없이 가까이.</p></article>
+<h4>인테리어 컷</h4><div class="why"><small>이 장면의 목적</small>꺼내두는 오브제 디자인</div><p class="how"><span class="only-dog">거실 전체 또는 선반·협탁 위에 놓인 모습. 주변 소품과 함께면 좋아요.</span><span class="only-cat">거실 전체가 보이게, 오브제는 바닥이나 낮은 자리에 둔 모습으로.</span></p></article>
     <article class="cut"><div class="cut-head"><span class="no">V</span><span class="must">필수</span></div>
-<h4>영상 1개 이상</h4><div class="why"><small>이 장면의 목적</small>포스팅 체류 시간과 신뢰도</div><p class="how">리필 넣고 자리에 두는 장면이나, 아이가 오브제 근처에서 노는 장면을 10초 이상. 영상 제목에도 키워드를 넣어주세요.</p></article>
+<h4>영상 1개 이상</h4><div class="why"><small>이 장면의 목적</small>포스팅 체류 시간과 신뢰도</div><p class="how">리필 넣고 자리에 두는 장면이나, 아이가 오브제 근처에서 쉬는 장면을 10초 이상. 영상 제목에도 키워드를 넣어주세요.</p></article>
   </div>
   <a class="see-ref" href="#refs">레퍼런스 사진 보기 →</a>
 </section>
 
 
 <section id="refs">
-  <div class="eyebrow">04 · REFERENCE</div>
+  <div class="eyebrow">05 · REFERENCE</div>
   <h2>레퍼런스 사진</h2>
   <p class="lead">사진 18장을 찍을 때 구도와 분위기를 참고해주세요.</p>
-  <div class="ref-intro">‘실제 제품’ 표시가 없는 사진은 <b>구도·분위기 참고용</b>이에요. 그대로 따라 하지 않아도 되고, 우리 집에서 비슷한 느낌만 내주시면 충분해요. 사진을 누르면 크게 볼 수 있어요.</div>
-  <div class="ref-tabs"><button type="button" class="on" data-g="all">전체</button><button type="button" data-g="own">에어 오브제가 놓인 모습</button><button type="button" data-g="spot">냄새가 신경 쓰이던 자리</button><button type="button" data-g="pet">아이와 함께하는 공간</button><button type="button" data-g="mood">공간 무드 · 넓은 뷰</button></div>
-  <div class="ref-group" data-g="own"><h4>에어 오브제가 놓인 모습<span class="own">실제 제품</span></h4><p>실제 에어 오브제 연출 이미지예요. 선반·협탁·테이블 위 높이와 주변 여백을 참고해주세요.</p><div class="ref-grid"><figure class="wide"><img src="air-object/ref/a1.jpg" alt="수납장 위 · 제품 디테일이 보이는 거리" loading="lazy" decoding="async"><figcaption>수납장 위 · 제품 디테일이 보이는 거리</figcaption></figure><figure><img src="air-object/ref/a2.jpg" alt="침실 협탁 · 책과 함께" loading="lazy" decoding="async"><figcaption>침실 협탁 · 책과 함께</figcaption></figure><figure><img src="air-object/ref/a3.jpg" alt="다이닝 테이블 · 오브제 소품과 함께" loading="lazy" decoding="async"><figcaption>다이닝 테이블 · 오브제 소품과 함께</figcaption></figure></div></div><div class="ref-group" data-g="spot"><h4>냄새가 신경 쓰이던 자리</h4><p>배변 공간·고양이 화장실은 이렇게 정돈된 모습으로 담아주세요. 오브제를 이 근처에 두면 돼요.</p><div class="ref-grid"><figure><img src="air-object/ref/b1.jpg" alt="강아지 배변 공간" loading="lazy" decoding="async"><figcaption>강아지 배변 공간</figcaption></figure><figure><img src="air-object/ref/b2.jpg" alt="고양이 화장실 코너" loading="lazy" decoding="async"><figcaption>고양이 화장실 코너</figcaption></figure><figure><img src="air-object/ref/b3.jpg" alt="거실 속 화장실 수납장" loading="lazy" decoding="async"><figcaption>거실 속 화장실 수납장</figcaption></figure><figure><img src="air-object/ref/b4.jpg" alt="화장실 하우스 · 선반 위 소품" loading="lazy" decoding="async"><figcaption>화장실 하우스 · 선반 위 소품</figcaption></figure></div></div><div class="ref-group" data-g="pet"><h4>아이와 함께하는 공간</h4><p>아이가 편하게 머무는 장면의 구도·톤 참고용이에요. 오브제가 화면 한쪽에 함께 보이면 좋아요.</p><div class="ref-grid"><figure><img src="air-object/ref/c1.jpg" alt="거실 러그 위 아이 · 넓은 뷰" loading="lazy" decoding="async"><figcaption>거실 러그 위 아이 · 넓은 뷰</figcaption></figure><figure><img src="air-object/ref/c2.jpg" alt="펫 소파에서 쉬는 아이" loading="lazy" decoding="async"><figcaption>펫 소파에서 쉬는 아이</figcaption></figure><figure><img src="air-object/ref/c3.jpg" alt="창가 쿠션 · 따뜻한 자연광" loading="lazy" decoding="async"><figcaption>창가 쿠션 · 따뜻한 자연광</figcaption></figure><figure><img src="air-object/ref/c4.jpg" alt="선반 아래 아이 자리" loading="lazy" decoding="async"><figcaption>선반 아래 아이 자리</figcaption></figure><figure><img src="air-object/ref/c5.jpg" alt="보호자와 함께 소파 위" loading="lazy" decoding="async"><figcaption>보호자와 함께 소파 위</figcaption></figure><figure><img src="air-object/ref/c6.jpg" alt="일상 속 보호자와 아이" loading="lazy" decoding="async"><figcaption>일상 속 보호자와 아이</figcaption></figure><figure><img src="air-object/ref/c7.jpg" alt="러그 위에서 함께 쉬기" loading="lazy" decoding="async"><figcaption>러그 위에서 함께 쉬기</figcaption></figure><figure><img src="air-object/ref/c8.jpg" alt="강아지·고양이 함께 있는 거실" loading="lazy" decoding="async"><figcaption>강아지·고양이 함께 있는 거실</figcaption></figure></div></div><div class="ref-group" data-g="mood"><h4>공간 무드 · 넓은 뷰</h4><p>뉴트럴 톤, 정돈된 여백, 낮 시간 자연광. 이런 분위기면 에어 오브제가 가장 예쁘게 보여요.</p><div class="ref-grid"><figure><img src="air-object/ref/d1.jpg" alt="웜 뉴트럴 거실" loading="lazy" decoding="async"><figcaption>웜 뉴트럴 거실</figcaption></figure><figure><img src="air-object/ref/d2.jpg" alt="현관 콘솔 · 간접조명" loading="lazy" decoding="async"><figcaption>현관 콘솔 · 간접조명</figcaption></figure><figure><img src="air-object/ref/d3.jpg" alt="여백 있는 벽면 · 낮은 벤치" loading="lazy" decoding="async"><figcaption>여백 있는 벽면 · 낮은 벤치</figcaption></figure><figure><img src="air-object/ref/d4.jpg" alt="원목 수납 · 따뜻한 톤" loading="lazy" decoding="async"><figcaption>원목 수납 · 따뜻한 톤</figcaption></figure><figure><img src="air-object/ref/a4.jpg" alt="사이드 테이블 · 창가 자연광" loading="lazy" decoding="async"><figcaption>사이드 테이블 · 창가 자연광</figcaption></figure></div></div>
+  <div class="ref-intro">‘실제 제품’ 묶음 말고는 <b>구도·분위기 참고용</b>이에요. 그대로 따라 하지 않아도 되고, 우리 집에서 비슷한 느낌만 내주시면 충분해요. 사진을 누르면 크게 볼 수 있어요.</div>
+  <div class="ref-tabs"><button type="button" class="on" data-g="all">전체</button><button type="button" data-g="own">실제 제품</button><button type="button" data-g="spot">냄새가 신경 쓰이던 자리</button><button type="button" data-g="pet">아이와 함께하는 공간</button><button type="button" data-g="mood">공간 무드 · 넓은 뷰</button></div>
+  <div class="ref-group" data-g="own"><h4>실제 제품<span class="own">실제 제품</span></h4><p>제품소개서의 실제 제품 이미지예요. 색감·뚜껑·리필 모양을 참고해주세요.</p><div class="ref-grid"><figure class="wide"><img src="air-object/ref/p_ivory.jpg" alt="Cream Ivory · 오브제와 패키지" loading="lazy" decoding="async" style="object-fit:contain;background:#fbfaf7"><figcaption>Cream Ivory · 오브제와 패키지</figcaption></figure><figure><img src="air-object/ref/p_brown.jpg" alt="Dark Brown · 오브제와 패키지" loading="lazy" decoding="async" style="object-fit:contain;background:#fbfaf7"><figcaption>Dark Brown · 오브제와 패키지</figcaption></figure><figure><img src="air-object/ref/p_lid.jpg" alt="구멍 뚜껑 · 위에서 본 모습" loading="lazy" decoding="async" style="object-fit:contain;background:#fbfaf7"><figcaption>구멍 뚜껑 · 위에서 본 모습</figcaption></figure><figure><img src="air-object/ref/p_refill.jpg" alt="리필 넣는 장면 · 손 컷 참고" loading="lazy" decoding="async" style="object-fit:contain;background:#fbfaf7"><figcaption>리필 넣는 장면 · 손 컷 참고</figcaption></figure><figure><img src="air-object/ref/p_unscented.jpg" alt="무향 리필" loading="lazy" decoding="async" style="object-fit:contain;background:#fbfaf7"><figcaption>무향 리필</figcaption></figure><figure><img src="air-object/ref/p_laundry.jpg" alt="런드리 데이 리필" loading="lazy" decoding="async" style="object-fit:contain;background:#fbfaf7"><figcaption>런드리 데이 리필</figcaption></figure><figure><img src="air-object/ref/a1.jpg" alt="수납장 위에 놓인 모습" loading="lazy" decoding="async"><figcaption>수납장 위에 놓인 모습</figcaption></figure></div></div><div class="ref-group" data-g="spot"><h4>냄새가 신경 쓰이던 자리</h4><p>배변 공간·고양이 화장실은 이렇게 정돈된 모습으로 담아주세요.</p><div class="ref-grid"><figure><img src="air-object/ref/b1.jpg" alt="강아지 배변 공간" loading="lazy" decoding="async"><figcaption>강아지 배변 공간</figcaption></figure><figure><img src="air-object/ref/b2.jpg" alt="고양이 화장실 코너" loading="lazy" decoding="async"><figcaption>고양이 화장실 코너</figcaption></figure><figure><img src="air-object/ref/b3.jpg" alt="거실 속 화장실 수납장" loading="lazy" decoding="async"><figcaption>거실 속 화장실 수납장</figcaption></figure><figure><img src="air-object/ref/b4.jpg" alt="화장실 하우스 · 선반 위 소품" loading="lazy" decoding="async"><figcaption>화장실 하우스 · 선반 위 소품</figcaption></figure></div></div><div class="ref-group" data-g="pet"><h4>아이와 함께하는 공간</h4><p>아이가 편하게 머무는 장면의 구도·톤 참고용이에요. 오브제가 화면 한쪽에 함께 보이면 좋아요.</p><div class="ref-grid"><figure><img src="air-object/ref/c1.jpg" alt="거실 러그 위 아이 · 넓은 뷰" loading="lazy" decoding="async"><figcaption>거실 러그 위 아이 · 넓은 뷰</figcaption></figure><figure><img src="air-object/ref/c2.jpg" alt="펫 소파에서 쉬는 아이" loading="lazy" decoding="async"><figcaption>펫 소파에서 쉬는 아이</figcaption></figure><figure><img src="air-object/ref/c3.jpg" alt="창가 쿠션 · 따뜻한 자연광" loading="lazy" decoding="async"><figcaption>창가 쿠션 · 따뜻한 자연광</figcaption></figure><figure><img src="air-object/ref/c4.jpg" alt="선반 아래 아이 자리" loading="lazy" decoding="async"><figcaption>선반 아래 아이 자리</figcaption></figure><figure><img src="air-object/ref/c5.jpg" alt="보호자와 함께 소파 위" loading="lazy" decoding="async"><figcaption>보호자와 함께 소파 위</figcaption></figure><figure><img src="air-object/ref/c6.jpg" alt="일상 속 보호자와 아이" loading="lazy" decoding="async"><figcaption>일상 속 보호자와 아이</figcaption></figure><figure><img src="air-object/ref/c7.jpg" alt="러그 위에서 함께 쉬기" loading="lazy" decoding="async"><figcaption>러그 위에서 함께 쉬기</figcaption></figure><figure><img src="air-object/ref/c8.jpg" alt="강아지·고양이 함께 있는 거실" loading="lazy" decoding="async"><figcaption>강아지·고양이 함께 있는 거실</figcaption></figure></div></div><div class="ref-group" data-g="mood"><h4>공간 무드 · 넓은 뷰</h4><p>뉴트럴 톤, 정돈된 여백, 낮 시간 자연광. 이런 분위기면 에어 오브제가 가장 예쁘게 보여요.</p><div class="ref-grid"><figure><img src="air-object/ref/d1.jpg" alt="웜 뉴트럴 거실" loading="lazy" decoding="async"><figcaption>웜 뉴트럴 거실</figcaption></figure><figure><img src="air-object/ref/d2.jpg" alt="현관 콘솔 · 간접조명" loading="lazy" decoding="async"><figcaption>현관 콘솔 · 간접조명</figcaption></figure><figure><img src="air-object/ref/d3.jpg" alt="여백 있는 벽면 · 낮은 벤치" loading="lazy" decoding="async"><figcaption>여백 있는 벽면 · 낮은 벤치</figcaption></figure><figure><img src="air-object/ref/d4.jpg" alt="원목 수납 · 따뜻한 톤" loading="lazy" decoding="async"><figcaption>원목 수납 · 따뜻한 톤</figcaption></figure><figure><img src="air-object/ref/a4.jpg" alt="사이드 테이블 · 창가 자연광" loading="lazy" decoding="async"><figcaption>사이드 테이블 · 창가 자연광</figcaption></figure></div></div>
 </section>
 
 
 <section id="keyword">
-  <div class="eyebrow">05 · KEYWORD</div>
+  <div class="eyebrow">06 · KEYWORD</div>
   <h2>키워드 가이드</h2>
-  <p class="lead">키우는 아이에 맞는 세트를 골라 쓰시면 돼요. <b>메일로 다른 키워드를 받으셨다면 메일 키워드가 우선</b>이에요.</p>
-  <div class="ref-tabs kw-tabs" style="margin-top:16px">
-    <button type="button" class="on" data-kw="dog">강아지 보호자</button><button type="button" data-kw="cat">고양이 보호자</button>
-  </div>
-  <div class="kwset" data-kw="dog">
-    <div class="box dark"><div class="box-head"><span>메인 키워드 · 제목에 모두</span><button type="button" class="btn-copy" data-copy="kwm-dog" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kwm-dog">고체탈취제, 강아지탈취제, 고체탈취제추천</p></div>
-    <div class="box"><div class="box-head"><span>서브 키워드 · 본문·해시태그에 자연스럽게</span><button type="button" class="btn-copy" data-copy="kws-dog" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kws-dog">릴리브에어오브제, 강아지고체탈취제, 강아지배변탈취제, 실내탈취제</p></div>
-  </div>
-  <div class="kwset" data-kw="cat" hidden>
-    <div class="box dark"><div class="box-head"><span>메인 키워드 · 제목에 모두</span><button type="button" class="btn-copy" data-copy="kwm-cat" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kwm-cat">고체탈취제, 고양이탈취제, 고체탈취제추천</p></div>
-    <div class="box"><div class="box-head"><span>서브 키워드 · 본문·해시태그에 자연스럽게</span><button type="button" class="btn-copy" data-copy="kws-cat" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kws-cat">릴리브에어오브제, 고양이고체탈취제, 고양이화장실탈취제, 실내탈취제</p></div>
-  </div>
+  <p class="lead">위에서 고른 <span class="only-dog">강아지</span><span class="only-cat">고양이</span> 세트예요. <b>메일로 다른 키워드를 받으셨다면 메일 키워드가 우선</b>이에요.</p>
+  <div class="only-dog"><div class="box dark"><div class="box-head"><span>메인 키워드 · 제목에 모두</span><button type="button" class="btn-copy" data-copy="kwm-dog" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kwm-dog">고체탈취제, 강아지탈취제, 고체탈취제추천</p></div><div class="box"><div class="box-head"><span>서브 키워드 · 본문·해시태그에 자연스럽게</span><button type="button" class="btn-copy" data-copy="kws-dog" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kws-dog">릴리브에어오브제, 강아지고체탈취제, 강아지배변탈취제, 실내탈취제</p></div></div><div class="only-cat"><div class="box dark"><div class="box-head"><span>메인 키워드 · 제목에 모두</span><button type="button" class="btn-copy" data-copy="kwm-cat" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kwm-cat">고체탈취제, 고양이탈취제, 고체탈취제추천</p></div><div class="box"><div class="box-head"><span>서브 키워드 · 본문·해시태그에 자연스럽게</span><button type="button" class="btn-copy" data-copy="kws-cat" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kws-cat">릴리브에어오브제, 고양이고체탈취제, 고양이화장실탈취제, 실내탈취제</p></div></div>
   <div class="box"><div class="box-head"><span>제목 예시 · 흐름만 참고</span></div>
-    <p class="example" style="margin-top:6px">릴리브 에어 오브제 후기, 강아지탈취제 찾다가 정착한 고체탈취제추천</p></div>
+    <p class="example" style="margin-top:6px"><span class="only-dog">릴리브 에어 오브제 후기, 강아지탈취제 찾다가 정착한 고체탈취제추천</span><span class="only-cat">릴리브 에어 오브제 무향 후기, 고양이탈취제 고민 끝낸 고체탈취제추천</span></p></div>
   <ol class="musts">
     <li><b>제목</b><span>브랜드명 <b>‘릴리브’</b> + 메인 키워드 3개 모두</span></li>
     <li><b>본문</b><span>메인 키워드 중 2개를 <b>각 5번 이상</b></span></li>
     <li><b>해시태그 · 동영상 제목</b><span>메인·서브 키워드를 자연스럽게</span></li>
     <li><b>2개월 사용 자제</b><span>메인 키워드는 앞으로 2개월간 타사 탈취제·방향제 포스팅에 쓰지 말아주세요.</span></li>
   </ol>
-  <div class="tipline" style="margin-top:12px">‘냄새 제거’, ‘무향’, ‘방향제’ 같은 단어는 키워드로도 쓰지 말아주세요. 제품 표현 원칙과 맞지 않아요.</div>
+  <div class="tipline" style="margin-top:12px">‘냄새 제거’, ‘방향제’ 같은 단어는 키워드로도 쓰지 말아주세요. 제품 표현 원칙과 맞지 않아요.</div>
 </section>
 
 <section id="link">
-  <div class="eyebrow">06 · LINK</div>
+  <div class="eyebrow">07 · LINK</div>
   <h2>포스팅 하단에 링크 넣기</h2>
   <p class="lead">메일로 받은 링크를 <b>포스팅 맨 아래</b>에 꼭 넣어주세요.</p>
   <ol class="musts">
@@ -372,8 +425,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
     <li><b>카드 위 주소 글자만 지우기</b><span>카드는 그대로 두고, 남아 있는 주소 텍스트만 삭제해주세요.</span></li>
   </ol>
   <h3>공정위 표기 (본문 맨 위 또는 맨 아래)</h3>
-  <div class="box dark"><div class="box-head"><span>필수 문구</span><button type="button" class="btn-copy" data-copy="ftc" data-msg="문구를 복사했어요">복사</button></div>
-    <p class="tx" id="ftc">본 포스팅은 릴리브로부터 제품을 무상으로 제공받아 작성되었습니다.</p></div>
+  <div class="box dark"><div class="box-head"><span>필수 문구</span><button type="button" class="btn-copy" data-copy="ftc" data-msg="문구를 복사했어요">복사</button></div><p class="tx" id="ftc">본 포스팅은 릴리브로부터 제품을 무상으로 제공받아 작성되었습니다.</p></div>
 </section>
 
 
@@ -381,14 +433,8 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
   <div class="eyebrow">EXPRESSION</div>
   <h2>표현은 이렇게 해주세요</h2>
   <p class="lead">광고로 집행될 수 있는 콘텐츠라, 아래 표현만 꼭 지켜주세요. 나머지는 본인 말투 그대로가 가장 좋아요.</p>
-  <div class="dd">
-    <div class="dd-row"><div class="ok"><b>O</b>향으로만 가리지 않는 탈취제</div><div class="no"><b>X</b>무향 탈취제, 향 없이 냄새 제거</div></div>
-    <div class="dd-row"><div class="ok"><b>O</b>냄새가 덜 신경 쓰여요 (써본 느낌)</div><div class="no"><b>X</b>냄새 완전 제거, 100% 탈취</div></div>
-    <div class="dd-row"><div class="ok"><b>O</b>반려생활을 고려한 구조라 마음이 놓여요</div><div class="no"><b>X</b>반려동물에게 절대 안전, 만져도 안전</div></div>
-    <div class="dd-row"><div class="ok"><b>O</b>세라믹 무드, 도자기 같은 질감</div><div class="no"><b>X</b>세라믹 용기, 도자기로 만든 탈취제</div></div>
-    <div class="dd-row"><div class="ok"><b>O</b>탈취 후 은은하게 남는 향</div><div class="no"><b>X</b>살균, 균 제거, 특허·인증 등 기술 단정</div></div>
-    <div class="dd-row"><div class="ok"><b>O</b>메일로 받은 키워드 그대로</div><div class="no"><b>X</b>키워드 임의 변경, 링크 주소 수정</div></div>
-  </div>
+  <div class="dd"><div class="dd-row"><div class="ok"><b>O</b>향으로만 가리지 않고 냄새를 줄여줘요</div><div class="no"><b>X</b>향으로 냄새를 싹 덮어줘요, 방향제처럼 써요</div></div><div class="dd-row"><div class="ok"><b>O</b>무향(향료 무첨가)이라 향이 부담스러운 집에 좋아요</div><div class="no"><b>X</b>무향이라 아무 냄새도 안 나요</div></div><div class="dd-row"><div class="ok"><b>O</b>5대 악취 시험에서 탈취율 최대 99.8%래요 (수치 그대로)</div><div class="no"><b>X</b>모든 냄새 99% 제거, 냄새 완전 제거, 압도적·최고 탈취력</div></div><div class="dd-row"><div class="ok"><b>O</b>유해물질 8종·CMIT/MIT 불검출 시험을 거쳤대요</div><div class="no"><b>X</b>무독성, 먹어도 괜찮아요, 반려동물에게 절대 안전</div></div><div class="dd-row"><div class="ok"><b>O</b>구멍 뚜껑이라 코·앞발이 내용물에 닿을 일이 줄어요</div><div class="no"><b>X</b>아이가 만지거나 핥아도 괜찮아요</div></div><div class="dd-row"><div class="ok"><b>O</b>세라믹 무드, 도자기 같은 질감</div><div class="no"><b>X</b>세라믹·도자기로 만든 탈취제</div></div><div class="dd-row"><div class="ok"><b>O</b>써보니 냄새가 덜 신경 쓰여요 (내 느낌)</div><div class="no"><b>X</b>살균·균 제거, 특허 몇 종 보유 같은 기술 단정</div></div><div class="dd-row"><div class="ok"><b>O</b>키워드는 받은 그대로</div><div class="no"><b>X</b>키워드 임의 변경, 링크 주소 수정</div></div></div>
+  <div class="tipline" style="margin-top:12px">특허·환불 프로그램 같은 내용은 브랜드가 상세페이지에서 따로 안내해요. 콘텐츠에서는 직접 써본 경험 위주로 담아주세요.</div>
 </section>
 
 
@@ -411,6 +457,17 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 <div class="bar"><div class="in"><a class="ghost" href="#keyword">키워드 규칙</a><a class="pri" href="https://docs.google.com/forms/d/e/1FAIpQLSd_2muJ0Ya4GB7OIKR5RZaNaburzlqZPvcuaFTz5YXqgxnjGA/viewform" target="_blank" rel="noopener">포스팅 제출하기</a></div></div>
 <div class="lb" id="lb" role="dialog" aria-label="레퍼런스 크게 보기"><button type="button" aria-label="닫기">×</button><img alt=""><p></p></div>
 <div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var q=(location.search.match(/[?&]pet=(dog|cat)/)||[])[1], saved=null;
+  try{saved=localStorage.getItem('airobj-pet')}catch(e){}
+  function setPet(p){document.body.dataset.pet=p;document.querySelectorAll('.seg button').forEach(function(b){b.classList.toggle('on',b.dataset.pet===p)});try{localStorage.setItem('airobj-pet',p)}catch(e){}}
+  setPet(q||saved||'dog');
+  document.querySelectorAll('.seg button').forEach(function(b){b.addEventListener('click',function(){setPet(b.dataset.pet)})});
+})();
+</script>
+
 
 <script>
 (function(){
