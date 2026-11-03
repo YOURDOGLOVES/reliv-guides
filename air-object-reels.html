@@ -7,7 +7,7 @@
 <meta name="description" content="릴리브 에어 오브제 인스타그램 릴스 촬영·업로드 가이드">
 <meta property="og:title" content="릴리브 에어 오브제 · 인스타 릴스 가이드">
 <meta property="og:description" content="릴리브 에어 오브제 인스타그램 릴스 촬영·업로드 가이드">
-<meta name="theme-color" content="#2a2724">
+<meta name="theme-color" content="#fffbf7">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
@@ -238,6 +238,27 @@ body[data-pet="dog"] .only-cat, body[data-pet="cat"] .only-dog{display:none !imp
 .ref-grid figure.wide{aspect-ratio:auto}
 .ref-grid figure.wide img{height:auto;aspect-ratio:1130/431}
 .ref-grid figure.wide figcaption{position:static;background:none;color:var(--sub);backdrop-filter:none;-webkit-backdrop-filter:none;padding:2px 12px 10px}
+/* hero v3 — product-photo paper, packaging wordmark, olive band */
+.hero2{background:#fffbf7;color:#23211b;position:relative;overflow:hidden}
+.hero2>.wrap{position:relative;padding-top:20px}
+.h2top{display:flex;justify-content:space-between;align-items:center}
+.h2top .logo{font-size:26px;font-style:italic;color:#544e3b;line-height:1}
+.h2top .chan{font-size:13px;font-weight:700;color:#544e3b;border:1px solid #cfc7b6;border-radius:999px;padding:5px 12px;background:#fffbf7}
+.hstage{display:grid;grid-template-columns:78px 1fr;align-items:end;gap:6px;margin-top:10px}
+.vmark{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:500;font-style:normal;font-size:88px;line-height:.86;color:#544e3b;letter-spacing:-.01em;white-space:nowrap;justify-self:start;opacity:.92}
+.himg{margin:0 -20px 0 0}
+.himg img{display:block;width:100%;height:auto}
+.htitle{margin:14px 0 0;padding-bottom:24px;font-size:28px;line-height:1.3;font-weight:800;letter-spacing:-.035em;color:#23211b}
+.htitle small{display:block;margin-top:6px;font-size:14.5px;font-weight:500;letter-spacing:-.01em;color:#6f6857}
+.hband{background:#544e3b;color:#f6f1e7;padding:4px 0 26px}
+.hband .petbar{margin-top:18px}
+.hband .petbar small{color:#d9cfb9}
+.hband .oneline{margin-top:20px;border-top:1px solid rgba(246,241,231,.18)}
+.hband .oneline small{color:#d9cfb9}
+.hband .oneline p{color:rgba(246,241,231,.78)}
+body.choosing .hband{display:none}
+@media (min-width:560px){.hstage{grid-template-columns:110px 1fr}.vmark{font-size:124px}.htitle{font-size:34px}}
+@media (max-width:360px){.hstage{grid-template-columns:62px 1fr}.vmark{font-size:70px}}
 /* gate */
 .gate{display:none;padding:28px 20px 40px}
 body.choosing .gate{display:block}
@@ -286,18 +307,20 @@ body.choosing{padding-bottom:0}
 </style>
 </head>
 <body data-pet="dog">
-<header class="hero"><div class="wrap">
-  <div class="topline"><span>RELIV</span><span class="chip">INSTAGRAM REELS</span></div>
-  <div class="hero-top">
-    <div>
-      <div class="en serif">Air Object</div>
-      <h1>인스타 릴스<span>촬영 가이드</span></h1>
+<header class="hero2">
+  <div class="wrap">
+    <div class="h2top"><span class="logo serif">reliv,</span><span class="chan">인스타 릴스용</span></div>
+    <div class="hstage">
+      <div class="vmark serif" aria-hidden="true">Air Objet</div>
+      <figure class="himg"><img src="air-object/ref/hx_reels.jpg" alt="릴리브 에어 오브제 실제 제품" fetchpriority="high"></figure>
     </div>
-    <figure class="hero-photo"><img src="air-object/ref/hb.jpg" alt="릴리브 에어 오브제 실제 제품" fetchpriority="high"></figure>
+    <h1 class="htitle">인스타 릴스 촬영 가이드<small>릴리브 에어 오브제 신제품 콘텐츠 협업 안내</small></h1>
   </div>
-  <div class="petbar"><small>우리 아이는</small><div class="seg" role="group" aria-label="반려동물 선택"><button type="button" data-pet="dog">강아지</button><button type="button" data-pet="cat">고양이</button></div></div>
-  <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong><span class="only-dog">“치워도 남던 냄새, 이제 향으로만 가리지 않아요”</span><span class="only-cat">“모래 갈아도 올라오던 냄새, 향 없이 덜어내요”</span></strong><p><span class="only-dog">냄새가 신경 쓰이던 순간 → 오브제 등장 → 달라진 일상. 이 흐름 하나만 기억해주세요.</span><span class="only-cat">향 때문에 망설이던 순간 → 무향 오브제 등장 → 편안해진 일상. 이 흐름 하나만 기억해주세요.</span></p></div>
-</div></header>
+  <div class="hband"><div class="wrap">
+    <div class="petbar"><small>우리 아이는</small><div class="seg" role="group" aria-label="반려동물 선택"><button type="button" data-pet="dog">강아지</button><button type="button" data-pet="cat">고양이</button></div></div>
+    <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong><span class="only-dog">“치워도 남던 냄새, 이제 향으로만 가리지 않아요”</span><span class="only-cat">“모래 갈아도 올라오던 냄새, 향 없이 덜어내요”</span></strong><p><span class="only-dog">냄새가 신경 쓰이던 순간 → 오브제 등장 → 달라진 일상. 이 흐름 하나만 기억해주세요.</span><span class="only-cat">향 때문에 망설이던 순간 → 무향 오브제 등장 → 편안해진 일상. 이 흐름 하나만 기억해주세요.</span></p></div>
+  </div></div>
+</header>
 <section class="gate wrap" aria-label="반려동물 선택">
   <div class="eyebrow">START</div>
   <h2>우리 아이는 누구인가요?</h2>
