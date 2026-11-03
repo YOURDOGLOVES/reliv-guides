@@ -235,6 +235,22 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 .seg button.on{background:#f4efe7;color:var(--stone)}
 body span.only-dog, body span.only-cat{display:inline;font-size:inherit;color:inherit;margin:0;font-weight:inherit;line-height:inherit}
 body[data-pet="dog"] .only-cat, body[data-pet="cat"] .only-dog{display:none !important}
+/* gate */
+.gate{display:none;padding:28px 20px 40px}
+body.choosing .gate{display:block}
+body.choosing .petbar, body.choosing .oneline, body.choosing .nav, body.choosing main, body.choosing .bar{display:none}
+body.choosing{padding-bottom:0}
+.gate h2{font-size:22px}
+.gate .lead{margin-top:6px}
+.gate-cards{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gate-cards button{font:inherit;text-align:left;cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:20px;overflow:hidden;padding:0;color:var(--ink);transition:transform .15s,box-shadow .15s}
+.gate-cards button:active{transform:scale(.98)}
+.gate-cards button:hover{box-shadow:0 10px 24px rgba(42,39,36,.12)}
+.gate-cards img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#fbfaf7}
+.gate-cards div{padding:14px 14px 16px}
+.gate-cards b{display:block;font-size:18px;letter-spacing:-.02em}
+.gate-cards span{display:block;font-size:13px;color:var(--sub);margin-top:4px;line-height:1.55}
+.gate-cards em{display:inline-block;margin-top:10px;font-style:normal;font-size:13px;font-weight:800;color:var(--stone)}
 /* product cards with image */
 .pcards{margin-top:20px;display:grid;gap:10px}
 .pc{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
@@ -279,6 +295,15 @@ body[data-pet="dog"] .only-cat, body[data-pet="cat"] .only-dog{display:none !imp
   <div class="petbar"><small>우리 아이는</small><div class="seg" role="group" aria-label="반려동물 선택"><button type="button" data-pet="dog">강아지</button><button type="button" data-pet="cat">고양이</button></div></div>
   <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong><span class="only-dog">“아이와 사는 우리 집, 꺼내두고 싶은 탈취제”</span><span class="only-cat">“고양이 곁에는, 향 없이 냄새만 덜어내도록”</span></strong><p><span class="only-dog">냄새 고민이 있던 자리에 오브제를 두고, 공간에 자연스럽게 어우러진 모습을 사진으로 담아주세요.</span><span class="only-cat">향료를 넣지 않은 무향 오브제를 고양이 곁 낮은 자리에 두고, 편안한 일상을 사진으로 담아주세요.</span></p></div>
 </div></header>
+<section class="gate wrap" aria-label="반려동물 선택">
+  <div class="eyebrow">START</div>
+  <h2>우리 아이는 누구인가요?</h2>
+  <p class="lead">고르시면 맞는 가이드가 열려요. 안에서도 언제든 바꿀 수 있어요.</p>
+  <div class="gate-cards">
+    <button type="button" data-pet="dog"><img src="air-object/ref/c1.jpg" alt=""><div><b>강아지</b><span>배변패드·거실 냄새<br>런드리 데이 또는 무향</span><em>가이드 보기 →</em></div></button>
+    <button type="button" data-pet="cat"><img src="air-object/ref/c3.jpg" alt=""><div><b>고양이</b><span>모래 화장실 냄새<br>향료 없는 무향 우선</span><em>가이드 보기 →</em></div></button>
+  </div>
+</section>
 <nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#place">두는 곳</a><a href="#cuts">사진 컷</a><a href="#refs">레퍼런스</a><a href="#caption">캡션</a><a href="#rules">표현</a><a href="#upload">업로드·PA</a><a href="#submit">제출</a></div></nav>
 <main class="wrap">
 
@@ -478,8 +503,9 @@ body[data-pet="dog"] .only-cat, body[data-pet="cat"] .only-dog{display:none !imp
   var q=(location.search.match(/[?&]pet=(dog|cat)/)||[])[1], saved=null;
   try{saved=localStorage.getItem('airobj-pet')}catch(e){}
   function setPet(p){document.body.dataset.pet=p;document.querySelectorAll('.seg button').forEach(function(b){b.classList.toggle('on',b.dataset.pet===p)});try{localStorage.setItem('airobj-pet',p)}catch(e){}}
-  setPet(q||saved||'dog');
+  if(q){setPet(q)}else{document.body.classList.add('choosing');setPet(saved||'dog')}
   document.querySelectorAll('.seg button').forEach(function(b){b.addEventListener('click',function(){setPet(b.dataset.pet)})});
+  document.querySelectorAll('.gate-cards button').forEach(function(b){b.addEventListener('click',function(){setPet(b.dataset.pet);document.body.classList.remove('choosing');window.scrollTo(0,0)})});
 })();
 </script>
 
