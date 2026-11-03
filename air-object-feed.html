@@ -35,7 +35,11 @@ a{color:inherit}
 .hero .wrap{position:relative}
 .topline{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.24em;font-weight:600;color:rgba(244,239,231,.62)}
 .chip{letter-spacing:.06em;font-size:12px;font-weight:700;color:var(--stone);background:#e9dfcf;border-radius:999px;padding:4px 11px}
-.hero-grid{display:grid;grid-template-columns:1fr 112px;gap:18px;align-items:end;margin-top:34px}
+.hero-title{margin-top:30px}
+.hero-photo{position:relative;margin-top:24px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:#3a3530;box-shadow:0 24px 48px rgba(0,0,0,.35)}
+.hero-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,39,36,0) 55%,rgba(42,39,36,.55))}
+.hero-photo span{position:absolute;left:14px;bottom:12px;z-index:1;font-size:11.5px;font-weight:700;letter-spacing:.14em;color:#f4efe7;opacity:.9}
 .hero .en{font-size:20px;font-style:italic;color:#d9cab2}
 .hero h1{font-size:34px;line-height:1.22;font-weight:800;letter-spacing:-.035em;margin-top:6px}
 .hero h1 span{display:block;font-weight:300;color:#d9cab2}
@@ -207,6 +211,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 .ref-group > p{font-size:14px;color:var(--sub);margin-top:3px}
 .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .ref-grid figure{position:relative;border-radius:14px;overflow:hidden;background:var(--accent-soft);cursor:zoom-in;aspect-ratio:4/5}
+.ref-grid figure.wide{grid-column:span 2;aspect-ratio:4/3}
 .ref-grid img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s}
 .ref-grid figure:hover img{transform:scale(1.03)}
 .ref-grid figcaption{position:absolute;left:8px;right:8px;bottom:8px;font-size:12px;font-weight:700;color:#fff;background:rgba(29,27,24,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:8px;padding:5px 8px;line-height:1.4}
@@ -219,7 +224,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 
 @media (max-width:420px){
   .wrap{padding:0 16px} .nav .wrap{padding:10px 16px}
-  .hero h1{font-size:29px} .hero-grid{grid-template-columns:1fr 86px} .obj{transform:scale(.78);transform-origin:bottom right}
+  .hero h1{font-size:29px} .hero-photo{border-radius:16px}
   h2{font-size:22px} .cut h4{font-size:17.5px}
   .sum dt{flex-basis:66px}
 }
@@ -228,13 +233,11 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 <body>
 <header class="hero"><div class="wrap">
   <div class="topline"><span>RELIV</span><span class="chip">INSTAGRAM FEED</span></div>
-  <div class="hero-grid">
-    <div>
-      <div class="en serif">Air Object</div>
-      <h1>인스타 피드<span>콘텐츠 가이드</span></h1>
-    </div>
-    <div class="obj" aria-hidden="true"><div class="shadow"></div><div class="body"></div><div class="top"></div></div>
+  <div class="hero-title">
+    <div class="en serif">Air Object</div>
+    <h1>인스타 피드<span>콘텐츠 가이드</span></h1>
   </div>
+  <figure class="hero-photo"><img src="air-object/ref/a1.jpg" alt="릴리브 에어 오브제 실제 제품 연출" style="object-position:72% 57%" fetchpriority="high"><span>RELIV AIR OBJECT</span></figure>
   <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong>“아이와 사는 우리 집, 꺼내두고 싶은 탈취제”</strong><p>냄새 고민이 있던 자리에 오브제를 두고, 공간에 자연스럽게 어우러진 모습을 사진으로 담아주세요.</p></div>
 </div></header>
 <nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#cuts">사진 컷</a><a href="#refs">레퍼런스</a><a href="#caption">캡션</a><a href="#rules">표현</a><a href="#upload">업로드·PA</a><a href="#tips">팁</a><a href="#submit">제출</a></div></nav>
@@ -310,7 +313,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
   <p class="lead">아래 사진 컷을 찍을 때 구도와 분위기를 참고해주세요.</p>
   <div class="ref-intro">‘실제 제품’ 표시가 없는 사진은 <b>구도·분위기 참고용</b>이에요. 그대로 따라 하지 않아도 되고, 우리 집에서 비슷한 느낌만 내주시면 충분해요. 사진을 누르면 크게 볼 수 있어요.</div>
   <div class="ref-tabs"><button type="button" class="on" data-g="all">전체</button><button type="button" data-g="own">에어 오브제가 놓인 모습</button><button type="button" data-g="spot">냄새가 신경 쓰이던 자리</button><button type="button" data-g="pet">아이와 함께하는 공간</button><button type="button" data-g="mood">공간 무드 · 넓은 뷰</button></div>
-  <div class="ref-group" data-g="own"><h4>에어 오브제가 놓인 모습<span class="own">실제 제품</span></h4><p>실제 에어 오브제 연출 이미지예요. 선반·협탁·테이블 위 높이와 주변 여백을 참고해주세요.</p><div class="ref-grid"><figure><img src="air-object/ref/a1.jpg" alt="수납장 위 · 제품 디테일이 보이는 거리" loading="lazy" decoding="async"><figcaption>수납장 위 · 제품 디테일이 보이는 거리</figcaption></figure><figure><img src="air-object/ref/a2.jpg" alt="침실 협탁 · 책과 함께" loading="lazy" decoding="async"><figcaption>침실 협탁 · 책과 함께</figcaption></figure><figure><img src="air-object/ref/a3.jpg" alt="다이닝 테이블 · 오브제 소품과 함께" loading="lazy" decoding="async"><figcaption>다이닝 테이블 · 오브제 소품과 함께</figcaption></figure><figure><img src="air-object/ref/a4.jpg" alt="사이드 테이블 · 자연광" loading="lazy" decoding="async"><figcaption>사이드 테이블 · 자연광</figcaption></figure></div></div><div class="ref-group" data-g="spot"><h4>냄새가 신경 쓰이던 자리</h4><p>배변 공간·고양이 화장실은 이렇게 정돈된 모습으로 담아주세요. 오브제를 이 근처에 두면 돼요.</p><div class="ref-grid"><figure><img src="air-object/ref/b1.jpg" alt="강아지 배변 공간" loading="lazy" decoding="async"><figcaption>강아지 배변 공간</figcaption></figure><figure><img src="air-object/ref/b2.jpg" alt="고양이 화장실 코너" loading="lazy" decoding="async"><figcaption>고양이 화장실 코너</figcaption></figure><figure><img src="air-object/ref/b3.jpg" alt="거실 속 화장실 수납장" loading="lazy" decoding="async"><figcaption>거실 속 화장실 수납장</figcaption></figure><figure><img src="air-object/ref/b4.jpg" alt="화장실 하우스 · 선반 위 소품" loading="lazy" decoding="async"><figcaption>화장실 하우스 · 선반 위 소품</figcaption></figure></div></div><div class="ref-group" data-g="pet"><h4>아이와 함께하는 공간</h4><p>아이가 편하게 머무는 장면의 구도·톤 참고용이에요. 오브제가 화면 한쪽에 함께 보이면 좋아요.</p><div class="ref-grid"><figure><img src="air-object/ref/c1.jpg" alt="거실 러그 위 아이 · 넓은 뷰" loading="lazy" decoding="async"><figcaption>거실 러그 위 아이 · 넓은 뷰</figcaption></figure><figure><img src="air-object/ref/c2.jpg" alt="펫 소파에서 쉬는 아이" loading="lazy" decoding="async"><figcaption>펫 소파에서 쉬는 아이</figcaption></figure><figure><img src="air-object/ref/c3.jpg" alt="창가 쿠션 · 따뜻한 자연광" loading="lazy" decoding="async"><figcaption>창가 쿠션 · 따뜻한 자연광</figcaption></figure><figure><img src="air-object/ref/c4.jpg" alt="선반 아래 아이 자리" loading="lazy" decoding="async"><figcaption>선반 아래 아이 자리</figcaption></figure><figure><img src="air-object/ref/c5.jpg" alt="보호자와 함께 소파 위" loading="lazy" decoding="async"><figcaption>보호자와 함께 소파 위</figcaption></figure><figure><img src="air-object/ref/c6.jpg" alt="일상 속 보호자와 아이" loading="lazy" decoding="async"><figcaption>일상 속 보호자와 아이</figcaption></figure><figure><img src="air-object/ref/c7.jpg" alt="러그 위에서 함께 쉬기" loading="lazy" decoding="async"><figcaption>러그 위에서 함께 쉬기</figcaption></figure><figure><img src="air-object/ref/c8.jpg" alt="강아지·고양이 함께 있는 거실" loading="lazy" decoding="async"><figcaption>강아지·고양이 함께 있는 거실</figcaption></figure></div></div><div class="ref-group" data-g="mood"><h4>공간 무드 · 넓은 뷰</h4><p>뉴트럴 톤, 정돈된 여백, 낮 시간 자연광. 이런 분위기면 에어 오브제가 가장 예쁘게 보여요.</p><div class="ref-grid"><figure><img src="air-object/ref/d1.jpg" alt="웜 뉴트럴 거실" loading="lazy" decoding="async"><figcaption>웜 뉴트럴 거실</figcaption></figure><figure><img src="air-object/ref/d2.jpg" alt="현관 콘솔 · 간접조명" loading="lazy" decoding="async"><figcaption>현관 콘솔 · 간접조명</figcaption></figure><figure><img src="air-object/ref/d3.jpg" alt="여백 있는 벽면 · 낮은 벤치" loading="lazy" decoding="async"><figcaption>여백 있는 벽면 · 낮은 벤치</figcaption></figure><figure><img src="air-object/ref/d4.jpg" alt="원목 수납 · 따뜻한 톤" loading="lazy" decoding="async"><figcaption>원목 수납 · 따뜻한 톤</figcaption></figure></div></div>
+  <div class="ref-group" data-g="own"><h4>에어 오브제가 놓인 모습<span class="own">실제 제품</span></h4><p>실제 에어 오브제 연출 이미지예요. 선반·협탁·테이블 위 높이와 주변 여백을 참고해주세요.</p><div class="ref-grid"><figure class="wide"><img src="air-object/ref/a1.jpg" alt="수납장 위 · 제품 디테일이 보이는 거리" loading="lazy" decoding="async"><figcaption>수납장 위 · 제품 디테일이 보이는 거리</figcaption></figure><figure><img src="air-object/ref/a2.jpg" alt="침실 협탁 · 책과 함께" loading="lazy" decoding="async"><figcaption>침실 협탁 · 책과 함께</figcaption></figure><figure><img src="air-object/ref/a3.jpg" alt="다이닝 테이블 · 오브제 소품과 함께" loading="lazy" decoding="async"><figcaption>다이닝 테이블 · 오브제 소품과 함께</figcaption></figure></div></div><div class="ref-group" data-g="spot"><h4>냄새가 신경 쓰이던 자리</h4><p>배변 공간·고양이 화장실은 이렇게 정돈된 모습으로 담아주세요. 오브제를 이 근처에 두면 돼요.</p><div class="ref-grid"><figure><img src="air-object/ref/b1.jpg" alt="강아지 배변 공간" loading="lazy" decoding="async"><figcaption>강아지 배변 공간</figcaption></figure><figure><img src="air-object/ref/b2.jpg" alt="고양이 화장실 코너" loading="lazy" decoding="async"><figcaption>고양이 화장실 코너</figcaption></figure><figure><img src="air-object/ref/b3.jpg" alt="거실 속 화장실 수납장" loading="lazy" decoding="async"><figcaption>거실 속 화장실 수납장</figcaption></figure><figure><img src="air-object/ref/b4.jpg" alt="화장실 하우스 · 선반 위 소품" loading="lazy" decoding="async"><figcaption>화장실 하우스 · 선반 위 소품</figcaption></figure></div></div><div class="ref-group" data-g="pet"><h4>아이와 함께하는 공간</h4><p>아이가 편하게 머무는 장면의 구도·톤 참고용이에요. 오브제가 화면 한쪽에 함께 보이면 좋아요.</p><div class="ref-grid"><figure><img src="air-object/ref/c1.jpg" alt="거실 러그 위 아이 · 넓은 뷰" loading="lazy" decoding="async"><figcaption>거실 러그 위 아이 · 넓은 뷰</figcaption></figure><figure><img src="air-object/ref/c2.jpg" alt="펫 소파에서 쉬는 아이" loading="lazy" decoding="async"><figcaption>펫 소파에서 쉬는 아이</figcaption></figure><figure><img src="air-object/ref/c3.jpg" alt="창가 쿠션 · 따뜻한 자연광" loading="lazy" decoding="async"><figcaption>창가 쿠션 · 따뜻한 자연광</figcaption></figure><figure><img src="air-object/ref/c4.jpg" alt="선반 아래 아이 자리" loading="lazy" decoding="async"><figcaption>선반 아래 아이 자리</figcaption></figure><figure><img src="air-object/ref/c5.jpg" alt="보호자와 함께 소파 위" loading="lazy" decoding="async"><figcaption>보호자와 함께 소파 위</figcaption></figure><figure><img src="air-object/ref/c6.jpg" alt="일상 속 보호자와 아이" loading="lazy" decoding="async"><figcaption>일상 속 보호자와 아이</figcaption></figure><figure><img src="air-object/ref/c7.jpg" alt="러그 위에서 함께 쉬기" loading="lazy" decoding="async"><figcaption>러그 위에서 함께 쉬기</figcaption></figure><figure><img src="air-object/ref/c8.jpg" alt="강아지·고양이 함께 있는 거실" loading="lazy" decoding="async"><figcaption>강아지·고양이 함께 있는 거실</figcaption></figure></div></div><div class="ref-group" data-g="mood"><h4>공간 무드 · 넓은 뷰</h4><p>뉴트럴 톤, 정돈된 여백, 낮 시간 자연광. 이런 분위기면 에어 오브제가 가장 예쁘게 보여요.</p><div class="ref-grid"><figure><img src="air-object/ref/d1.jpg" alt="웜 뉴트럴 거실" loading="lazy" decoding="async"><figcaption>웜 뉴트럴 거실</figcaption></figure><figure><img src="air-object/ref/d2.jpg" alt="현관 콘솔 · 간접조명" loading="lazy" decoding="async"><figcaption>현관 콘솔 · 간접조명</figcaption></figure><figure><img src="air-object/ref/d3.jpg" alt="여백 있는 벽면 · 낮은 벤치" loading="lazy" decoding="async"><figcaption>여백 있는 벽면 · 낮은 벤치</figcaption></figure><figure><img src="air-object/ref/d4.jpg" alt="원목 수납 · 따뜻한 톤" loading="lazy" decoding="async"><figcaption>원목 수납 · 따뜻한 톤</figcaption></figure><figure><img src="air-object/ref/a4.jpg" alt="사이드 테이블 · 창가 자연광" loading="lazy" decoding="async"><figcaption>사이드 테이블 · 창가 자연광</figcaption></figure></div></div>
 </section>
 
 
