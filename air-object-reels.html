@@ -203,7 +203,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 .ref-tabs button{flex:none;font:inherit;font-size:14px;font-weight:700;cursor:pointer;border-radius:999px;padding:8px 14px;border:1px solid var(--line2);background:var(--card);color:var(--sub)}
 .ref-tabs button.on{background:var(--stone);border-color:var(--stone);color:#f4efe7}
 .ref-group{margin-top:22px}
-.ref-group[hidden]{display:none}
+.ref-group[hidden],.kwset[hidden]{display:none}
 .ref-group h4{font-size:16.5px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
 .ref-group h4 .own{font-size:11px;font-weight:800;color:#f4efe7;background:var(--accent);border-radius:999px;padding:2px 8px}
 .ref-group > p{font-size:14px;color:var(--sub);margin-top:3px}
@@ -404,7 +404,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
   });
   function fallback(t,ok){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){show('길게 눌러 복사해주세요')}ta.remove()}
   // reference tabs + lightbox
-  var tabs=[].slice.call(document.querySelectorAll('.ref-tabs button'));
+  var tabs=[].slice.call(document.querySelectorAll('.ref-tabs:not(.kw-tabs) button'));
   tabs.forEach(function(b){b.addEventListener('click',function(){
     tabs.forEach(function(x){x.classList.toggle('on',x===b)});
     document.querySelectorAll('.ref-group').forEach(function(g){g.hidden=!(b.dataset.g==='all'||g.dataset.g===b.dataset.g)});
@@ -418,6 +418,8 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
     lb.addEventListener('click',function(){lb.classList.remove('open')});
     document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open')});
   }
+  var kt=[].slice.call(document.querySelectorAll('.kw-tabs button'));
+  kt.forEach(function(b){b.addEventListener('click',function(){kt.forEach(function(x){x.classList.toggle('on',x===b)});document.querySelectorAll('.kwset').forEach(function(g){g.hidden=g.dataset.kw!==b.dataset.kw})})});
   // checklist memory
   var key='airobj-'+location.pathname;
   var boxes=[].slice.call(document.querySelectorAll('.check input'));

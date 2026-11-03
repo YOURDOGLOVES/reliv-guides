@@ -203,7 +203,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 .ref-tabs button{flex:none;font:inherit;font-size:14px;font-weight:700;cursor:pointer;border-radius:999px;padding:8px 14px;border:1px solid var(--line2);background:var(--card);color:var(--sub)}
 .ref-tabs button.on{background:var(--stone);border-color:var(--stone);color:#f4efe7}
 .ref-group{margin-top:22px}
-.ref-group[hidden]{display:none}
+.ref-group[hidden],.kwset[hidden]{display:none}
 .ref-group h4{font-size:16.5px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
 .ref-group h4 .own{font-size:11px;font-weight:800;color:#f4efe7;background:var(--accent);border-radius:999px;padding:2px 8px}
 .ref-group > p{font-size:14px;color:var(--sub);margin-top:3px}
@@ -339,15 +339,27 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 <section id="keyword">
   <div class="eyebrow">05 · KEYWORD</div>
   <h2>키워드 가이드</h2>
-  <p class="lead"><b>메인·서브 키워드는 메일로 개별 전달</b>드려요. 아래 규칙대로 넣어주세요.</p>
+  <p class="lead">키우는 아이에 맞는 세트를 골라 쓰시면 돼요. <b>메일로 다른 키워드를 받으셨다면 메일 키워드가 우선</b>이에요.</p>
+  <div class="ref-tabs kw-tabs" style="margin-top:16px">
+    <button type="button" class="on" data-kw="dog">강아지 보호자</button><button type="button" data-kw="cat">고양이 보호자</button>
+  </div>
+  <div class="kwset" data-kw="dog">
+    <div class="box dark"><div class="box-head"><span>메인 키워드 · 제목에 모두</span><button type="button" class="btn-copy" data-copy="kwm-dog" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kwm-dog">고체탈취제, 강아지탈취제, 고체탈취제추천</p></div>
+    <div class="box"><div class="box-head"><span>서브 키워드 · 본문·해시태그에 자연스럽게</span><button type="button" class="btn-copy" data-copy="kws-dog" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kws-dog">릴리브에어오브제, 강아지고체탈취제, 강아지배변탈취제, 실내탈취제</p></div>
+  </div>
+  <div class="kwset" data-kw="cat" hidden>
+    <div class="box dark"><div class="box-head"><span>메인 키워드 · 제목에 모두</span><button type="button" class="btn-copy" data-copy="kwm-cat" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kwm-cat">고체탈취제, 고양이탈취제, 고체탈취제추천</p></div>
+    <div class="box"><div class="box-head"><span>서브 키워드 · 본문·해시태그에 자연스럽게</span><button type="button" class="btn-copy" data-copy="kws-cat" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kws-cat">릴리브에어오브제, 고양이고체탈취제, 고양이화장실탈취제, 실내탈취제</p></div>
+  </div>
+  <div class="box"><div class="box-head"><span>제목 예시 · 흐름만 참고</span></div>
+    <p class="example" style="margin-top:6px">릴리브 에어 오브제 후기, 강아지탈취제 찾다가 정착한 고체탈취제추천</p></div>
   <ol class="musts">
-    <li><b>제목</b><span>브랜드명 <b>‘릴리브’</b> + 메인 키워드 모두 포함</span></li>
+    <li><b>제목</b><span>브랜드명 <b>‘릴리브’</b> + 메인 키워드 3개 모두</span></li>
     <li><b>본문</b><span>메인 키워드 중 2개를 <b>각 5번 이상</b></span></li>
     <li><b>해시태그 · 동영상 제목</b><span>메인·서브 키워드를 자연스럽게</span></li>
-    <li><b>2개월 사용 자제</b><span>메인 키워드는 앞으로 2개월간 타사 탈취제 포스팅에 쓰지 말아주세요.</span></li>
+    <li><b>2개월 사용 자제</b><span>메인 키워드는 앞으로 2개월간 타사 탈취제·방향제 포스팅에 쓰지 말아주세요.</span></li>
   </ol>
-  <div class="box"><div class="box-head"><span>메일로 받은 키워드 확인</span></div>
-    <p class="tx" style="font-size:15px;font-weight:600">메인 키워드 <span class="ph">메일 참고</span><br>서브 키워드 <span class="ph">메일 참고</span></p></div>
+  <div class="tipline" style="margin-top:12px">‘냄새 제거’, ‘무향’, ‘방향제’ 같은 단어는 키워드로도 쓰지 말아주세요. 제품 표현 원칙과 맞지 않아요.</div>
 </section>
 
 <section id="link">
@@ -413,7 +425,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
   });
   function fallback(t,ok){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){show('길게 눌러 복사해주세요')}ta.remove()}
   // reference tabs + lightbox
-  var tabs=[].slice.call(document.querySelectorAll('.ref-tabs button'));
+  var tabs=[].slice.call(document.querySelectorAll('.ref-tabs:not(.kw-tabs) button'));
   tabs.forEach(function(b){b.addEventListener('click',function(){
     tabs.forEach(function(x){x.classList.toggle('on',x===b)});
     document.querySelectorAll('.ref-group').forEach(function(g){g.hidden=!(b.dataset.g==='all'||g.dataset.g===b.dataset.g)});
@@ -427,6 +439,8 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
     lb.addEventListener('click',function(){lb.classList.remove('open')});
     document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open')});
   }
+  var kt=[].slice.call(document.querySelectorAll('.kw-tabs button'));
+  kt.forEach(function(b){b.addEventListener('click',function(){kt.forEach(function(x){x.classList.toggle('on',x===b)});document.querySelectorAll('.kwset').forEach(function(g){g.hidden=g.dataset.kw!==b.dataset.kw})})});
   // checklist memory
   var key='airobj-'+location.pathname;
   var boxes=[].slice.call(document.querySelectorAll('.check input'));
