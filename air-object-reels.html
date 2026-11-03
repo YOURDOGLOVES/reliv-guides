@@ -35,11 +35,9 @@ a{color:inherit}
 .hero .wrap{position:relative}
 .topline{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.24em;font-weight:600;color:rgba(244,239,231,.62)}
 .chip{letter-spacing:.06em;font-size:12px;font-weight:700;color:var(--stone);background:#e9dfcf;border-radius:999px;padding:4px 11px}
-.hero-title{margin-top:30px}
-.hero-photo{position:relative;margin-top:24px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:#3a3530;box-shadow:0 24px 48px rgba(0,0,0,.35)}
+.hero-top{display:grid;grid-template-columns:1fr 116px;gap:16px;align-items:end;margin-top:30px}
+.hero-photo{margin:0;border-radius:16px;overflow:hidden;aspect-ratio:4/5;background:#3a3530;box-shadow:0 14px 28px rgba(0,0,0,.35)}
 .hero-photo img{display:block;width:100%;height:100%;object-fit:cover}
-.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,39,36,0) 55%,rgba(42,39,36,.55))}
-.hero-photo span{position:absolute;left:14px;bottom:12px;z-index:1;font-size:11.5px;font-weight:700;letter-spacing:.14em;color:#f4efe7;opacity:.9}
 .hero .en{font-size:20px;font-style:italic;color:#d9cab2}
 .hero h1{font-size:34px;line-height:1.22;font-weight:800;letter-spacing:-.035em;margin-top:6px}
 .hero h1 span{display:block;font-weight:300;color:#d9cab2}
@@ -224,7 +222,7 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 
 @media (max-width:420px){
   .wrap{padding:0 16px} .nav .wrap{padding:10px 16px}
-  .hero h1{font-size:29px} .hero-photo{border-radius:16px}
+  .hero h1{font-size:29px} .hero-top{grid-template-columns:1fr 96px;gap:12px} .hero-photo{border-radius:14px}
   h2{font-size:22px} .cut h4{font-size:17.5px}
   .sum dt{flex-basis:66px}
 }
@@ -233,11 +231,13 @@ footer .en{font-size:18px;font-style:italic;color:var(--accent);display:block;ma
 <body>
 <header class="hero"><div class="wrap">
   <div class="topline"><span>RELIV</span><span class="chip">INSTAGRAM REELS</span></div>
-  <div class="hero-title">
-    <div class="en serif">Air Object</div>
-    <h1>인스타 릴스<span>촬영 가이드</span></h1>
+  <div class="hero-top">
+    <div>
+      <div class="en serif">Air Object</div>
+      <h1>인스타 릴스<span>촬영 가이드</span></h1>
+    </div>
+    <figure class="hero-photo"><img src="air-object/ref/h3.jpg" alt="릴리브 에어 오브제 실제 제품" style="object-position:50% 50%" fetchpriority="high"></figure>
   </div>
-  <figure class="hero-photo"><img src="air-object/ref/a3.jpg" alt="릴리브 에어 오브제 실제 제품 연출" style="object-position:58% 52%" fetchpriority="high"><span>RELIV AIR OBJECT</span></figure>
   <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong>“치워도 남던 냄새, 이제 향으로만 가리지 않아요”</strong><p>냄새가 신경 쓰이던 순간 → 오브제 등장 → 달라진 일상. 이 흐름 하나만 기억해주세요.</p></div>
 </div></header>
 <nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#scenes">장면</a><a href="#hooks">훅</a><a href="#refs">레퍼런스</a><a href="#caption">캡션</a><a href="#rules">표현</a><a href="#shoot">팁·PA</a><a href="#submit">제출</a></div></nav>
