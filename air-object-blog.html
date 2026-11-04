@@ -8,10 +8,9 @@
 <meta property="og:title" content="릴리브 에어 오브제 · 블로그 포스팅 가이드">
 <meta property="og:description" content="릴리브 에어 오브제 네이버 블로그 포스팅 가이드">
 <meta name="theme-color" content="#fffbf7">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="air-object/fonts/wanted-sans/WantedSansVariable.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f3f0ea; --paper:#fbfaf7; --card:#ffffff; --ink:#1d1b18; --sub:#5d5850; --faint:#948d82;
@@ -239,12 +238,22 @@ body[data-pet="dog"] .only-cat, body[data-pet="cat"] .only-dog{display:none !imp
 .ref-grid figure.wide{aspect-ratio:auto}
 .ref-grid figure.wide img{height:auto;aspect-ratio:1130/431}
 .ref-grid figure.wide figcaption{position:static;background:none;color:var(--sub);backdrop-filter:none;-webkit-backdrop-filter:none;padding:2px 12px 10px}
-/* display type: MaruBuri (Naver) → Noto Serif KR */
-.htitle, h2, h3, .cut h4, .oneline strong, .gate-cards b, .pc b, .sc b{font-family:"MaruBuri","Noto Serif KR","Apple SD Gothic Neo",serif;font-weight:700;letter-spacing:-.02em}
-.htitle{font-size:29px;line-height:1.32}
-h2{font-size:24px;line-height:1.4}
-.cut h4{font-size:18px}
-.oneline strong{font-weight:600;line-height:1.55}
+/* type: Wanted Sans Variable (self-hosted) for Korean, Cormorant only for the packaging wordmark */
+body, button, input{font-family:"Wanted Sans Variable","Wanted Sans","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+body{letter-spacing:-.01em;font-size:16px;line-height:1.72}
+.htitle{font-size:30px;line-height:1.28;font-weight:760;letter-spacing:-.04em}
+h2{font-size:25px;line-height:1.35;font-weight:740;letter-spacing:-.035em;margin-top:0}
+h3{font-weight:700;letter-spacing:-.025em}
+.cut h4{font-size:18px;font-weight:700;letter-spacing:-.03em}
+.oneline strong{font-weight:650;line-height:1.5;letter-spacing:-.025em}
+h2,h3,h4,.htitle,.oneline strong{text-wrap:balance}
+p,.lead,.how,li span{text-wrap:pretty}
+section{padding-top:56px}
+.lead{max-width:34em}
+::selection{background:rgba(84,78,59,.18);color:#23211b}
+:focus-visible{outline:2px solid #544e3b;outline-offset:3px;border-radius:6px}
+html{accent-color:#544e3b;scrollbar-color:#bdb4a2 transparent}
+a{text-underline-offset:3px}
 /* hero v3 — product-photo paper, packaging wordmark, olive band */
 .hero2{background:#fffbf7;color:#23211b;position:relative;overflow:hidden}
 .hero2>.wrap{position:relative;padding-top:20px}
@@ -266,6 +275,8 @@ h2{font-size:24px;line-height:1.4}
 body.choosing .hband{display:none}
 @media (min-width:560px){.hstage{grid-template-columns:110px 1fr}.vmark{font-size:124px}.htitle{font-size:34px}}
 @media (max-width:360px){.hstage{grid-template-columns:62px 1fr}.vmark{font-size:70px}}
+.cta a::after{content:none}
+.pc{gap:0}
 /* gate */
 .gate{display:none;padding:28px 20px 40px}
 body.choosing .gate{display:block}
@@ -325,23 +336,21 @@ body.choosing{padding-bottom:0}
   </div>
   <div class="hband"><div class="wrap">
     <div class="petbar"><small>우리 아이는</small><div class="seg" role="group" aria-label="반려동물 선택"><button type="button" data-pet="dog">강아지</button><button type="button" data-pet="cat">고양이</button></div></div>
-    <div class="oneline"><small>이번 콘텐츠의 한 줄</small><strong><span class="only-dog">“반려생활 냄새 고민, 그리고 꺼내두고 싶은 탈취제”</span><span class="only-cat">“향에 예민한 고양이 집, 무향 탈취제로 바꾼 이야기”</span></strong><p><span class="only-dog">우리 집 냄새 고민 사연으로 시작해, 직접 써본 솔직한 경험으로 마무리해주세요.</span><span class="only-cat">고양이 때문에 향 있는 제품을 망설였던 사연으로 시작해, 무향을 써본 솔직한 경험으로 마무리해주세요.</span></p></div>
+    <div class="oneline"><strong><span class="only-dog">“반려생활 냄새 고민, 그리고 꺼내두고 싶은 탈취제”</span><span class="only-cat">“향에 예민한 고양이 집, 무향 탈취제로 바꾼 이야기”</span></strong><p><span class="only-dog">우리 집 냄새 고민 사연으로 시작해, 직접 써본 솔직한 경험으로 마무리해주세요.</span><span class="only-cat">고양이 때문에 향 있는 제품을 망설였던 사연으로 시작해, 무향을 써본 솔직한 경험으로 마무리해주세요.</span></p></div>
   </div></div>
 </header>
 <section class="gate wrap" aria-label="반려동물 선택">
-  <div class="eyebrow">START</div>
   <h2>우리 아이는 누구인가요?</h2>
   <p class="lead">고르시면 맞는 가이드가 열려요. 안에서도 언제든 바꿀 수 있어요.</p>
   <div class="gate-cards">
-    <button type="button" data-pet="dog"><img src="air-object/ref/c1.jpg" alt=""><div><b>강아지</b><span>배변패드·거실 냄새<br>런드리 데이 또는 무향</span><em>가이드 보기 →</em></div></button>
-    <button type="button" data-pet="cat"><img src="air-object/ref/c3.jpg" alt=""><div><b>고양이</b><span>모래 화장실 냄새<br>향료 없는 무향 우선</span><em>가이드 보기 →</em></div></button>
+    <button type="button" data-pet="dog"><img src="air-object/ref/c1.jpg" alt=""><div><b>강아지</b><span>배변패드·거실 냄새<br>런드리 데이 또는 무향</span><em>가이드 보기</em></div></button>
+    <button type="button" data-pet="cat"><img src="air-object/ref/c3.jpg" alt=""><div><b>고양이</b><span>모래 화장실 냄새<br>향료 없는 무향 우선</span><em>가이드 보기</em></div></button>
   </div>
 </section>
 <nav class="nav"><div class="wrap"><a href="#overview">진행 내용</a><a href="#product">제품</a><a href="#place">두는 곳</a><a href="#story">원고</a><a href="#photo">사진·영상</a><a href="#refs">레퍼런스</a><a href="#keyword">키워드</a><a href="#link">링크·표기</a><a href="#rules">표현</a><a href="#submit">제출</a></div></nav>
 <main class="wrap">
 
 <section id="overview">
-  <div class="eyebrow">00 · OVERVIEW</div>
   <h2>한눈에 보는 진행 내용</h2>
   <dl class="sum">
     <div class="row"><dt>채널</dt><dd>네이버 블로그 포스팅 1회</dd></div>
@@ -353,11 +362,10 @@ body.choosing{padding-bottom:0}
   <div class="steps"><div class="st"><div class="n">1</div><div><b>제품 수령 · 촬영</b><span>사진 18장 이상, 영상 1개 이상 찍어주세요.</span></div></div><div class="st"><div class="n">2</div><div><b>포스팅 발행</b><span><em>수령 후 7일 이내</em> · 아래 키워드와 메일로 받은 링크 넣기</span></div></div><div class="st"><div class="n">3</div><div><b>링크 + 원본 제출</b><span>포스팅 링크와 사용한 사진·영상 원본을 제출 폼으로</span></div></div></div>
 </section>
 <section id="product">
-  <div class="eyebrow">01 · PRODUCT</div>
   <h2>릴리브 에어 오브제는요</h2>
   <p class="lead"><span class="only-dog">반려생활 냄새를 <b>향으로만 가리지 않고 줄이도록</b> 만든 오브제형 고체 탈취제예요. 외장 오브제는 꺼내두고, 안쪽 리필만 갈아 끼워요.</span><span class="only-cat">고양이 곁에 두도록 <b>향료를 넣지 않은 무향</b>으로 권해드리는 오브제형 고체 탈취제예요. 향을 더하지 않고, 탈취 성분만으로 냄새를 줄이는 데 집중했어요.</span></p>
   <div class="pcards">
-    <div class="pc"><i class="n">01</i><div><b>5대 악취 탈취 시험</b><span>반려생활 대표 악취 물질 5가지로 탈취율을 시험했어요.</span>
+    <div class="pc"><div><b>5대 악취 탈취 시험</b><span>반려생활 대표 악취 물질 5가지로 탈취율을 시험했어요.</span>
       <table class="odor">
         <tr><td>암모니아<small><span class="only-dog">배변패드의 찌린 소변 냄새</span><span class="only-cat">모래 화장실의 찌린 소변 냄새</span></small></td><td>99%</td></tr>
         <tr><td>트리메틸아민<small><span class="only-dog">생선 원료 사료·간식의 비릿한 냄새</span><span class="only-cat">생선 원료 사료·습식캔의 비릿한 냄새</span></small></td><td>97%</td></tr>
@@ -366,10 +374,10 @@ body.choosing{padding-bottom:0}
         <tr><td>메틸메르캅탄<small>배변 냄새, 입 냄새</small></td><td>84.7%</td></tr>
       </table>
       <p class="fine">개별 물질 시험 결과예요. 실제 집 냄새는 여러 물질이 섞여 있어서, 공간 냄새가 같은 비율로 줄어든다는 뜻은 아니에요.</p></div></div>
-    <div class="pc"><i class="n">02</i><div><b>향으로 덮지 않는 탈취 원리</b><span><span class="only-dog">흡착 → 분해·중화 → 무취화로 냄새 물질 자체를 줄이고, 런드리 데이는 그 위에 은은한 향을 더해요.</span><span class="only-cat">흡착 → 분해·중화 → 무취화. 무향은 향을 더하지 않고 냄새를 줄이는 데에만 집중해요.</span></span></div></div>
-    <div class="pc"><i class="n">03</i><div><b>식물·발효 유래 6가지 성분</b><span>8대 중금속 불검출 · CMIT/MIT 불검출 시험을 거쳤고, 인공색소는 넣지 않았어요.</span></div></div>
-    <div class="pc"><i class="n">04</i><div><b><span class="only-dog">반려생활을 기준으로 만든 구멍 뚜껑</span><span class="only-cat">고양이를 고려한 구멍 뚜껑</span></b><span>내용물이 그대로 드러나지 않도록 구멍 뚜껑으로 한 번 더 감쌌어요. <span class="only-dog">호기심 많은 코와 앞발</span><span class="only-cat">킁킁대고 앞발로 건드려보는 고양이</span>가 내용물에 직접 닿을 가능성을 줄이려고 금형부터 직접 만들었어요.</span></div></div>
-    <div class="pc"><i class="n">05</i><div><b>오브제는 그대로, 리필만 새롭게</b><span>세라믹 무드의 외장 오브제(Cream Ivory / Dark Brown)는 계속 쓰고, 다 쓴 리필만 갈아 끼워요.</span></div></div>
+    <div class="pc"><div><b>향으로 덮지 않는 탈취 원리</b><span><span class="only-dog">흡착 → 분해·중화 → 무취화로 냄새 물질 자체를 줄이고, 런드리 데이는 그 위에 은은한 향을 더해요.</span><span class="only-cat">흡착 → 분해·중화 → 무취화. 무향은 향을 더하지 않고 냄새를 줄이는 데에만 집중해요.</span></span></div></div>
+    <div class="pc"><div><b>식물·발효 유래 6가지 성분</b><span>8대 중금속 불검출 · CMIT/MIT 불검출 시험을 거쳤고, 인공색소는 넣지 않았어요.</span></div></div>
+    <div class="pc"><div><b><span class="only-dog">반려생활을 기준으로 만든 구멍 뚜껑</span><span class="only-cat">고양이를 고려한 구멍 뚜껑</span></b><span>내용물이 그대로 드러나지 않도록 구멍 뚜껑으로 한 번 더 감쌌어요. <span class="only-dog">호기심 많은 코와 앞발</span><span class="only-cat">킁킁대고 앞발로 건드려보는 고양이</span>가 내용물에 직접 닿을 가능성을 줄이려고 금형부터 직접 만들었어요.</span></div></div>
+    <div class="pc"><div><b>오브제는 그대로, 리필만 새롭게</b><span>세라믹 무드의 외장 오브제(Cream Ivory / Dark Brown)는 계속 쓰고, 다 쓴 리필만 갈아 끼워요.</span></div></div>
   </div>
   <div class="spec"><div><b>220mL</b><span>리필 용량</span></div><div><b>4~6평</b><span>1개 기준</span></div><div><b>1~2개월</b><span>사용 환경에 따라</span></div><div><b>2 colors</b><span>Ivory · Brown</span></div></div>
 
@@ -384,7 +392,6 @@ body.choosing{padding-bottom:0}
 </section>
 
 <section id="place">
-  <div class="eyebrow">02 · PLACE</div>
   <h2>어디에 두고 찍나요</h2>
   <p class="lead"><span class="only-dog">냄새가 신경 쓰이는 자리 가까이, <b>아이가 직접 닿거나 넘어뜨리지 않는 안정적인 곳</b>에 두면 돼요.</span><span class="only-cat">고양이는 높은 곳까지 오르니까, 오브제는 <b>바닥처럼 낮고 안정된 곳</b>에 두는 게 기본이에요. 떨어질 걱정이 덜해요.</span></p>
   <div class="place only-dog">
@@ -403,7 +410,6 @@ body.choosing{padding-bottom:0}
 </section>
 
 <section id="story">
-  <div class="eyebrow">03 · WRITING</div>
   <h2>원고는 이렇게</h2>
   <p class="lead">정해진 문장은 없어요. 아래 흐름을 참고해 본인 경험으로 편하게 써주세요.</p>
   <ol class="musts">
@@ -414,17 +420,16 @@ body.choosing{padding-bottom:0}
   </ol>
   <h3>골라서 언급해주세요</h3>
   <div class="pts">
-    <div class="pt"><i>01</i><div><b>향으로 덮지 않는 탈취</b><span><span class="only-dog">냄새 물질 자체를 줄이는 방식, 런드리 데이는 은은한 향까지</span><span class="only-cat">향을 더하지 않고 냄새만 덜어내는 무향</span></span></div></div>
-    <div class="pt"><i>02</i><div><b>5대 악취 탈취 시험</b><span>암모니아 99%, 포름알데히드 99.8% 등 (‘시험 결과’라고 함께 적어주세요)</span></div></div>
-    <div class="pt"><i>03</i><div><b>식물·발효 유래 6가지 성분</b><span>8대 중금속·CMIT/MIT 불검출 시험, 인공색소 무첨가</span></div></div>
-    <div class="pt"><i>04</i><div><b>구멍 뚜껑</b><span><span class="only-dog">코와 앞발이 내용물에 닿을 일을 줄인 구조</span><span class="only-cat">킁킁대고 건드려보는 고양이를 고려한 구조</span></span></div></div>
-    <div class="pt"><i>05</i><div><b>꺼내두고 싶은 오브제</b><span>세라믹 무드의 무광 질감, Cream Ivory / Dark Brown</span></div></div>
-    <div class="pt"><i>06</i><div><b>리필 구조와 사양</b><span>오브제는 그대로 리필만 교체, 220mL · 1개 약 4~6평 · 약 1~2개월</span></div></div>
+    <div class="pt"><div><b>향으로 덮지 않는 탈취</b><span><span class="only-dog">냄새 물질 자체를 줄이는 방식, 런드리 데이는 은은한 향까지</span><span class="only-cat">향을 더하지 않고 냄새만 덜어내는 무향</span></span></div></div>
+    <div class="pt"><div><b>5대 악취 탈취 시험</b><span>암모니아 99%, 포름알데히드 99.8% 등 (‘시험 결과’라고 함께 적어주세요)</span></div></div>
+    <div class="pt"><div><b>식물·발효 유래 6가지 성분</b><span>8대 중금속·CMIT/MIT 불검출 시험, 인공색소 무첨가</span></div></div>
+    <div class="pt"><div><b>구멍 뚜껑</b><span><span class="only-dog">코와 앞발이 내용물에 닿을 일을 줄인 구조</span><span class="only-cat">킁킁대고 건드려보는 고양이를 고려한 구조</span></span></div></div>
+    <div class="pt"><div><b>꺼내두고 싶은 오브제</b><span>세라믹 무드의 무광 질감, Cream Ivory / Dark Brown</span></div></div>
+    <div class="pt"><div><b>리필 구조와 사양</b><span>오브제는 그대로 리필만 교체, 220mL · 1개 약 4~6평 · 약 1~2개월</span></div></div>
   </div>
 </section>
 
 <section id="photo">
-  <div class="eyebrow">04 · PHOTO & VIDEO</div>
   <h2>사진·영상 가이드</h2>
   <p class="lead">사진 18장 이상, 영상 1개 이상. 아래 컷을 골고루 담아주세요.</p>
   <div class="cuts">
@@ -443,12 +448,11 @@ body.choosing{padding-bottom:0}
     <article class="cut"><div class="cut-head"><span class="no">V</span><span class="must">필수</span></div>
 <h4>영상 1개 이상</h4><div class="why"><small>이 장면의 목적</small>포스팅 체류 시간과 신뢰도</div><p class="how">리필 넣고 자리에 두는 장면이나, 아이가 오브제 근처에서 쉬는 장면을 10초 이상. 영상 제목에도 키워드를 넣어주세요.</p></article>
   </div>
-  <a class="see-ref" href="#refs">레퍼런스 사진 보기 →</a>
+  <a class="see-ref" href="#refs">레퍼런스 사진 보기</a>
 </section>
 
 
 <section id="refs">
-  <div class="eyebrow">05 · REFERENCE</div>
   <h2>레퍼런스 사진</h2>
   <p class="lead">사진 18장을 찍을 때 구도와 분위기를 참고해주세요.</p>
   <div class="ref-intro">‘실제 제품’ 묶음 말고는 <b>구도·분위기 참고용</b>이에요. 그대로 따라 하지 않아도 되고, 우리 집에서 비슷한 느낌만 내주시면 충분해요. 사진을 누르면 크게 볼 수 있어요.</div>
@@ -458,7 +462,6 @@ body.choosing{padding-bottom:0}
 
 
 <section id="keyword">
-  <div class="eyebrow">06 · KEYWORD</div>
   <h2>키워드 가이드</h2>
   <p class="lead">위에서 고른 <span class="only-dog">강아지</span><span class="only-cat">고양이</span> 세트예요. <b>메일로 다른 키워드를 받으셨다면 메일 키워드가 우선</b>이에요.</p>
   <div class="only-dog"><div class="box dark"><div class="box-head"><span>메인 키워드 · 제목에 모두</span><button type="button" class="btn-copy" data-copy="kwm-dog" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kwm-dog">고체탈취제, 강아지탈취제, 고체탈취제추천</p></div><div class="box"><div class="box-head"><span>서브 키워드 · 본문·해시태그에 자연스럽게</span><button type="button" class="btn-copy" data-copy="kws-dog" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kws-dog">릴리브에어오브제, 강아지고체탈취제, 강아지배변탈취제, 실내탈취제</p></div></div><div class="only-cat"><div class="box dark"><div class="box-head"><span>메인 키워드 · 제목에 모두</span><button type="button" class="btn-copy" data-copy="kwm-cat" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kwm-cat">고체탈취제, 고양이탈취제, 고체탈취제추천</p></div><div class="box"><div class="box-head"><span>서브 키워드 · 본문·해시태그에 자연스럽게</span><button type="button" class="btn-copy" data-copy="kws-cat" data-msg="키워드를 복사했어요">복사</button></div><p class="tx" id="kws-cat">릴리브에어오브제, 고양이고체탈취제, 고양이화장실탈취제, 실내탈취제</p></div></div>
@@ -474,7 +477,6 @@ body.choosing{padding-bottom:0}
 </section>
 
 <section id="link">
-  <div class="eyebrow">07 · LINK</div>
   <h2>포스팅 하단에 링크 넣기</h2>
   <p class="lead">메일로 받은 링크를 <b>포스팅 맨 아래</b>에 꼭 넣어주세요.</p>
   <ol class="musts">
@@ -488,7 +490,6 @@ body.choosing{padding-bottom:0}
 
 
 <section id="rules">
-  <div class="eyebrow">EXPRESSION</div>
   <h2>표현은 이렇게 해주세요</h2>
   <p class="lead">광고로 집행될 수 있는 콘텐츠라, 아래 표현만 꼭 지켜주세요. 나머지는 본인 말투 그대로가 가장 좋아요.</p>
   <div class="dd"><div class="dd-row"><div class="ok"><b>O</b>향으로만 가리지 않고 냄새를 줄여줘요</div><div class="no"><b>X</b>향으로 냄새를 싹 덮어줘요, 방향제처럼 써요</div></div><div class="dd-row"><div class="ok"><b>O</b>무향(향료 무첨가)이라 향이 부담스러운 집에 좋아요</div><div class="no"><b>X</b>무향이라 아무 냄새도 안 나요</div></div><div class="dd-row"><div class="ok"><b>O</b>5대 악취 시험에서 탈취율 최대 99.8%래요 (수치 그대로)</div><div class="no"><b>X</b>모든 냄새 99% 제거, 냄새 완전 제거, 압도적·최고 탈취력</div></div><div class="dd-row"><div class="ok"><b>O</b>유해물질 8종·CMIT/MIT 불검출 시험을 거쳤대요</div><div class="no"><b>X</b>무독성, 먹어도 괜찮아요, 반려동물에게 절대 안전</div></div><div class="dd-row"><div class="ok"><b>O</b>구멍 뚜껑이라 코·앞발이 내용물에 닿을 일이 줄어요</div><div class="no"><b>X</b>아이가 만지거나 핥아도 괜찮아요</div></div><div class="dd-row"><div class="ok"><b>O</b>세라믹 무드, 도자기 같은 질감</div><div class="no"><b>X</b>세라믹·도자기로 만든 탈취제</div></div><div class="dd-row"><div class="ok"><b>O</b>써보니 냄새가 덜 신경 쓰여요 (내 느낌)</div><div class="no"><b>X</b>살균·균 제거, 특허 몇 종 보유 같은 기술 단정</div></div><div class="dd-row"><div class="ok"><b>O</b>키워드는 받은 그대로</div><div class="no"><b>X</b>키워드 임의 변경, 링크 주소 수정</div></div></div>
@@ -498,15 +499,12 @@ body.choosing{padding-bottom:0}
 
 
 <section id="submit">
-  <div class="eyebrow">SUBMIT</div>
   <h2>제출하기</h2>
-  <p class="lead">아래 항목이 모두 체크되면 완료예요. 원본은 압축하지 말고 그대로 보내주세요.</p>
-  <ul class="check"><li><label><input type="checkbox"><span>포스팅 발행 (제목·본문 키워드 · 하단 링크 카드 · 공정위 문구)</span></label></li><li><label><input type="checkbox"><span>제출 폼에 포스팅 링크 기재</span></label></li><li><label><input type="checkbox"><span>포스팅에 사용한 사진·영상 원본 업로드</span></label></li></ul>
-  <div class="tipline" style="margin-top:12px">제출 폼은 구글 로그인이 필요해요. 원본 그대로, 한 번에 10개까지 올라가니 넘으면 나눠서 올려주세요.</div>
+  <p class="lead">사진과 영상은 아래 제출 폼으로 보내주세요. 제출하신 콘텐츠는 릴리브 상세페이지·SNS·광고 소재로 2차 활용될 수 있어요.</p>
+  <ul class="check"><li><label><input type="checkbox"><span>포스팅 링크 제출</span></label></li><li><label><input type="checkbox"><span>원본 · 편집본 · 제품 이용 사진 제출</span></label></li></ul>
   <div class="cta">
-    <a class="pri" href="https://docs.google.com/forms/d/e/1FAIpQLSd_2muJ0Ya4GB7OIKR5RZaNaburzlqZPvcuaFTz5YXqgxnjGA/viewform" target="_blank" rel="noopener"><span><small>사진 · 영상 원본</small>촬영본 제출하기</span></a>
+    <a class="pri" href="https://docs.google.com/forms/d/e/1FAIpQLSd_2muJ0Ya4GB7OIKR5RZaNaburzlqZPvcuaFTz5YXqgxnjGA/viewform" target="_blank" rel="noopener"><span>촬영본 제출하기</span></a>
   </div>
-  <div class="reuse">제출해주신 사진·영상(원본 포함)은 릴리브 상세페이지, SNS, 광고 소재 등으로 <b>편집·가공되어 2차 활용</b>될 수 있어요. 진행해주시면 동의하신 것으로 안내드려요.</div>
 </section>
 
 
